@@ -20,13 +20,15 @@
     var CONFIG = {"hostname":"dxzmpk.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="I am a fresh researcher in nlp in Harbin Institute of Technology">
-<meta property="og:type" content="website">
-<meta property="og:title" content="董雄的博客">
-<meta property="og:url" content="https://dxzmpk.github.io/">
+  <meta name="description" content="深度学习notebook多折交叉验证样本代码这份样本代码基于 @abhishek’s BERT Base Uncased using PyTorch在tweet情感词抽取比赛上的notebook, 如果决定使用代码，请为abhishek投上一个赞成票。 导入需要用到的包12345678910111213141516import osimport torchimport pandas as pdim">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习Notebook多折交叉验证样本代码">
+<meta property="og:url" content="https://dxzmpk.github.io/2020/04/27/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0notebook%E5%A4%9A%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%E6%A0%B7%E6%9C%AC%E4%BB%A3%E7%A0%81/">
 <meta property="og:site_name" content="董雄的博客">
-<meta property="og:description" content="I am a fresh researcher in nlp in Harbin Institute of Technology">
+<meta property="og:description" content="深度学习notebook多折交叉验证样本代码这份样本代码基于 @abhishek’s BERT Base Uncased using PyTorch在tweet情感词抽取比赛上的notebook, 如果决定使用代码，请为abhishek投上一个赞成票。 导入需要用到的包12345678910111213141516import osimport torchimport pandas as pdim">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-27T03:45:20.000Z">
+<meta property="article:modified_time" content="2020-04-27T04:17:16.312Z">
 <meta property="article:author" content="董雄">
 <meta property="article:tag" content="nlp">
 <meta property="article:tag" content=" cs">
@@ -34,20 +36,20 @@
 <meta property="article:tag" content=" transformers">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://dxzmpk.github.io/">
+<link rel="canonical" href="https://dxzmpk.github.io/2020/04/27/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0notebook%E5%A4%9A%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%E6%A0%B7%E6%9C%AC%E4%BB%A3%E7%A0%81/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>董雄的博客</title>
+  <title>深度学习Notebook多折交叉验证样本代码 | 董雄的博客</title>
   
 
 
@@ -161,273 +163,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/04/23/HuggingFace-transformers%E7%B3%BB%E5%88%97%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="I am a fresh researcher in nlp in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/23/HuggingFace-transformers%E7%B3%BB%E5%88%97%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">HuggingFace-Transformers系列的介绍以及在下游任务中的使用</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <i class="fa fa-thumb-tack"></i>
-            <font color=7D26CD>置顶</font>
-            <span class="post-meta-divider">|</span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-04-23 09:02:46" itemprop="dateCreated datePublished" datetime="2020-04-23T09:02:46+08:00">2020-04-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-27 11:43:04" itemprop="dateModified" datetime="2020-04-27T11:43:04+08:00">2020-04-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
 
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="内容介绍"><a href="#内容介绍" class="headerlink" title="内容介绍"></a>内容介绍</h1><p>这篇博客主要面向对<strong>Bert</strong>系列在<strong>Pytorch</strong>上应用感兴趣的同学，将涵盖的主要内容是：Bert系列有关的论文，<a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">Huggingface</a>的实现，以及如何在不同下游任务中使用预训练模型。</p>
-<p>看过这篇博客，你将了解：</p>
-<ul>
-<li>Transformers实现的介绍，不同的Tokenizer和Model如何使用。</li>
-<li>如何利用HuggingFace的实现自定义你的模型，如果你想利用这个库实现自己的下游任务，而不想过多关注其实现细节的话，那么这篇文章将会成为很好的参考。</li>
-</ul>
-<h2 id="Huggingface-transformers介绍"><a href="#Huggingface-transformers介绍" class="headerlink" title="Huggingface-transformers介绍"></a>Huggingface-transformers介绍</h2><p><a href="https://huggingface.co/transformers/index.html" target="_blank" rel="noopener">transformers</a>（以前称为pytorch-transformers和pytorch-pretrained-bert）提供用于自然语言理解（NLU）和自然语言生成（NLG）的BERT家族通用结构（BERT，GPT-2，RoBERTa，XLM，DistilBert，XLNet等），包含超过32种、涵盖100多种语言的预训练模型。同时提供TensorFlow 2.0和PyTorch之间的高互通性。</p>
-<p><strong>特性</strong>：</p>
-<ul>
-<li><p>与pytorch-transformers一样易于使用</p>
-</li>
-<li><p>像Keras一样强大而简洁</p>
-</li>
-<li><p>在NLU和NLG任务上表现良好</p>
-</li>
-<li><p>对于教育者和从业者的门槛低</p>
-</li>
-</ul>
-<p><strong>现存的模型</strong>：</p>
-<ul>
-<li><p>Bert(基础版和巨人版, 是否区分大小写)， </p>
-</li>
-<li><p>GPT, GPT-2</p>
-</li>
-<li><p>Transformer-XL, XLNet, XLM</p>
-</li>
-<li><p>DistilBERT, DistilGPT2</p>
-</li>
-<li><p>CTRL</p>
-</li>
-<li><p>ALBERT, RoBERTa, XLM-RoBERTa</p>
-</li>
-<li><p>FlauBERT，CamemBERT</p>
-</li>
-<li>其他在各种下游任务上微调过的模型。</li>
-<li>在多语言上训练的模型</li>
-</ul>
-<h1 id="所需的知识"><a href="#所需的知识" class="headerlink" title="所需的知识"></a>所需的知识</h1><p><a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">安装Huggface库</a>(需要预先安装pytorch)</p>
-<p>在阅读这篇文章之前，如果你能将以下资料读一遍，或者看一遍的话，在后续的阅读过程中将极大地减少你陷入疑惑的概率。</p>
-<ul>
-<li>视频类内容：根据排序观看更佳<ul>
-<li><a href="https://www.bilibili.com/video/BV17441137fa?from=search&amp;seid=17871853660365597030" target="_blank" rel="noopener">李宏毅关于Elmo, Bert, GPT的讲解</a></li>
-<li><a href="https://www.bilibili.com/video/BV1Tt411M7Wp?from=search&amp;seid=194654766718455422" target="_blank" rel="noopener">Goebels关于transformerXL的讲解</a></li>
-<li><a href="https://www.youtube.com/watch?v=H5vpBCLo74U" target="_blank" rel="noopener">Kilcher关于XLnet的讲解</a></li>
-<li><a href="https://www.youtube.com/watch?v=vsGN8WqwvKg&amp;t=597s" target="_blank" rel="noopener">McCormick关于ALBERT的讲解</a></li>
-</ul>
-</li>
-</ul>
-<p><strong>或者</strong>，你更愿意去看论文的话：</p>
-<ul>
-<li>相关论文：根据排序阅读更佳<ul>
-<li><a href="https://arxiv.org/abs/1810.04805" target="_blank" rel="noopener">arXiv:1810.04805</a>, BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding, Authors: Jacob Devlin, Ming-Wei Chang, Kenton Lee, Kristina Toutanova</li>
-<li><a href="https://arxiv.org/abs/1901.02860" target="_blank" rel="noopener">arXiv:1901.02860</a>, Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context,  Authors: Zihang Dai, Zhilin Yang, Yiming Yang, William W. Cohen, Jaime Carbonell, Quoc V. Le and Ruslan Salakhutdinov.</li>
-<li>XLNet论文</li>
-<li>ALBERT论文</li>
-</ul>
-</li>
-</ul>
-<h1 id="HuggingFace模型加载-下游任务使用"><a href="#HuggingFace模型加载-下游任务使用" class="headerlink" title="HuggingFace模型加载+下游任务使用"></a>HuggingFace模型加载+下游任务使用</h1><h2 id="项目组件"><a href="#项目组件" class="headerlink" title="项目组件"></a>项目组件</h2><p>一个完整的transformer模型主要包含三部分：</p>
-<ol>
-<li><p><strong>Config</strong>，控制模型的名称、最终输出的样式、隐藏层宽度和深度、激活函数的类别等。将Config类导出时文件格式为 json格式，就像下面这样：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"attention_probs_dropout_prob"</span>: <span class="number">0.1</span>,</span><br><span class="line">  <span class="attr">"hidden_act"</span>: <span class="string">"gelu"</span>,</span><br><span class="line">  <span class="attr">"hidden_dropout_prob"</span>: <span class="number">0.1</span>,</span><br><span class="line">  <span class="attr">"hidden_size"</span>: <span class="number">768</span>,</span><br><span class="line">  <span class="attr">"initializer_range"</span>: <span class="number">0.02</span>,</span><br><span class="line">  <span class="attr">"intermediate_size"</span>: <span class="number">3072</span>,</span><br><span class="line">  <span class="attr">"max_position_embeddings"</span>: <span class="number">512</span>,</span><br><span class="line">  <span class="attr">"num_attention_heads"</span>: <span class="number">12</span>,</span><br><span class="line">  <span class="attr">"num_hidden_layers"</span>: <span class="number">12</span>,</span><br><span class="line">  <span class="attr">"type_vocab_size"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"vocab_size"</span>: <span class="number">30522</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，也可以通过config.json来实例化Config类，这是一个互逆的过程。</p>
-</li>
-<li><p><strong>Tokenizer</strong>，这是一个将纯文本转换为编码的过程。注意，Tokenizer并不涉及将词转化为词向量的过程，仅仅是将纯文本分词，添加[MASK]标记、[SEP]、[CLS]标记，并转换为字典索引。Tokenizer类导出时将分为三个文件，也就是：</p>
-<ul>
-<li><p>vocab.txt</p>
-<p>词典文件，每一行为一个词或词的一部分</p>
-</li>
-<li><p>special_tokens_map.json 特殊标记的定义方式</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"unk_token"</span>: <span class="string">"[UNK]"</span>, <span class="attr">"sep_token"</span>: <span class="string">"[SEP]"</span>, <span class="attr">"pad_token"</span>: <span class="string">"[PAD]"</span>, </span><br><span class="line"> <span class="attr">"cls_token"</span>: <span class="string">"[CLS]"</span>, <span class="attr">"mask_token"</span>: <span class="string">"[MASK]"</span>&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>tokenizer_config.json 配置文件，主要存储特殊的配置。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>Model</strong>，也就是各种各样的模型。除了初始的Bert、GPT等基本模型，针对下游任务，还定义了诸如<code>BertForQuestionAnswering</code>等下游任务模型。模型导出时将生成<code>config.json</code>和<code>pytorch_model.bin</code>参数文件。前者就是1中的配置文件，这和我们的直觉相同，即config和model应该是紧密联系在一起的两个类。后者其实和torch.save()存储得到的文件是相同的，这是因为Model都直接或者间接继承了Pytorch的Module类。从这里可以看出，HuggingFace在实现时很好地尊重了Pytorch的原生API。</p>
-</li>
-</ol>
-<h2 id="导入Bert系列基本模型的方法"><a href="#导入Bert系列基本模型的方法" class="headerlink" title="导入Bert系列基本模型的方法"></a>导入Bert系列基本模型的方法</h2><h3 id="通过官网自动导入"><a href="#通过官网自动导入" class="headerlink" title="通过官网自动导入"></a>通过官网自动导入</h3><p>官方文档中<a href="https://huggingface.co/transformers/quickstart.html#" target="_blank" rel="noopener">初始教程</a>提供的方法为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Load pre-trained model (weights)</span></span><br><span class="line"><span class="comment"># model = BertModel.from_pretrained('bert-base-uncased')</span></span><br></pre></td></tr></table></figure>
-<p>这个方法需要从官方的s3数据库下载模型配置、参数等信息（代码中已配置好位置）。这个方法虽然简单，但是在国内并不可用。当然你可以先尝试一下，不过会有很大的概率无法下载模型。</p>
-<h3 id="手动下载模型信息并导入"><a href="#手动下载模型信息并导入" class="headerlink" title="手动下载模型信息并导入"></a>手动下载模型信息并导入</h3><ol>
-<li><p>在HuggingFace<a href="https://huggingface.co/models" target="_blank" rel="noopener">官方模型库</a>上找到需要下载的模型，点击模型链接， 这个例子使用的是bert-base-uncased模型</p>
-</li>
-<li><p>点击<a href="https://huggingface.co/bert-base-uncased#" target="_blank" rel="noopener">List all files in model</a>，将其中的文件一一下载到同一目录中。例如，对于XLNet:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># List of model files</span><br><span class="line">config.json	782.0B</span><br><span class="line">pytorch_model.bin	445.4MB</span><br><span class="line">special_tokens_map.json	202.0B</span><br><span class="line">spiece.model	779.3KB</span><br><span class="line">tokenizer_config.json	2.0B</span><br></pre></td></tr></table></figure>
-<p>但是这种方法有时也会不可用。如果您可以将Transformers预训练模型上传到迅雷等网盘的话，请在评论区告知，我会添加在此博客中，并为您添加博客友链。</p>
-</li>
-<li><p>通过下载好的路径导入模型：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> transformers</span><br><span class="line">MODEL_PATH = <span class="string">r"D:\transformr_files\bert-base-uncased/"</span></span><br><span class="line"><span class="comment"># a.通过词典导入分词器</span></span><br><span class="line">tokenizer = transformers.BertTokenizer.from_pretrained(<span class="string">r"D:\transformr_files\bert-base-uncased\bert-base-uncased-vocab.txt"</span>) </span><br><span class="line"><span class="comment"># b. 导入配置文件</span></span><br><span class="line">model_config = transformers.BertConfig.from_pretrained(MODEL_PATH)</span><br><span class="line"><span class="comment"># 修改配置</span></span><br><span class="line">model_config.output_hidden_states = <span class="literal">True</span></span><br><span class="line">model_config.output_attentions = <span class="literal">True</span></span><br><span class="line"><span class="comment"># 通过配置和路径导入模型</span></span><br><span class="line">model = transformers.BertModel.from_pretrained(MODEL_PATH,config = model_config)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="利用分词器分词"><a href="#利用分词器分词" class="headerlink" title="利用分词器分词"></a>利用分词器分词</h3><p>利用分词器进行编码</p>
-<ul>
-<li><p>对于单句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encode仅返回input_ids</span></span><br><span class="line">tokenizer.encode(<span class="string">"i like you"</span>)</span><br><span class="line">Out : [<span class="number">101</span>, <span class="number">1045</span>, <span class="number">2066</span>, <span class="number">2017</span>, <span class="number">102</span>]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对于多句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encode_plus返回所有编码信息</span></span><br><span class="line">tokenizer.encode_plus(<span class="string">"i like you"</span>, <span class="string">"but not him"</span>)</span><br><span class="line">Out : </span><br><span class="line">    &#123;<span class="string">'input_ids'</span>: [<span class="number">101</span>, <span class="number">1045</span>, <span class="number">2066</span>, <span class="number">2017</span>, <span class="number">102</span>, <span class="number">2021</span>, <span class="number">2025</span>, <span class="number">2032</span>, <span class="number">102</span>],</span><br><span class="line">     <span class="string">'token_type_ids'</span>: [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">     <span class="string">'attention_mask'</span>: [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>模型的所有分词器都是在PreTrainedTokenizer中实现的，分词的结果主要有以下内容：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">input_ids: list[int],</span><br><span class="line">token_type_ids: list[int] <span class="keyword">if</span> return_token_type_ids <span class="keyword">is</span> <span class="literal">True</span> (default)</span><br><span class="line">attention_mask: list[int] <span class="keyword">if</span> return_attention_mask <span class="keyword">is</span> <span class="literal">True</span> (default)</span><br><span class="line">overflowing_tokens: list[int] <span class="keyword">if</span> a max_length <span class="keyword">is</span> specified <span class="keyword">and</span> 		return_overflowing_tokens <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">num_truncated_tokens: int <span class="keyword">if</span> a max_length <span class="keyword">is</span> specified <span class="keyword">and</span> return_overflowing_tokens <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">special_tokens_mask: list[int] <span class="keyword">if</span> add_special_tokens <span class="keyword">if</span> set to <span class="literal">True</span> <span class="keyword">and</span> return_special_tokens_mask <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编码解释：</p>
-<ul>
-<li>‘input_ids’：顾名思义，是单词在词典中的编码</li>
-<li>‘token_type_ids’， 区分两个句子的编码</li>
-<li>‘attention_mask’,  指定对哪些词进行self-Attention操作</li>
-<li>‘overflowing_tokens’, 当指定最大长度时，溢出的单词</li>
-<li>‘num_truncated_tokens’, 溢出的token数量</li>
-<li>‘return_special_tokens_mask’，如果添加特殊标记，则这是[0，1]的列表，其中0指定特殊添加的标记，而1指定序列标记</li>
-</ul>
-<h3 id="将分词结果输入模型，得到编码"><a href="#将分词结果输入模型，得到编码" class="headerlink" title="将分词结果输入模型，得到编码"></a>将分词结果输入模型，得到编码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加batch维度并转化为tensor</span></span><br><span class="line">input_ids = torch.tensor([input_ids])</span><br><span class="line">token_type_ids = torch.tensor([token_type_ids])</span><br><span class="line"><span class="comment"># 将模型转化为eval模式</span></span><br><span class="line">model.eval()</span><br><span class="line"><span class="comment"># 将模型和数据转移到cuda, 若无cuda,可更换为cpu</span></span><br><span class="line">device = <span class="string">'cuda'</span></span><br><span class="line">tokens_tensor = input_ids.to(device)</span><br><span class="line">segments_tensors = token_type_ids.to(device)</span><br><span class="line">model.to(device)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行编码</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    <span class="comment"># See the models docstrings for the detail of the inputs</span></span><br><span class="line">    outputs = model(tokens_tensor, token_type_ids=segments_tensors)</span><br><span class="line">    <span class="comment"># Transformers models always output tuples.</span></span><br><span class="line">    <span class="comment"># See the models docstrings for the detail of all the outputs</span></span><br><span class="line">    <span class="comment"># In our case, the first element is the hidden state of the last layer of the Bert model</span></span><br><span class="line">    encoded_layers = outputs</span><br><span class="line"><span class="comment"># 得到最终的编码结果encoded_layers</span></span><br></pre></td></tr></table></figure>
-<p>Bert最终输出的结果为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sequence_output, pooled_output, (hidden_states), (attentions)</span><br></pre></td></tr></table></figure>
-<p>以输入序列长度为14为例</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>index</th>
-<th>名称</th>
-<th>维度</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>sequence_output</td>
-<td>torch.Size([1, 14, 768])</td>
-<td>输出序列</td>
-</tr>
-<tr>
-<td>1</td>
-<td>pooled_output</td>
-<td>torch.Size([1, 768])</td>
-<td>对输出序列进行pool操作的结果</td>
-</tr>
-<tr>
-<td>2</td>
-<td>(hidden_states)</td>
-<td>tuple,13*torch.Size([1, 14, 768])</td>
-<td>隐藏层状态(包括Embedding层)，取决于modelconfig中output_hidden_states</td>
-</tr>
-<tr>
-<td>3</td>
-<td>(attentions)</td>
-<td>tuple,12*torch.Size([1, 12, 14, 14])</td>
-<td>注意力层，取决于参数中output_attentions</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Bert总结"><a href="#Bert总结" class="headerlink" title="Bert总结"></a>Bert总结</h3><p>这一节我们以Bert为例对模型整体的流程进行了了解。之后的很多模型都基于Bert，并基于Bert进行了少量的调整。其中的输出和输出参数也有很多重复的地方。</p>
-<h2 id="利用预训练模型在下游任务上微调"><a href="#利用预训练模型在下游任务上微调" class="headerlink" title="利用预训练模型在下游任务上微调"></a>利用预训练模型在下游任务上微调</h2><p>如开头所说，这篇文章重点在于”如何进行模型的调整以及输入输出的设定”, 以及”Transformer的实现进行简要的提及”, 所以，我们不会去介绍、涉及如何写train循环等话题，而仅仅专注于模型。也就是说，我们将止步于跑通一个模型，而不计批量数据预处理、训练、验证等过程。</p>
-<p>同时，这里更看重如何基于Bert等初始模型在实际任务上进行微调，所以我们不会仅仅地导入已经在下游任务上训练好的模型参数，因为在这些模型上使用的方法和上一章的几乎完全相同。</p>
-<p>这里的输入和输入以模型的预测过程为例。</p>
-<h3 id="问答任务-via-Bert"><a href="#问答任务-via-Bert" class="headerlink" title="问答任务 via Bert"></a>问答任务 via Bert</h3><p><strong>任务输入</strong>：问题句，答案所在的文章 <code>&quot;Who was Jim Henson?&quot;, &quot;Jim Henson was a nice puppet&quot;</code></p>
-<p><strong>任务输出</strong>：答案  <code>&quot;a nice puppet&quot;</code></p>
-<p>现存的模型输入输出和任务的输入输出有一定差别，这也是在使用上需要区别的地方：</p>
-<p><strong>模型输入</strong>：inputids, token_type_ids</p>
-<p><strong>模型输出</strong>：start_scores, end_scores 形状都为<code>torch.Size([1, 14])</code>,其中<code>14</code>为序列长度，代表每个位置是开始/结束位置的概率。</p>
-<p><strong>模型的构建</strong>：</p>
-<p>一般情况下，一个基本模型对应一个Tokenizer, 所以并不存在对应于具体下游任务的Tokenizer。这里通过bert_model初始化BertForQuestionAnswering。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertTokenizer, BertForQuestionAnswering</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">MODEL_PATH = <span class="string">r"D:\transformr_files\bert-base-uncased/"</span></span><br><span class="line"><span class="comment"># 实例化tokenizer</span></span><br><span class="line">tokenizer = BertTokenizer.from_pretrained(<span class="string">r"D:\transformr_files\bert-base-uncased\bert-base-uncased-vocab.txt"</span>)</span><br><span class="line"><span class="comment"># 导入bert的model_config</span></span><br><span class="line">model_config = transformers.BertConfig.from_pretrained(MODEL_PATH)</span><br><span class="line"><span class="comment"># 首先新建bert_model</span></span><br><span class="line">bert_model = transformers.BertModel.from_pretrained(MODEL_PATH,config = model_config)</span><br><span class="line"><span class="comment"># 最终有两个输出，初始位置和结束位置（下面有解释）</span></span><br><span class="line">model_config.num_labels = <span class="number">2</span></span><br><span class="line"><span class="comment"># 同样根据bert的model_config新建BertForQuestionAnswering</span></span><br><span class="line">model = BertForQuestionAnswering(model_config)</span><br><span class="line">model.bert = bert_model</span><br></pre></td></tr></table></figure>
-<p><strong>利用模型进行运算：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设定模式</span></span><br><span class="line">model.eval()</span><br><span class="line">question, text = <span class="string">"Who was Jim Henson?"</span>, <span class="string">"Jim Henson was a nice puppet"</span></span><br><span class="line"><span class="comment"># 获取input_ids编码</span></span><br><span class="line">input_ids = tokenizer.encode(question, text)</span><br><span class="line"><span class="comment"># 手动进行token_type_ids编码，可用encode_plus代替</span></span><br><span class="line">token_type_ids = [<span class="number">0</span> <span class="keyword">if</span> i &lt;= input_ids.index(<span class="number">102</span>) <span class="keyword">else</span> <span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(input_ids))]</span><br><span class="line"><span class="comment"># 得到评分, </span></span><br><span class="line">start_scores, end_scores = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([token_type_ids]))</span><br><span class="line"><span class="comment"># 进行逆编码，得到原始的token </span></span><br><span class="line">all_tokens = tokenizer.convert_ids_to_tokens(input_ids)</span><br><span class="line"><span class="comment">#['[CLS]', 'who', 'was', 'jim', 'henson', '?', '[SEP]', 'jim', 'henson', 'was', 'a', 'nice', 'puppet', '[SEP]']</span></span><br></pre></td></tr></table></figure>
-<p><strong>将模型输出转化为任务输出：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对输出的答案进行解码的过程</span></span><br><span class="line">answer = <span class="string">' '</span>.join(all_tokens[torch.argmax(start_scores) : torch.argmax(end_scores)+<span class="number">1</span>])</span><br><span class="line"><span class="comment"># assert answer == "a nice puppet" </span></span><br><span class="line"><span class="comment"># 这里因为没有经过微调，所以效果不是很好，输出结果不佳。</span></span><br><span class="line">print(answer)</span><br><span class="line"><span class="comment"># 'was jim henson ? [SEP] jim henson was a nice puppet [SEP]'</span></span><br></pre></td></tr></table></figure>
-<h3 id="文本分类任务-情感分析等-via-XLNet"><a href="#文本分类任务-情感分析等-via-XLNet" class="headerlink" title="文本分类任务(情感分析等) via XLNet"></a>文本分类任务(情感分析等) via XLNet</h3><p><strong>任务输入</strong>：句子 <code>&quot;i like you, what about you&quot;</code></p>
-<p><strong>任务输出</strong>：句子所属的类别 <code>class1</code></p>
-<p><strong>模型输入</strong>：inputids, token_type_ids</p>
-<p><strong>模型输出</strong>：logits, hidden states， 其中logits形状为<code>torch.Size([1, 3])</code>, 其中的3对应的是类别的数量。当训练时，第一项为loss。</p>
-<p><strong>模型的构建</strong>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> XLNetConfig, XLNetModel, XLNetTokenizer, XLNetForSequenceClassification</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="comment"># 定义路径，初始化tokenizer</span></span><br><span class="line">XLN_PATH = <span class="string">r"D:\transformr_files\XLNetLMHeadModel"</span></span><br><span class="line">tokenizer = XLNetTokenizer.from_pretrained(XLN_PATH)</span><br><span class="line"><span class="comment"># 加载配置</span></span><br><span class="line">model_config = XLNetConfig.from_pretrained(XLN_PATH)</span><br><span class="line"><span class="comment"># 设定类别数为3</span></span><br><span class="line">model_config.num_labels = <span class="number">3</span></span><br><span class="line"><span class="comment"># 直接从xlnet的config新建XLNetForSequenceClassification(和上一节方法等效)</span></span><br><span class="line">cls_model = XLNetForSequenceClassification.from_pretrained(XLN_PATH, config=model_config)</span><br></pre></td></tr></table></figure>
-<p><strong>利用模型进行运算：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设定模式</span></span><br><span class="line">model.eval()</span><br><span class="line">token_codes = tokenizer.encode_plus(<span class="string">"i like you, what about you"</span>)</span><br><span class="line"><span class="comment"># encode_plus结果为字典形式</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    outputs = cls_model(input_ids=torch.tensor([token_codes[<span class="string">'input_ids'</span>]]),token_type_ids = torch.tensor([token_codes[<span class="string">'token_type_ids'</span>]]))</span><br><span class="line"><span class="comment"># outputs[0]为logits，outputs[1]为hidden</span></span><br></pre></td></tr></table></figure>
-<p>输出的转化可直接通过numpy的argmax函数实现。</p>
-<h3 id="其他的任务，将继续更新"><a href="#其他的任务，将继续更新" class="headerlink" title="其他的任务，将继续更新"></a>其他的任务，将继续更新</h3><p>其他的模型和之前的两个大致是相同的，你可以自己发挥。我会继续在相关的库上进行实验，如果发现用法不一样的情况，将会添加在这里。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>本文章主要对HuggingFace库进行了简要介绍。具体安装等过程请参见官方<a href="https://github.com/huggingface/transformers" target="_blank" rel="noopener">github仓库</a>。</p>
-<p>本文主要参考于<a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">官方文档</a></p>
-<p>同时，在模型的理解过程中参考了一些kaggle上的notebooks, <a href="https://www.kaggle.com/abhishek/bert-base-uncased-using-pytorch" target="_blank" rel="noopener">主要是这一篇</a>，作者是<a href="https://www.kaggle.com/abhishek" target="_blank" rel="noopener">Abhishek Thakur</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -443,10 +182,9 @@
       <meta itemprop="name" content="董雄的博客">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/27/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0notebook%E5%A4%9A%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%E6%A0%B7%E6%9C%AC%E4%BB%A3%E7%A0%81/" class="post-title-link" itemprop="url">深度学习Notebook多折交叉验证样本代码</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          深度学习Notebook多折交叉验证样本代码
+        </h1>
 
         <div class="post-meta">
           
@@ -462,6 +200,18 @@
 
           
   
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/04/27/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0notebook%E5%A4%9A%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%E6%A0%B7%E6%9C%AC%E4%BB%A3%E7%A0%81/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/27/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0notebook%E5%A4%9A%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%E6%A0%B7%E6%9C%AC%E4%BB%A3%E7%A0%81/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
   
 
         </div>
@@ -473,7 +223,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="深度学习notebook多折交叉验证样本代码"><a href="#深度学习notebook多折交叉验证样本代码" class="headerlink" title="深度学习notebook多折交叉验证样本代码"></a>深度学习notebook多折交叉验证样本代码</h1><p><strong>这份样本代码基于 @abhishek’s <a href="https://www.kaggle.com/abhishek/bert-base-uncased-using-pytorch" target="_blank" rel="noopener">BERT Base Uncased using PyTorch</a>在tweet情感词抽取比赛上的notebook</strong>, 如果决定使用代码，请为abhishek投上一个赞成票。</p>
+        <h1 id="深度学习notebook多折交叉验证样本代码"><a href="#深度学习notebook多折交叉验证样本代码" class="headerlink" title="深度学习notebook多折交叉验证样本代码"></a>深度学习notebook多折交叉验证样本代码</h1><p><strong>这份样本代码基于 @abhishek’s <a href="https://www.kaggle.com/abhishek/bert-base-uncased-using-pytorch" target="_blank" rel="noopener">BERT Base Uncased using PyTorch</a>在tweet情感词抽取比赛上的notebook</strong>, 如果决定使用代码，请为abhishek投上一个赞成票。</p>
 <h1 id="导入需要用到的包"><a href="#导入需要用到的包" class="headerlink" title="导入需要用到的包"></a>导入需要用到的包</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">from</span> torch.optim <span class="keyword">import</span> lr_scheduler</span><br><span class="line"><span class="comment"># tqdm用来记录notebook训练的进度条</span></span><br><span class="line"><span class="keyword">from</span> tqdm.autonotebook <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> model_selection</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> metrics</span><br><span class="line"><span class="keyword">import</span> transformers</span><br><span class="line"><span class="keyword">import</span> tokenizers</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AdamW</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> get_linear_schedule_with_warmup</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">config</span>:</span></span><br><span class="line">    MAX_LEN = <span class="number">128</span></span><br><span class="line">    TRAIN_BATCH_SIZE = <span class="number">64</span></span><br><span class="line">    VALID_BATCH_SIZE = <span class="number">16</span></span><br><span class="line">    EPOCHS = <span class="number">6</span></span><br><span class="line">    ROBERTA_PATH = <span class="string">"../input/roberta-base/"</span></span><br><span class="line">    MODEL_PATH = <span class="string">"pytorch_model.bin"</span></span><br><span class="line">    TRAINING_FILE = <span class="string">"../input/tweet-train-folds/train_folds.csv"</span></span><br><span class="line">    TOKENIZER = tokenizers.ByteLevelBPETokenizer(</span><br><span class="line">    vocab_file=<span class="string">f"<span class="subst">&#123;ROBERTA_PATH&#125;</span>/vocab.json"</span>, </span><br><span class="line">    merges_file=<span class="string">f"<span class="subst">&#123;ROBERTA_PATH&#125;</span>/merges.txt"</span>, </span><br><span class="line">    lowercase=<span class="literal">True</span>,</span><br><span class="line">    add_prefix_space=<span class="literal">True</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
 <h1 id="Data-Processing"><a href="#Data-Processing" class="headerlink" title="Data Processing"></a>Data Processing</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">process_data</span><span class="params">(tweet, selected_text, sentiment, tokenizer, max_len)</span>:</span></span><br><span class="line">    tweet = <span class="string">" "</span> + <span class="string">" "</span>.join(str(tweet).split())</span><br><span class="line">    selected_text = <span class="string">" "</span> + <span class="string">" "</span>.join(str(selected_text).split())</span><br><span class="line"></span><br><span class="line">    len_st = len(selected_text) - <span class="number">1</span></span><br><span class="line">    idx0 = <span class="literal">None</span></span><br><span class="line">    idx1 = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ind <span class="keyword">in</span> (i <span class="keyword">for</span> i, e <span class="keyword">in</span> enumerate(tweet) <span class="keyword">if</span> e == selected_text[<span class="number">1</span>]):</span><br><span class="line">        <span class="keyword">if</span> <span class="string">" "</span> + tweet[ind: ind+len_st] == selected_text:</span><br><span class="line">            idx0 = ind</span><br><span class="line">            idx1 = ind + len_st - <span class="number">1</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    char_targets = [<span class="number">0</span>] * len(tweet)</span><br><span class="line">    <span class="keyword">if</span> idx0 != <span class="literal">None</span> <span class="keyword">and</span> idx1 != <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">for</span> ct <span class="keyword">in</span> range(idx0, idx1 + <span class="number">1</span>):</span><br><span class="line">            char_targets[ct] = <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    tok_tweet = tokenizer.encode(tweet)</span><br><span class="line">    input_ids_orig = tok_tweet.ids</span><br><span class="line">    tweet_offsets = tok_tweet.offsets</span><br><span class="line">    </span><br><span class="line">    target_idx = []</span><br><span class="line">    <span class="keyword">for</span> j, (offset1, offset2) <span class="keyword">in</span> enumerate(tweet_offsets):</span><br><span class="line">        <span class="keyword">if</span> sum(char_targets[offset1: offset2]) &gt; <span class="number">0</span>:</span><br><span class="line">            target_idx.append(j)</span><br><span class="line">    </span><br><span class="line">    targets_start = target_idx[<span class="number">0</span>]</span><br><span class="line">    targets_end = target_idx[<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    sentiment_id = &#123;</span><br><span class="line">        <span class="string">'positive'</span>: <span class="number">1313</span>,</span><br><span class="line">        <span class="string">'negative'</span>: <span class="number">2430</span>,</span><br><span class="line">        <span class="string">'neutral'</span>: <span class="number">7974</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    input_ids = [<span class="number">0</span>] + [sentiment_id[sentiment]] + [<span class="number">2</span>] + [<span class="number">2</span>] + input_ids_orig + [<span class="number">2</span>]</span><br><span class="line">    token_type_ids = [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>] + [<span class="number">0</span>] * (len(input_ids_orig) + <span class="number">1</span>)</span><br><span class="line">    mask = [<span class="number">1</span>] * len(token_type_ids)</span><br><span class="line">    tweet_offsets = [(<span class="number">0</span>, <span class="number">0</span>)] * <span class="number">4</span> + tweet_offsets + [(<span class="number">0</span>, <span class="number">0</span>)]</span><br><span class="line">    targets_start += <span class="number">4</span></span><br><span class="line">    targets_end += <span class="number">4</span></span><br><span class="line"></span><br><span class="line">    padding_length = max_len - len(input_ids)</span><br><span class="line">    <span class="keyword">if</span> padding_length &gt; <span class="number">0</span>:</span><br><span class="line">        input_ids = input_ids + ([<span class="number">1</span>] * padding_length)</span><br><span class="line">        mask = mask + ([<span class="number">0</span>] * padding_length)</span><br><span class="line">        token_type_ids = token_type_ids + ([<span class="number">0</span>] * padding_length)</span><br><span class="line">        tweet_offsets = tweet_offsets + ([(<span class="number">0</span>, <span class="number">0</span>)] * padding_length)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">'ids'</span>: input_ids,</span><br><span class="line">        <span class="string">'mask'</span>: mask,</span><br><span class="line">        <span class="string">'token_type_ids'</span>: token_type_ids,</span><br><span class="line">        <span class="string">'targets_start'</span>: targets_start,</span><br><span class="line">        <span class="string">'targets_end'</span>: targets_end,</span><br><span class="line">        <span class="string">'orig_tweet'</span>: tweet,</span><br><span class="line">        <span class="string">'orig_selected'</span>: selected_text,</span><br><span class="line">        <span class="string">'sentiment'</span>: sentiment,</span><br><span class="line">        <span class="string">'offsets'</span>: tweet_offsets</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
@@ -1038,204 +788,37 @@ import torch
     return float(len(c)) / (len(a) + len(b) - len(c))
 </code></pre><p>​    </p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/04/24/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/">
+        
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="I am a fresh researcher in nlp in Harbin Institute of Technology">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/24/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/" class="post-title-link" itemprop="url">普通学生，如何用Colab跑起来BERT系列模型？</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-24 23:04:11 / 修改时间：23:04:48" itemprop="dateCreated datePublished" datetime="2020-04-24T23:04:11+08:00">2020-04-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/24/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/" rel="prev" title="普通学生，如何用Colab跑起来BERT系列模型？">
+      <i class="fa fa-chevron-left"></i> 普通学生，如何用Colab跑起来BERT系列模型？
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/04/22/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80-%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%B7%A5%E5%85%B7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="I am a fresh researcher in nlp in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/22/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80-%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">算法设计基础-最重要的两个工具</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-04-22 15:02:12" itemprop="dateCreated datePublished" datetime="2020-04-22T15:02:12+08:00">2020-04-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-23 09:00:46" itemprop="dateModified" datetime="2020-04-23T09:00:46+08:00">2020-04-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithms/" itemprop="url" rel="index"><span itemprop="name">algorithms</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="两个基础"><a href="#两个基础" class="headerlink" title="两个基础"></a>两个基础</h3><ol>
-<li><p>算法设计中的一项重要的技术是缩小允许的实例的集合，直到找到正确有效的算法为止。</p>
-</li>
-<li><p>要利用好已有的算法，您必须学会基本过程中的“抽象地”描述问题。根据定义好的结构和算法对应用程序进行建模是实现解决方案的最重要的一步。</p>
-</li>
-</ol>
-<h3 id="RAM-和-大O"><a href="#RAM-和-大O" class="headerlink" title="RAM 和 大O"></a>RAM 和 大O</h3><ol>
-<li><p>RAM计算模型</p>
-<p>将机器抽象为一个简单的机器，在这个机器上进行计算：</p>
-<ul>
-<li>每个简单的操作（+，*，-，=，if，call）只需一个时间步。</li>
-<li>循环和子例程不被视为简单操作</li>
-<li>每次内存访问仅需一个时间步长，而无需注意缓存或磁盘中的内容</li>
-</ul>
-</li>
-<li><p>大O</p>
-<p>这些复杂性中的每一个都定义了一个数字函数，表示时间与问题大小的关系。但是时间上的复杂性是如此复杂，以至于我们必须简化它们以实现利用。为此，我们需要使用大O符号</p>
-<p>首先，要精确计算复杂度非常困难，因为它倾向于：</p>
-</li>
-</ol>
-<ul>
-<li><p>变化很大，不稳定</p>
-</li>
-<li><p>需要太多细节才能精确指定。因为计算最坏情况下执行的RAM指令的确切数量需要把整个计算机程序的细节考虑进来。</p>
-<p> 大O符号会精确到不影响我们算法比较的详细程度。</p>
-<h3 id="一个原则"><a href="#一个原则" class="headerlink" title="一个原则"></a>一个原则</h3></li>
-<li><p>最重要的原则：<strong>Big Oh符号</strong>和<strong>最坏情况分析</strong>是极大简化我们比较算法效率的功能的工具。</p>
-</li>
-<li><p>大O的通俗解法：找一个c，不管n怎么变大，$g(n)$都是其上界。注意，$g(n)$是比较大的那一个</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -1282,6 +865,7 @@ import torch
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深度学习notebook多折交叉验证样本代码"><span class="nav-number">1.</span> <span class="nav-text">深度学习notebook多折交叉验证样本代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#导入需要用到的包"><span class="nav-number">2.</span> <span class="nav-text">导入需要用到的包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Data-Processing"><span class="nav-number">3.</span> <span class="nav-text">Data Processing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Data-loader"><span class="nav-number">4.</span> <span class="nav-text">Data loader</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型定义"><span class="nav-number">5.</span> <span class="nav-text">模型定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义损失函数（optional-取决于任务）"><span class="nav-number">6.</span> <span class="nav-text">自定义损失函数（optional,取决于任务）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Training-Function"><span class="nav-number">7.</span> <span class="nav-text">Training Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Evaluation-Functions"><span class="nav-number">8.</span> <span class="nav-text">Evaluation Functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Training"><span class="nav-number">9.</span> <span class="nav-text">Training</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Do-the-evaluation-on-test-data"><span class="nav-number">10.</span> <span class="nav-text">Do the evaluation on test data</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1397,59 +981,6 @@ import torch
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
