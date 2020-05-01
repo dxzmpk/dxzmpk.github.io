@@ -20,23 +20,23 @@
     var CONFIG = {"hostname":"dxzmpk.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="概括​       这篇文章将对Bert等模型使用的分词技术进行介绍。同时会涉及这些分词器在huggingface tokenizers库中的使用。理解这些分词器的原理，对于灵活使用transformers库中的不同模型非常重要。除此之外，我们还能将这些分词器用于其他任务中，如果有必要的话，我们还能自己训练分词器。 分词器是做什么的？​        机器无法理解文本。当我们将句子序列送入模型时，">
+  <meta name="description" content="概括这篇文章将对Bert等模型使用的分词技术进行介绍。同时会涉及这些分词器在huggingface tokenizers库中的使用。理解这些分词器的原理，对于灵活使用transformers库中的不同模型非常重要。除此之外，我们还能将这些分词器用于其他任务中，如果有必要的话，我们还能自己训练分词器。 分词器是做什么的？机器无法理解文本。当我们将句子序列送入模型时，模型仅仅能看到一串字节，它无法知道">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Bert系列伴生的新分词器">
 <meta property="og:url" content="https://dxzmpk.github.io/2020/04/29/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/">
 <meta property="og:site_name" content="董雄的博客">
-<meta property="og:description" content="概括​       这篇文章将对Bert等模型使用的分词技术进行介绍。同时会涉及这些分词器在huggingface tokenizers库中的使用。理解这些分词器的原理，对于灵活使用transformers库中的不同模型非常重要。除此之外，我们还能将这些分词器用于其他任务中，如果有必要的话，我们还能自己训练分词器。 分词器是做什么的？​        机器无法理解文本。当我们将句子序列送入模型时，">
+<meta property="og:description" content="概括这篇文章将对Bert等模型使用的分词技术进行介绍。同时会涉及这些分词器在huggingface tokenizers库中的使用。理解这些分词器的原理，对于灵活使用transformers库中的不同模型非常重要。除此之外，我们还能将这些分词器用于其他任务中，如果有必要的话，我们还能自己训练分词器。 分词器是做什么的？机器无法理解文本。当我们将句子序列送入模型时，模型仅仅能看到一串字节，它无法知道">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://dxzmpk.github.io/.io//tokenize.png">
-<meta property="og:image" content="https://dxzmpk.github.io/.io//1_x1Y_n3sXGygUPSdfXTm9pQ.gif">
-<meta property="og:image" content="https://dxzmpk.github.io/.io//image-20200429104839759.png">
-<meta property="og:image" content="https://dxzmpk.github.io/.io//image-20200501185312612.png">
+<meta property="og:image" content="https://dxzmpk.github.io/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/tokenize.png">
+<meta property="og:image" content="https://dxzmpk.github.io/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/1_x1Y_n3sXGygUPSdfXTm9pQ.gif">
+<meta property="og:image" content="https://dxzmpk.github.io/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/image-20200429104839759.png">
+<meta property="og:image" content="https://dxzmpk.github.io/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/image-20200501185312612.png">
 <meta property="article:published_time" content="2020-04-29T01:31:52.000Z">
-<meta property="article:modified_time" content="2020-05-01T15:36:38.482Z">
+<meta property="article:modified_time" content="2020-05-01T15:53:28.875Z">
 <meta property="article:author" content="董雄">
 <meta property="article:tag" content="5">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://dxzmpk.github.io/.io//tokenize.png">
+<meta name="twitter:image" content="https://dxzmpk.github.io/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/tokenize.png">
 
 <link rel="canonical" href="https://dxzmpk.github.io/2020/04/29/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/">
 
@@ -203,7 +203,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-01 23:36:38" itemprop="dateModified" datetime="2020-05-01T23:36:38+08:00">2020-05-01</time>
+                <time title="修改时间：2020-05-01 23:53:28" itemprop="dateModified" datetime="2020-05-01T23:53:28+08:00">2020-05-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,16 +240,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>​       这篇文章将对Bert等模型使用的分词技术进行介绍。同时会涉及这些分词器在huggingface <a href="https://github.com/huggingface/tokenizers" target="_blank" rel="noopener">tokenizers</a>库中的使用。理解这些分词器的原理，对于灵活使用transformers库中的不同模型非常重要。除此之外，我们还能将这些分词器用于其他任务中，如果有必要的话，我们还能自己训练分词器。</p>
-<h2 id="分词器是做什么的？"><a href="#分词器是做什么的？" class="headerlink" title="分词器是做什么的？"></a>分词器是做什么的？</h2><p>​        <strong>机器无法理解文本。</strong>当我们将句子序列送入模型时，模型仅仅能看到一串字节，它无法知道一个词从哪里开始，到哪里结束，所以也不知道一个词是怎么组成的。</p>
+        <h2 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h2><p>这篇文章将对Bert等模型使用的分词技术进行介绍。同时会涉及这些分词器在huggingface <a href="https://github.com/huggingface/tokenizers" target="_blank" rel="noopener">tokenizers</a>库中的使用。理解这些分词器的原理，对于灵活使用transformers库中的不同模型非常重要。除此之外，我们还能将这些分词器用于其他任务中，如果有必要的话，我们还能自己训练分词器。</p>
+<h2 id="分词器是做什么的？"><a href="#分词器是做什么的？" class="headerlink" title="分词器是做什么的？"></a>分词器是做什么的？</h2><p><strong>机器无法理解文本。</strong>当我们将句子序列送入模型时，模型仅仅能看到一串字节，它无法知道一个词从哪里开始，到哪里结束，所以也不知道一个词是怎么组成的。</p>
 <p>​    所以，为了帮助机器理解文本，我们需要</p>
 <ol>
 <li>将文本分成一个个小片段</li>
 <li>然后将这些片段表示为一个向量作为模型的输入</li>
 <li>同时，我们需要将一个个小片段（token) 表示为向量，作为词嵌入矩阵， 通过在语料库上训练来优化token的表示，使其蕴含更多有用的信息，用于之后的任务。</li>
 </ol>
-<h2 id="古典分词方法"><a href="#古典分词方法" class="headerlink" title="古典分词方法"></a>古典分词方法</h2><p><img src="/.io//tokenize.png" alt="3 different tokenization scheme: on rules, on punctuaction, on white spaces from https://blog.floydhub.com/tokenization-nlp/"></p>
-<h3 id="基于空格的分词方法"><a href="#基于空格的分词方法" class="headerlink" title="基于空格的分词方法"></a>基于空格的分词方法</h3><p>​        一个句子，使用不同的规则，将有许多种不同的分词结果。我们之前常用的分词方法将空格作为分词的边界。也就是图中的第三种方法。但是，这种方法存在问题，即只有在训练语料中出现的token才能被训练器学习到，而那些没有出现的token将会被<code>&lt;UNK&gt;</code>等特殊标记代替，这样将影响模型的表现。如果我们将词典做得足够大，使其能容纳所有的单词。那么词典将非常庞大，产生很大的开销。同时对于出现次数很少的词，学习其token的向量表示也非常困难。除去这些原因，有很多语言不用空格进行分词，也就无法使用基于空格分词的方法。综上，我们需要新的分词方法来解决这些问题。</p>
+<h2 id="古典分词方法"><a href="#古典分词方法" class="headerlink" title="古典分词方法"></a>古典分词方法</h2><p><img src="/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/tokenize.png" alt="tokenize"></p>
+<h3 id="基于空格的分词方法"><a href="#基于空格的分词方法" class="headerlink" title="基于空格的分词方法"></a>基于空格的分词方法</h3><p>一个句子，使用不同的规则，将有许多种不同的分词结果。我们之前常用的分词方法将空格作为分词的边界。也就是图中的第三种方法。但是，这种方法存在问题，即只有在训练语料中出现的token才能被训练器学习到，而那些没有出现的token将会被<code>&lt;UNK&gt;</code>等特殊标记代替，这样将影响模型的表现。如果我们将词典做得足够大，使其能容纳所有的单词。那么词典将非常庞大，产生很大的开销。同时对于出现次数很少的词，学习其token的向量表示也非常困难。除去这些原因，有很多语言不用空格进行分词，也就无法使用基于空格分词的方法。综上，我们需要新的分词方法来解决这些问题。</p>
 <h3 id="基于字母的分词方法"><a href="#基于字母的分词方法" class="headerlink" title="基于字母的分词方法"></a>基于字母的分词方法</h3><p><strong>优点</strong>： 不用担心未知词汇，可以为每一个单词生成词嵌入向量表示。</p>
 <p><strong>缺点</strong>：</p>
 <ul>
@@ -257,18 +257,18 @@
 <li>计算复杂度提升（字母的数目远大于token的数目）</li>
 <li>输出序列的长度将变大，对于Bert、CNN等限制最大长度的模型将很容易达到最大值。</li>
 </ul>
-<h2 id="基于子词的分词方法（Subword-Tokenization）"><a href="#基于子词的分词方法（Subword-Tokenization）" class="headerlink" title="基于子词的分词方法（Subword Tokenization）"></a>基于子词的分词方法（Subword Tokenization）</h2><p>​        为了改进分词方法，在<code>&lt;UNK&gt;</code>数目和词向量含义丰富性之间达到平衡，提出了Subword Tokenization方法。这种方法的目的是通过一个有限的单词列表来解决所有单词的分词问题，同时将结果中token的数目降到最低。例如，可以用更小的词片段来组成更大的词：</p>
+<h2 id="基于子词的分词方法（Subword-Tokenization）"><a href="#基于子词的分词方法（Subword-Tokenization）" class="headerlink" title="基于子词的分词方法（Subword Tokenization）"></a>基于子词的分词方法（Subword Tokenization）</h2><p>为了改进分词方法，在<code>&lt;UNK&gt;</code>数目和词向量含义丰富性之间达到平衡，提出了Subword Tokenization方法。这种方法的目的是通过一个有限的单词列表来解决所有单词的分词问题，同时将结果中token的数目降到最低。例如，可以用更小的词片段来组成更大的词：</p>
 <p>“<strong><em>unfortunately</em></strong>” = “<strong><em>un</em></strong>” + “<strong><em>for</em></strong>” + “<strong><em>tun</em></strong>” + “<strong><em>ate</em></strong>” + “<strong><em>ly</em></strong>”。</p>
 <p>接下来，将介绍几种不同的Subword Tokenization方法。</p>
 <h3 id="Byte-Pair-Encoding-BPE-字节对编码"><a href="#Byte-Pair-Encoding-BPE-字节对编码" class="headerlink" title="Byte Pair Encoding (BPE) 字节对编码"></a>Byte Pair Encoding (BPE) 字节对编码</h3><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>字节对编码最早是在信号压缩领域提出的，后来被应用于分词任务中。在信号压缩领域中BPE过程可视化如下：</p>
-<p><img src="/.io//1_x1Y_n3sXGygUPSdfXTm9pQ.gif" alt="img"></p>
+<p><img src="/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/1_x1Y_n3sXGygUPSdfXTm9pQ.gif" alt="1_x1Y_n3sXGygUPSdfXTm9pQ"></p>
 <p>接下来重点介绍将BPE应用于分词任务的流程：</p>
 <h3 id="实现流程"><a href="#实现流程" class="headerlink" title="实现流程"></a>实现流程</h3><ol>
 <li>根据语料库建立一个词典，词典中仅包含单个字符，如英文中就是a-z</li>
 <li>统计语料库中出现次数最多的字符对（词典中两项的组合），然后将字符对加入到词典中</li>
 <li>重复步骤2直到到达规定的步骤数目或者词典尺寸缩小到了指定的值。</li>
 </ol>
-<h3 id="BPE存在的缺点："><a href="#BPE存在的缺点：" class="headerlink" title="BPE存在的缺点："></a><strong>BPE</strong>存在的缺点：</h3><p><img src="/.io//image-20200429104839759.png" alt="image-20200429104839759"></p>
+<h3 id="BPE存在的缺点："><a href="#BPE存在的缺点：" class="headerlink" title="BPE存在的缺点："></a><strong>BPE</strong>存在的缺点：</h3><p><img src="/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/image-20200429104839759.png" alt="image-20200429104839759"></p>
 <ul>
 <li>对于同一个句子, 例如Hello world，如图所示，可能会有不同的Subword序列。不同的Subword序列会产生完全不同的id序列表示，这种歧义可能在解码阶段无法解决。在翻译任务中，不同的id序列可能翻译出不同的句子，这显然是错误的。</li>
 <li>在训练任务中，如果能对不同的Subword进行训练的话，将增加模型的健壮性，能够容忍更多的噪声，而BPE的贪心算法无法对随机分布进行学习。</li>
@@ -280,7 +280,7 @@ P(\vec{x}) = \prod_{i=1}^{M}p(x_i)</script><p>这里的$x_i$是从预先定义�
 <script type="math/tex; mode=display">
 x^* =\underset{x\in S(X)}{arg\;max}\;P(\vec{x})</script><p>这里$S(X)$是句子$X$不同的分词结果集合。$x^*$可以通过维特比算法得到。</p>
 <p>如果已知词典$V$, 我们可以通过EM算法来估计$p(x_i)$，其中M步最大化的对象是以下似然函数（原谅我这里偷懒直接使用图片）：</p>
-<p><img src="/.io//image-20200501185312612.png" alt="image-20200501185312612"></p>
+<p><img src="/images/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/image-20200501185312612.png" alt="image-20200501185312612"></p>
 <p>$|D|$是语料库中语料数量。</p>
 <p><strong>我是这样理解这个似然函数的：</strong>将语料库中所有句子的所有分词组合形成的概率相加。</p>
 <p>初始时，我们连词典$V$都没有，作者通过不断执行以下步骤来构造合适的词典以及分词概率：</p>
