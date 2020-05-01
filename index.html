@@ -167,270 +167,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/04/23/HuggingFace-transformers%E7%B3%BB%E5%88%97%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="I am a fresh researcher in nlp in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/23/HuggingFace-transformers%E7%B3%BB%E5%88%97%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">HuggingFace-Transformers系列的介绍以及在下游任务中的使用</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <i class="fa fa-thumb-tack"></i>
-            <font color=7D26CD>置顶</font>
-            <span class="post-meta-divider">|</span>
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-04-23 09:02:46" itemprop="dateCreated datePublished" datetime="2020-04-23T09:02:46+08:00">2020-04-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-27 11:43:04" itemprop="dateModified" datetime="2020-04-27T11:43:04+08:00">2020-04-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="内容介绍"><a href="#内容介绍" class="headerlink" title="内容介绍"></a>内容介绍</h1><p>这篇博客主要面向对<strong>Bert</strong>系列在<strong>Pytorch</strong>上应用感兴趣的同学，将涵盖的主要内容是：Bert系列有关的论文，<a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">Huggingface</a>的实现，以及如何在不同下游任务中使用预训练模型。</p>
-<p>看过这篇博客，你将了解：</p>
-<ul>
-<li>Transformers实现的介绍，不同的Tokenizer和Model如何使用。</li>
-<li>如何利用HuggingFace的实现自定义你的模型，如果你想利用这个库实现自己的下游任务，而不想过多关注其实现细节的话，那么这篇文章将会成为很好的参考。</li>
-</ul>
-<h2 id="Huggingface-transformers介绍"><a href="#Huggingface-transformers介绍" class="headerlink" title="Huggingface-transformers介绍"></a>Huggingface-transformers介绍</h2><p><a href="https://huggingface.co/transformers/index.html" target="_blank" rel="noopener">transformers</a>（以前称为pytorch-transformers和pytorch-pretrained-bert）提供用于自然语言理解（NLU）和自然语言生成（NLG）的BERT家族通用结构（BERT，GPT-2，RoBERTa，XLM，DistilBert，XLNet等），包含超过32种、涵盖100多种语言的预训练模型。同时提供TensorFlow 2.0和PyTorch之间的高互通性。</p>
-<p><strong>特性</strong>：</p>
-<ul>
-<li><p>与pytorch-transformers一样易于使用</p>
-</li>
-<li><p>像Keras一样强大而简洁</p>
-</li>
-<li><p>在NLU和NLG任务上表现良好</p>
-</li>
-<li><p>对于教育者和从业者的门槛低</p>
-</li>
-</ul>
-<p><strong>现存的模型</strong>：</p>
-<ul>
-<li><p>Bert(基础版和巨人版, 是否区分大小写)， </p>
-</li>
-<li><p>GPT, GPT-2</p>
-</li>
-<li><p>Transformer-XL, XLNet, XLM</p>
-</li>
-<li><p>DistilBERT, DistilGPT2</p>
-</li>
-<li><p>CTRL</p>
-</li>
-<li><p>ALBERT, RoBERTa, XLM-RoBERTa</p>
-</li>
-<li><p>FlauBERT，CamemBERT</p>
-</li>
-<li>其他在各种下游任务上微调过的模型。</li>
-<li>在多语言上训练的模型</li>
-</ul>
-<h1 id="所需的知识"><a href="#所需的知识" class="headerlink" title="所需的知识"></a>所需的知识</h1><p><a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">安装Huggface库</a>(需要预先安装pytorch)</p>
-<p>在阅读这篇文章之前，如果你能将以下资料读一遍，或者看一遍的话，在后续的阅读过程中将极大地减少你陷入疑惑的概率。</p>
-<ul>
-<li>视频类内容：根据排序观看更佳<ul>
-<li><a href="https://www.bilibili.com/video/BV17441137fa?from=search&amp;seid=17871853660365597030" target="_blank" rel="noopener">李宏毅关于Elmo, Bert, GPT的讲解</a></li>
-<li><a href="https://www.bilibili.com/video/BV1Tt411M7Wp?from=search&amp;seid=194654766718455422" target="_blank" rel="noopener">Goebels关于transformerXL的讲解</a></li>
-<li><a href="https://www.youtube.com/watch?v=H5vpBCLo74U" target="_blank" rel="noopener">Kilcher关于XLnet的讲解</a></li>
-<li><a href="https://www.youtube.com/watch?v=vsGN8WqwvKg&amp;t=597s" target="_blank" rel="noopener">McCormick关于ALBERT的讲解</a></li>
-</ul>
-</li>
-</ul>
-<p><strong>或者</strong>，你更愿意去看论文的话：</p>
-<ul>
-<li>相关论文：根据排序阅读更佳<ul>
-<li><a href="https://arxiv.org/abs/1810.04805" target="_blank" rel="noopener">arXiv:1810.04805</a>, BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding, Authors: Jacob Devlin, Ming-Wei Chang, Kenton Lee, Kristina Toutanova</li>
-<li><a href="https://arxiv.org/abs/1901.02860" target="_blank" rel="noopener">arXiv:1901.02860</a>, Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context,  Authors: Zihang Dai, Zhilin Yang, Yiming Yang, William W. Cohen, Jaime Carbonell, Quoc V. Le and Ruslan Salakhutdinov.</li>
-<li>XLNet论文</li>
-<li>ALBERT论文</li>
-</ul>
-</li>
-</ul>
-<h1 id="HuggingFace模型加载-下游任务使用"><a href="#HuggingFace模型加载-下游任务使用" class="headerlink" title="HuggingFace模型加载+下游任务使用"></a>HuggingFace模型加载+下游任务使用</h1><h2 id="项目组件"><a href="#项目组件" class="headerlink" title="项目组件"></a>项目组件</h2><p>一个完整的transformer模型主要包含三部分：</p>
-<ol>
-<li><p><strong>Config</strong>，控制模型的名称、最终输出的样式、隐藏层宽度和深度、激活函数的类别等。将Config类导出时文件格式为 json格式，就像下面这样：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"attention_probs_dropout_prob"</span>: <span class="number">0.1</span>,</span><br><span class="line">  <span class="attr">"hidden_act"</span>: <span class="string">"gelu"</span>,</span><br><span class="line">  <span class="attr">"hidden_dropout_prob"</span>: <span class="number">0.1</span>,</span><br><span class="line">  <span class="attr">"hidden_size"</span>: <span class="number">768</span>,</span><br><span class="line">  <span class="attr">"initializer_range"</span>: <span class="number">0.02</span>,</span><br><span class="line">  <span class="attr">"intermediate_size"</span>: <span class="number">3072</span>,</span><br><span class="line">  <span class="attr">"max_position_embeddings"</span>: <span class="number">512</span>,</span><br><span class="line">  <span class="attr">"num_attention_heads"</span>: <span class="number">12</span>,</span><br><span class="line">  <span class="attr">"num_hidden_layers"</span>: <span class="number">12</span>,</span><br><span class="line">  <span class="attr">"type_vocab_size"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"vocab_size"</span>: <span class="number">30522</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，也可以通过config.json来实例化Config类，这是一个互逆的过程。</p>
-</li>
-<li><p><strong>Tokenizer</strong>，这是一个将纯文本转换为编码的过程。注意，Tokenizer并不涉及将词转化为词向量的过程，仅仅是将纯文本分词，添加[MASK]标记、[SEP]、[CLS]标记，并转换为字典索引。Tokenizer类导出时将分为三个文件，也就是：</p>
-<ul>
-<li><p>vocab.txt</p>
-<p>词典文件，每一行为一个词或词的一部分</p>
-</li>
-<li><p>special_tokens_map.json 特殊标记的定义方式</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"unk_token"</span>: <span class="string">"[UNK]"</span>, <span class="attr">"sep_token"</span>: <span class="string">"[SEP]"</span>, <span class="attr">"pad_token"</span>: <span class="string">"[PAD]"</span>, </span><br><span class="line"> <span class="attr">"cls_token"</span>: <span class="string">"[CLS]"</span>, <span class="attr">"mask_token"</span>: <span class="string">"[MASK]"</span>&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>tokenizer_config.json 配置文件，主要存储特殊的配置。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>Model</strong>，也就是各种各样的模型。除了初始的Bert、GPT等基本模型，针对下游任务，还定义了诸如<code>BertForQuestionAnswering</code>等下游任务模型。模型导出时将生成<code>config.json</code>和<code>pytorch_model.bin</code>参数文件。前者就是1中的配置文件，这和我们的直觉相同，即config和model应该是紧密联系在一起的两个类。后者其实和torch.save()存储得到的文件是相同的，这是因为Model都直接或者间接继承了Pytorch的Module类。从这里可以看出，HuggingFace在实现时很好地尊重了Pytorch的原生API。</p>
-</li>
-</ol>
-<h2 id="导入Bert系列基本模型的方法"><a href="#导入Bert系列基本模型的方法" class="headerlink" title="导入Bert系列基本模型的方法"></a>导入Bert系列基本模型的方法</h2><h3 id="通过官网自动导入"><a href="#通过官网自动导入" class="headerlink" title="通过官网自动导入"></a>通过官网自动导入</h3><p>官方文档中<a href="https://huggingface.co/transformers/quickstart.html#" target="_blank" rel="noopener">初始教程</a>提供的方法为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Load pre-trained model (weights)</span></span><br><span class="line"><span class="comment"># model = BertModel.from_pretrained('bert-base-uncased')</span></span><br></pre></td></tr></table></figure>
-<p>这个方法需要从官方的s3数据库下载模型配置、参数等信息（代码中已配置好位置）。这个方法虽然简单，但是在国内并不可用。当然你可以先尝试一下，不过会有很大的概率无法下载模型。</p>
-<h3 id="手动下载模型信息并导入"><a href="#手动下载模型信息并导入" class="headerlink" title="手动下载模型信息并导入"></a>手动下载模型信息并导入</h3><ol>
-<li><p>在HuggingFace<a href="https://huggingface.co/models" target="_blank" rel="noopener">官方模型库</a>上找到需要下载的模型，点击模型链接， 这个例子使用的是bert-base-uncased模型</p>
-</li>
-<li><p>点击<a href="https://huggingface.co/bert-base-uncased#" target="_blank" rel="noopener">List all files in model</a>，将其中的文件一一下载到同一目录中。例如，对于XLNet:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># List of model files</span><br><span class="line">config.json	782.0B</span><br><span class="line">pytorch_model.bin	445.4MB</span><br><span class="line">special_tokens_map.json	202.0B</span><br><span class="line">spiece.model	779.3KB</span><br><span class="line">tokenizer_config.json	2.0B</span><br></pre></td></tr></table></figure>
-<p>但是这种方法有时也会不可用。如果您可以将Transformers预训练模型上传到迅雷等网盘的话，请在评论区告知，我会添加在此博客中，并为您添加博客友链。</p>
-</li>
-<li><p>通过下载好的路径导入模型：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> transformers</span><br><span class="line">MODEL_PATH = <span class="string">r"D:\transformr_files\bert-base-uncased/"</span></span><br><span class="line"><span class="comment"># a.通过词典导入分词器</span></span><br><span class="line">tokenizer = transformers.BertTokenizer.from_pretrained(<span class="string">r"D:\transformr_files\bert-base-uncased\bert-base-uncased-vocab.txt"</span>) </span><br><span class="line"><span class="comment"># b. 导入配置文件</span></span><br><span class="line">model_config = transformers.BertConfig.from_pretrained(MODEL_PATH)</span><br><span class="line"><span class="comment"># 修改配置</span></span><br><span class="line">model_config.output_hidden_states = <span class="literal">True</span></span><br><span class="line">model_config.output_attentions = <span class="literal">True</span></span><br><span class="line"><span class="comment"># 通过配置和路径导入模型</span></span><br><span class="line">model = transformers.BertModel.from_pretrained(MODEL_PATH,config = model_config)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="利用分词器分词"><a href="#利用分词器分词" class="headerlink" title="利用分词器分词"></a>利用分词器分词</h3><p>利用分词器进行编码</p>
-<ul>
-<li><p>对于单句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encode仅返回input_ids</span></span><br><span class="line">tokenizer.encode(<span class="string">"i like you"</span>)</span><br><span class="line">Out : [<span class="number">101</span>, <span class="number">1045</span>, <span class="number">2066</span>, <span class="number">2017</span>, <span class="number">102</span>]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对于多句：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encode_plus返回所有编码信息</span></span><br><span class="line">tokenizer.encode_plus(<span class="string">"i like you"</span>, <span class="string">"but not him"</span>)</span><br><span class="line">Out : </span><br><span class="line">    &#123;<span class="string">'input_ids'</span>: [<span class="number">101</span>, <span class="number">1045</span>, <span class="number">2066</span>, <span class="number">2017</span>, <span class="number">102</span>, <span class="number">2021</span>, <span class="number">2025</span>, <span class="number">2032</span>, <span class="number">102</span>],</span><br><span class="line">     <span class="string">'token_type_ids'</span>: [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">     <span class="string">'attention_mask'</span>: [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>模型的所有分词器都是在PreTrainedTokenizer中实现的，分词的结果主要有以下内容：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">input_ids: list[int],</span><br><span class="line">token_type_ids: list[int] <span class="keyword">if</span> return_token_type_ids <span class="keyword">is</span> <span class="literal">True</span> (default)</span><br><span class="line">attention_mask: list[int] <span class="keyword">if</span> return_attention_mask <span class="keyword">is</span> <span class="literal">True</span> (default)</span><br><span class="line">overflowing_tokens: list[int] <span class="keyword">if</span> a max_length <span class="keyword">is</span> specified <span class="keyword">and</span> 		return_overflowing_tokens <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">num_truncated_tokens: int <span class="keyword">if</span> a max_length <span class="keyword">is</span> specified <span class="keyword">and</span> return_overflowing_tokens <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">special_tokens_mask: list[int] <span class="keyword">if</span> add_special_tokens <span class="keyword">if</span> set to <span class="literal">True</span> <span class="keyword">and</span> return_special_tokens_mask <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编码解释：</p>
-<ul>
-<li>‘input_ids’：顾名思义，是单词在词典中的编码</li>
-<li>‘token_type_ids’， 区分两个句子的编码</li>
-<li>‘attention_mask’,  指定对哪些词进行self-Attention操作</li>
-<li>‘overflowing_tokens’, 当指定最大长度时，溢出的单词</li>
-<li>‘num_truncated_tokens’, 溢出的token数量</li>
-<li>‘return_special_tokens_mask’，如果添加特殊标记，则这是[0，1]的列表，其中0指定特殊添加的标记，而1指定序列标记</li>
-</ul>
-<h3 id="将分词结果输入模型，得到编码"><a href="#将分词结果输入模型，得到编码" class="headerlink" title="将分词结果输入模型，得到编码"></a>将分词结果输入模型，得到编码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加batch维度并转化为tensor</span></span><br><span class="line">input_ids = torch.tensor([input_ids])</span><br><span class="line">token_type_ids = torch.tensor([token_type_ids])</span><br><span class="line"><span class="comment"># 将模型转化为eval模式</span></span><br><span class="line">model.eval()</span><br><span class="line"><span class="comment"># 将模型和数据转移到cuda, 若无cuda,可更换为cpu</span></span><br><span class="line">device = <span class="string">'cuda'</span></span><br><span class="line">tokens_tensor = input_ids.to(device)</span><br><span class="line">segments_tensors = token_type_ids.to(device)</span><br><span class="line">model.to(device)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行编码</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    <span class="comment"># See the models docstrings for the detail of the inputs</span></span><br><span class="line">    outputs = model(tokens_tensor, token_type_ids=segments_tensors)</span><br><span class="line">    <span class="comment"># Transformers models always output tuples.</span></span><br><span class="line">    <span class="comment"># See the models docstrings for the detail of all the outputs</span></span><br><span class="line">    <span class="comment"># In our case, the first element is the hidden state of the last layer of the Bert model</span></span><br><span class="line">    encoded_layers = outputs</span><br><span class="line"><span class="comment"># 得到最终的编码结果encoded_layers</span></span><br></pre></td></tr></table></figure>
-<p>Bert最终输出的结果为：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sequence_output, pooled_output, (hidden_states), (attentions)</span><br></pre></td></tr></table></figure>
-<p>以输入序列长度为14为例</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>index</th>
-<th>名称</th>
-<th>维度</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>sequence_output</td>
-<td>torch.Size([1, 14, 768])</td>
-<td>输出序列</td>
-</tr>
-<tr>
-<td>1</td>
-<td>pooled_output</td>
-<td>torch.Size([1, 768])</td>
-<td>对输出序列进行pool操作的结果</td>
-</tr>
-<tr>
-<td>2</td>
-<td>(hidden_states)</td>
-<td>tuple,13*torch.Size([1, 14, 768])</td>
-<td>隐藏层状态(包括Embedding层)，取决于modelconfig中output_hidden_states</td>
-</tr>
-<tr>
-<td>3</td>
-<td>(attentions)</td>
-<td>tuple,12*torch.Size([1, 12, 14, 14])</td>
-<td>注意力层，取决于参数中output_attentions</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Bert总结"><a href="#Bert总结" class="headerlink" title="Bert总结"></a>Bert总结</h3><p>这一节我们以Bert为例对模型整体的流程进行了了解。之后的很多模型都基于Bert，并基于Bert进行了少量的调整。其中的输出和输出参数也有很多重复的地方。</p>
-<h2 id="利用预训练模型在下游任务上微调"><a href="#利用预训练模型在下游任务上微调" class="headerlink" title="利用预训练模型在下游任务上微调"></a>利用预训练模型在下游任务上微调</h2><p>如开头所说，这篇文章重点在于”如何进行模型的调整以及输入输出的设定”, 以及”Transformer的实现进行简要的提及”, 所以，我们不会去介绍、涉及如何写train循环等话题，而仅仅专注于模型。也就是说，我们将止步于跑通一个模型，而不计批量数据预处理、训练、验证等过程。</p>
-<p>同时，这里更看重如何基于Bert等初始模型在实际任务上进行微调，所以我们不会仅仅地导入已经在下游任务上训练好的模型参数，因为在这些模型上使用的方法和上一章的几乎完全相同。</p>
-<p>这里的输入和输入以模型的预测过程为例。</p>
-<h3 id="问答任务-via-Bert"><a href="#问答任务-via-Bert" class="headerlink" title="问答任务 via Bert"></a>问答任务 via Bert</h3><p><strong>任务输入</strong>：问题句，答案所在的文章 <code>&quot;Who was Jim Henson?&quot;, &quot;Jim Henson was a nice puppet&quot;</code></p>
-<p><strong>任务输出</strong>：答案  <code>&quot;a nice puppet&quot;</code></p>
-<p>现存的模型输入输出和任务的输入输出有一定差别，这也是在使用上需要区别的地方：</p>
-<p><strong>模型输入</strong>：inputids, token_type_ids</p>
-<p><strong>模型输出</strong>：start_scores, end_scores 形状都为<code>torch.Size([1, 14])</code>,其中<code>14</code>为序列长度，代表每个位置是开始/结束位置的概率。</p>
-<p><strong>模型的构建</strong>：</p>
-<p>一般情况下，一个基本模型对应一个Tokenizer, 所以并不存在对应于具体下游任务的Tokenizer。这里通过bert_model初始化BertForQuestionAnswering。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertTokenizer, BertForQuestionAnswering</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">MODEL_PATH = <span class="string">r"D:\transformr_files\bert-base-uncased/"</span></span><br><span class="line"><span class="comment"># 实例化tokenizer</span></span><br><span class="line">tokenizer = BertTokenizer.from_pretrained(<span class="string">r"D:\transformr_files\bert-base-uncased\bert-base-uncased-vocab.txt"</span>)</span><br><span class="line"><span class="comment"># 导入bert的model_config</span></span><br><span class="line">model_config = transformers.BertConfig.from_pretrained(MODEL_PATH)</span><br><span class="line"><span class="comment"># 首先新建bert_model</span></span><br><span class="line">bert_model = transformers.BertModel.from_pretrained(MODEL_PATH,config = model_config)</span><br><span class="line"><span class="comment"># 最终有两个输出，初始位置和结束位置（下面有解释）</span></span><br><span class="line">model_config.num_labels = <span class="number">2</span></span><br><span class="line"><span class="comment"># 同样根据bert的model_config新建BertForQuestionAnswering</span></span><br><span class="line">model = BertForQuestionAnswering(model_config)</span><br><span class="line">model.bert = bert_model</span><br></pre></td></tr></table></figure>
-<p><strong>利用模型进行运算：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设定模式</span></span><br><span class="line">model.eval()</span><br><span class="line">question, text = <span class="string">"Who was Jim Henson?"</span>, <span class="string">"Jim Henson was a nice puppet"</span></span><br><span class="line"><span class="comment"># 获取input_ids编码</span></span><br><span class="line">input_ids = tokenizer.encode(question, text)</span><br><span class="line"><span class="comment"># 手动进行token_type_ids编码，可用encode_plus代替</span></span><br><span class="line">token_type_ids = [<span class="number">0</span> <span class="keyword">if</span> i &lt;= input_ids.index(<span class="number">102</span>) <span class="keyword">else</span> <span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(input_ids))]</span><br><span class="line"><span class="comment"># 得到评分, </span></span><br><span class="line">start_scores, end_scores = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([token_type_ids]))</span><br><span class="line"><span class="comment"># 进行逆编码，得到原始的token </span></span><br><span class="line">all_tokens = tokenizer.convert_ids_to_tokens(input_ids)</span><br><span class="line"><span class="comment">#['[CLS]', 'who', 'was', 'jim', 'henson', '?', '[SEP]', 'jim', 'henson', 'was', 'a', 'nice', 'puppet', '[SEP]']</span></span><br></pre></td></tr></table></figure>
-<p><strong>将模型输出转化为任务输出：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对输出的答案进行解码的过程</span></span><br><span class="line">answer = <span class="string">' '</span>.join(all_tokens[torch.argmax(start_scores) : torch.argmax(end_scores)+<span class="number">1</span>])</span><br><span class="line"><span class="comment"># assert answer == "a nice puppet" </span></span><br><span class="line"><span class="comment"># 这里因为没有经过微调，所以效果不是很好，输出结果不佳。</span></span><br><span class="line">print(answer)</span><br><span class="line"><span class="comment"># 'was jim henson ? [SEP] jim henson was a nice puppet [SEP]'</span></span><br></pre></td></tr></table></figure>
-<h3 id="文本分类任务-情感分析等-via-XLNet"><a href="#文本分类任务-情感分析等-via-XLNet" class="headerlink" title="文本分类任务(情感分析等) via XLNet"></a>文本分类任务(情感分析等) via XLNet</h3><p><strong>任务输入</strong>：句子 <code>&quot;i like you, what about you&quot;</code></p>
-<p><strong>任务输出</strong>：句子所属的类别 <code>class1</code></p>
-<p><strong>模型输入</strong>：inputids, token_type_ids</p>
-<p><strong>模型输出</strong>：logits, hidden states， 其中logits形状为<code>torch.Size([1, 3])</code>, 其中的3对应的是类别的数量。当训练时，第一项为loss。</p>
-<p><strong>模型的构建</strong>：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> XLNetConfig, XLNetModel, XLNetTokenizer, XLNetForSequenceClassification</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="comment"># 定义路径，初始化tokenizer</span></span><br><span class="line">XLN_PATH = <span class="string">r"D:\transformr_files\XLNetLMHeadModel"</span></span><br><span class="line">tokenizer = XLNetTokenizer.from_pretrained(XLN_PATH)</span><br><span class="line"><span class="comment"># 加载配置</span></span><br><span class="line">model_config = XLNetConfig.from_pretrained(XLN_PATH)</span><br><span class="line"><span class="comment"># 设定类别数为3</span></span><br><span class="line">model_config.num_labels = <span class="number">3</span></span><br><span class="line"><span class="comment"># 直接从xlnet的config新建XLNetForSequenceClassification(和上一节方法等效)</span></span><br><span class="line">cls_model = XLNetForSequenceClassification.from_pretrained(XLN_PATH, config=model_config)</span><br></pre></td></tr></table></figure>
-<p><strong>利用模型进行运算：</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设定模式</span></span><br><span class="line">model.eval()</span><br><span class="line">token_codes = tokenizer.encode_plus(<span class="string">"i like you, what about you"</span>)</span><br><span class="line"><span class="comment"># encode_plus结果为字典形式</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    outputs = cls_model(input_ids=torch.tensor([token_codes[<span class="string">'input_ids'</span>]]),token_type_ids = torch.tensor([token_codes[<span class="string">'token_type_ids'</span>]]))</span><br><span class="line"><span class="comment"># outputs[0]为logits，outputs[1]为hidden</span></span><br></pre></td></tr></table></figure>
-<p>输出的转化可直接通过numpy的argmax函数实现。</p>
-<h3 id="其他的任务，将继续更新"><a href="#其他的任务，将继续更新" class="headerlink" title="其他的任务，将继续更新"></a>其他的任务，将继续更新</h3><p>其他的模型和之前的两个大致是相同的，你可以自己发挥。我会继续在相关的库上进行实验，如果发现用法不一样的情况，将会添加在这里。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>本文章主要对HuggingFace库进行了简要介绍。具体安装等过程请参见官方<a href="https://github.com/huggingface/transformers" target="_blank" rel="noopener">github仓库</a>。</p>
-<p>本文主要参考于<a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">官方文档</a></p>
-<p>同时，在模型的理解过程中参考了一些kaggle上的notebooks, <a href="https://www.kaggle.com/abhishek/bert-base-uncased-using-pytorch" target="_blank" rel="noopener">主要是这一篇</a>，作者是<a href="https://www.kaggle.com/abhishek" target="_blank" rel="noopener">Abhishek Thakur</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/04/29/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -463,7 +199,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-01 21:28:57" itemprop="dateModified" datetime="2020-05-01T21:28:57+08:00">2020-05-01</time>
+                <time title="修改时间：2020-05-01 23:36:38" itemprop="dateModified" datetime="2020-05-01T23:36:38+08:00">2020-05-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -496,7 +232,7 @@
 <li>然后将这些片段表示为一个向量作为模型的输入</li>
 <li>同时，我们需要将一个个小片段（token) 表示为向量，作为词嵌入矩阵， 通过在语料库上训练来优化token的表示，使其蕴含更多有用的信息，用于之后的任务。</li>
 </ol>
-<h2 id="古典分词方法"><a href="#古典分词方法" class="headerlink" title="古典分词方法"></a>古典分词方法</h2><p><img src="Bert系列伴生的新分词器.assets/tokenize.png" alt="3 different tokenization scheme: on rules, on punctuaction, on white spaces from https://blog.floydhub.com/tokenization-nlp/"></p>
+<h2 id="古典分词方法"><a href="#古典分词方法" class="headerlink" title="古典分词方法"></a>古典分词方法</h2><p><img src="/.io//tokenize.png" alt="3 different tokenization scheme: on rules, on punctuaction, on white spaces from https://blog.floydhub.com/tokenization-nlp/"></p>
 <h3 id="基于空格的分词方法"><a href="#基于空格的分词方法" class="headerlink" title="基于空格的分词方法"></a>基于空格的分词方法</h3><p>​        一个句子，使用不同的规则，将有许多种不同的分词结果。我们之前常用的分词方法将空格作为分词的边界。也就是图中的第三种方法。但是，这种方法存在问题，即只有在训练语料中出现的token才能被训练器学习到，而那些没有出现的token将会被<code>&lt;UNK&gt;</code>等特殊标记代替，这样将影响模型的表现。如果我们将词典做得足够大，使其能容纳所有的单词。那么词典将非常庞大，产生很大的开销。同时对于出现次数很少的词，学习其token的向量表示也非常困难。除去这些原因，有很多语言不用空格进行分词，也就无法使用基于空格分词的方法。综上，我们需要新的分词方法来解决这些问题。</p>
 <h3 id="基于字母的分词方法"><a href="#基于字母的分词方法" class="headerlink" title="基于字母的分词方法"></a>基于字母的分词方法</h3><p><strong>优点</strong>： 不用担心未知词汇，可以为每一个单词生成词嵌入向量表示。</p>
 <p><strong>缺点</strong>：</p>
@@ -509,14 +245,14 @@
 <p>“<strong><em>unfortunately</em></strong>” = “<strong><em>un</em></strong>” + “<strong><em>for</em></strong>” + “<strong><em>tun</em></strong>” + “<strong><em>ate</em></strong>” + “<strong><em>ly</em></strong>”。</p>
 <p>接下来，将介绍几种不同的Subword Tokenization方法。</p>
 <h3 id="Byte-Pair-Encoding-BPE-字节对编码"><a href="#Byte-Pair-Encoding-BPE-字节对编码" class="headerlink" title="Byte Pair Encoding (BPE) 字节对编码"></a>Byte Pair Encoding (BPE) 字节对编码</h3><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>字节对编码最早是在信号压缩领域提出的，后来被应用于分词任务中。在信号压缩领域中BPE过程可视化如下：</p>
-<p><img src="Bert系列伴生的新分词器.assets/1_x1Y_n3sXGygUPSdfXTm9pQ.gif" alt="img"></p>
+<p><img src="/.io//1_x1Y_n3sXGygUPSdfXTm9pQ.gif" alt="img"></p>
 <p>接下来重点介绍将BPE应用于分词任务的流程：</p>
 <h3 id="实现流程"><a href="#实现流程" class="headerlink" title="实现流程"></a>实现流程</h3><ol>
 <li>根据语料库建立一个词典，词典中仅包含单个字符，如英文中就是a-z</li>
 <li>统计语料库中出现次数最多的字符对（词典中两项的组合），然后将字符对加入到词典中</li>
 <li>重复步骤2直到到达规定的步骤数目或者词典尺寸缩小到了指定的值。</li>
 </ol>
-<h3 id="BPE存在的缺点："><a href="#BPE存在的缺点：" class="headerlink" title="BPE存在的缺点："></a><strong>BPE</strong>存在的缺点：</h3><p><img src="Bert系列伴生的新分词器.assets/image-20200429104839759.png" alt="image-20200429104839759"></p>
+<h3 id="BPE存在的缺点："><a href="#BPE存在的缺点：" class="headerlink" title="BPE存在的缺点："></a><strong>BPE</strong>存在的缺点：</h3><p><img src="/.io//image-20200429104839759.png" alt="image-20200429104839759"></p>
 <ul>
 <li>对于同一个句子, 例如Hello world，如图所示，可能会有不同的Subword序列。不同的Subword序列会产生完全不同的id序列表示，这种歧义可能在解码阶段无法解决。在翻译任务中，不同的id序列可能翻译出不同的句子，这显然是错误的。</li>
 <li>在训练任务中，如果能对不同的Subword进行训练的话，将增加模型的健壮性，能够容忍更多的噪声，而BPE的贪心算法无法对随机分布进行学习。</li>
@@ -528,7 +264,7 @@ P(\vec{x}) = \prod_{i=1}^{M}p(x_i)</script><p>这里的$x_i$是从预先定义�
 <script type="math/tex; mode=display">
 x^* =\underset{x\in S(X)}{arg\;max}\;P(\vec{x})</script><p>这里$S(X)$是句子$X$不同的分词结果集合。$x^*$可以通过维特比算法得到。</p>
 <p>如果已知词典$V$, 我们可以通过EM算法来估计$p(x_i)$，其中M步最大化的对象是以下似然函数（原谅我这里偷懒直接使用图片）：</p>
-<p><img src="Bert系列伴生的新分词器.assets/image-20200501185312612.png" alt="image-20200501185312612"></p>
+<p><img src="/.io//image-20200501185312612.png" alt="image-20200501185312612"></p>
 <p>$|D|$是语料库中语料数量。</p>
 <p><strong>我是这样理解这个似然函数的：</strong>将语料库中所有句子的所有分词组合形成的概率相加。</p>
 <p>初始时，我们连词典$V$都没有，作者通过不断执行以下步骤来构造合适的词典以及分词概率：</p>
@@ -1245,6 +981,266 @@ import torch
 
       
           
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/04/23/HuggingFace-transformers%E7%B3%BB%E5%88%97%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="I am a fresh researcher in nlp in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/23/HuggingFace-transformers%E7%B3%BB%E5%88%97%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">HuggingFace-Transformers系列的介绍以及在下游任务中的使用</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-23 09:02:46" itemprop="dateCreated datePublished" datetime="2020-04-23T09:02:46+08:00">2020-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-01 21:31:29" itemprop="dateModified" datetime="2020-05-01T21:31:29+08:00">2020-05-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="内容介绍"><a href="#内容介绍" class="headerlink" title="内容介绍"></a>内容介绍</h1><p>这篇博客主要面向对<strong>Bert</strong>系列在<strong>Pytorch</strong>上应用感兴趣的同学，将涵盖的主要内容是：Bert系列有关的论文，<a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">Huggingface</a>的实现，以及如何在不同下游任务中使用预训练模型。</p>
+<p>看过这篇博客，你将了解：</p>
+<ul>
+<li>Transformers实现的介绍，不同的Tokenizer和Model如何使用。</li>
+<li>如何利用HuggingFace的实现自定义你的模型，如果你想利用这个库实现自己的下游任务，而不想过多关注其实现细节的话，那么这篇文章将会成为很好的参考。</li>
+</ul>
+<h2 id="Huggingface-transformers介绍"><a href="#Huggingface-transformers介绍" class="headerlink" title="Huggingface-transformers介绍"></a>Huggingface-transformers介绍</h2><p><a href="https://huggingface.co/transformers/index.html" target="_blank" rel="noopener">transformers</a>（以前称为pytorch-transformers和pytorch-pretrained-bert）提供用于自然语言理解（NLU）和自然语言生成（NLG）的BERT家族通用结构（BERT，GPT-2，RoBERTa，XLM，DistilBert，XLNet等），包含超过32种、涵盖100多种语言的预训练模型。同时提供TensorFlow 2.0和PyTorch之间的高互通性。</p>
+<p><strong>特性</strong>：</p>
+<ul>
+<li><p>与pytorch-transformers一样易于使用</p>
+</li>
+<li><p>像Keras一样强大而简洁</p>
+</li>
+<li><p>在NLU和NLG任务上表现良好</p>
+</li>
+<li><p>对于教育者和从业者的门槛低</p>
+</li>
+</ul>
+<p><strong>现存的模型</strong>：</p>
+<ul>
+<li><p>Bert(基础版和巨人版, 是否区分大小写)， </p>
+</li>
+<li><p>GPT, GPT-2</p>
+</li>
+<li><p>Transformer-XL, XLNet, XLM</p>
+</li>
+<li><p>DistilBERT, DistilGPT2</p>
+</li>
+<li><p>CTRL</p>
+</li>
+<li><p>ALBERT, RoBERTa, XLM-RoBERTa</p>
+</li>
+<li><p>FlauBERT，CamemBERT</p>
+</li>
+<li>其他在各种下游任务上微调过的模型。</li>
+<li>在多语言上训练的模型</li>
+</ul>
+<h1 id="所需的知识"><a href="#所需的知识" class="headerlink" title="所需的知识"></a>所需的知识</h1><p><a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">安装Huggface库</a>(需要预先安装pytorch)</p>
+<p>在阅读这篇文章之前，如果你能将以下资料读一遍，或者看一遍的话，在后续的阅读过程中将极大地减少你陷入疑惑的概率。</p>
+<ul>
+<li>视频类内容：根据排序观看更佳<ul>
+<li><a href="https://www.bilibili.com/video/BV17441137fa?from=search&amp;seid=17871853660365597030" target="_blank" rel="noopener">李宏毅关于Elmo, Bert, GPT的讲解</a></li>
+<li><a href="https://www.bilibili.com/video/BV1Tt411M7Wp?from=search&amp;seid=194654766718455422" target="_blank" rel="noopener">Goebels关于transformerXL的讲解</a></li>
+<li><a href="https://www.youtube.com/watch?v=H5vpBCLo74U" target="_blank" rel="noopener">Kilcher关于XLnet的讲解</a></li>
+<li><a href="https://www.youtube.com/watch?v=vsGN8WqwvKg&amp;t=597s" target="_blank" rel="noopener">McCormick关于ALBERT的讲解</a></li>
+</ul>
+</li>
+</ul>
+<p><strong>或者</strong>，你更愿意去看论文的话：</p>
+<ul>
+<li>相关论文：根据排序阅读更佳<ul>
+<li><a href="https://arxiv.org/abs/1810.04805" target="_blank" rel="noopener">arXiv:1810.04805</a>, BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding, Authors: Jacob Devlin, Ming-Wei Chang, Kenton Lee, Kristina Toutanova</li>
+<li><a href="https://arxiv.org/abs/1901.02860" target="_blank" rel="noopener">arXiv:1901.02860</a>, Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context,  Authors: Zihang Dai, Zhilin Yang, Yiming Yang, William W. Cohen, Jaime Carbonell, Quoc V. Le and Ruslan Salakhutdinov.</li>
+<li>XLNet论文</li>
+<li>ALBERT论文</li>
+</ul>
+</li>
+</ul>
+<h1 id="HuggingFace模型加载-下游任务使用"><a href="#HuggingFace模型加载-下游任务使用" class="headerlink" title="HuggingFace模型加载+下游任务使用"></a>HuggingFace模型加载+下游任务使用</h1><h2 id="项目组件"><a href="#项目组件" class="headerlink" title="项目组件"></a>项目组件</h2><p>一个完整的transformer模型主要包含三部分：</p>
+<ol>
+<li><p><strong>Config</strong>，控制模型的名称、最终输出的样式、隐藏层宽度和深度、激活函数的类别等。将Config类导出时文件格式为 json格式，就像下面这样：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"attention_probs_dropout_prob"</span>: <span class="number">0.1</span>,</span><br><span class="line">  <span class="attr">"hidden_act"</span>: <span class="string">"gelu"</span>,</span><br><span class="line">  <span class="attr">"hidden_dropout_prob"</span>: <span class="number">0.1</span>,</span><br><span class="line">  <span class="attr">"hidden_size"</span>: <span class="number">768</span>,</span><br><span class="line">  <span class="attr">"initializer_range"</span>: <span class="number">0.02</span>,</span><br><span class="line">  <span class="attr">"intermediate_size"</span>: <span class="number">3072</span>,</span><br><span class="line">  <span class="attr">"max_position_embeddings"</span>: <span class="number">512</span>,</span><br><span class="line">  <span class="attr">"num_attention_heads"</span>: <span class="number">12</span>,</span><br><span class="line">  <span class="attr">"num_hidden_layers"</span>: <span class="number">12</span>,</span><br><span class="line">  <span class="attr">"type_vocab_size"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"vocab_size"</span>: <span class="number">30522</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，也可以通过config.json来实例化Config类，这是一个互逆的过程。</p>
+</li>
+<li><p><strong>Tokenizer</strong>，这是一个将纯文本转换为编码的过程。注意，Tokenizer并不涉及将词转化为词向量的过程，仅仅是将纯文本分词，添加[MASK]标记、[SEP]、[CLS]标记，并转换为字典索引。Tokenizer类导出时将分为三个文件，也就是：</p>
+<ul>
+<li><p>vocab.txt</p>
+<p>词典文件，每一行为一个词或词的一部分</p>
+</li>
+<li><p>special_tokens_map.json 特殊标记的定义方式</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"unk_token"</span>: <span class="string">"[UNK]"</span>, <span class="attr">"sep_token"</span>: <span class="string">"[SEP]"</span>, <span class="attr">"pad_token"</span>: <span class="string">"[PAD]"</span>, </span><br><span class="line"> <span class="attr">"cls_token"</span>: <span class="string">"[CLS]"</span>, <span class="attr">"mask_token"</span>: <span class="string">"[MASK]"</span>&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>tokenizer_config.json 配置文件，主要存储特殊的配置。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Model</strong>，也就是各种各样的模型。除了初始的Bert、GPT等基本模型，针对下游任务，还定义了诸如<code>BertForQuestionAnswering</code>等下游任务模型。模型导出时将生成<code>config.json</code>和<code>pytorch_model.bin</code>参数文件。前者就是1中的配置文件，这和我们的直觉相同，即config和model应该是紧密联系在一起的两个类。后者其实和torch.save()存储得到的文件是相同的，这是因为Model都直接或者间接继承了Pytorch的Module类。从这里可以看出，HuggingFace在实现时很好地尊重了Pytorch的原生API。</p>
+</li>
+</ol>
+<h2 id="导入Bert系列基本模型的方法"><a href="#导入Bert系列基本模型的方法" class="headerlink" title="导入Bert系列基本模型的方法"></a>导入Bert系列基本模型的方法</h2><h3 id="通过官网自动导入"><a href="#通过官网自动导入" class="headerlink" title="通过官网自动导入"></a>通过官网自动导入</h3><p>官方文档中<a href="https://huggingface.co/transformers/quickstart.html#" target="_blank" rel="noopener">初始教程</a>提供的方法为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Load pre-trained model (weights)</span></span><br><span class="line"><span class="comment"># model = BertModel.from_pretrained('bert-base-uncased')</span></span><br></pre></td></tr></table></figure>
+<p>这个方法需要从官方的s3数据库下载模型配置、参数等信息（代码中已配置好位置）。这个方法虽然简单，但是在国内并不可用。当然你可以先尝试一下，不过会有很大的概率无法下载模型。</p>
+<h3 id="手动下载模型信息并导入"><a href="#手动下载模型信息并导入" class="headerlink" title="手动下载模型信息并导入"></a>手动下载模型信息并导入</h3><ol>
+<li><p>在HuggingFace<a href="https://huggingface.co/models" target="_blank" rel="noopener">官方模型库</a>上找到需要下载的模型，点击模型链接， 这个例子使用的是bert-base-uncased模型</p>
+</li>
+<li><p>点击<a href="https://huggingface.co/bert-base-uncased#" target="_blank" rel="noopener">List all files in model</a>，将其中的文件一一下载到同一目录中。例如，对于XLNet:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># List of model files</span><br><span class="line">config.json	782.0B</span><br><span class="line">pytorch_model.bin	445.4MB</span><br><span class="line">special_tokens_map.json	202.0B</span><br><span class="line">spiece.model	779.3KB</span><br><span class="line">tokenizer_config.json	2.0B</span><br></pre></td></tr></table></figure>
+<p>但是这种方法有时也会不可用。如果您可以将Transformers预训练模型上传到迅雷等网盘的话，请在评论区告知，我会添加在此博客中，并为您添加博客友链。</p>
+</li>
+<li><p>通过下载好的路径导入模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> transformers</span><br><span class="line">MODEL_PATH = <span class="string">r"D:\transformr_files\bert-base-uncased/"</span></span><br><span class="line"><span class="comment"># a.通过词典导入分词器</span></span><br><span class="line">tokenizer = transformers.BertTokenizer.from_pretrained(<span class="string">r"D:\transformr_files\bert-base-uncased\bert-base-uncased-vocab.txt"</span>) </span><br><span class="line"><span class="comment"># b. 导入配置文件</span></span><br><span class="line">model_config = transformers.BertConfig.from_pretrained(MODEL_PATH)</span><br><span class="line"><span class="comment"># 修改配置</span></span><br><span class="line">model_config.output_hidden_states = <span class="literal">True</span></span><br><span class="line">model_config.output_attentions = <span class="literal">True</span></span><br><span class="line"><span class="comment"># 通过配置和路径导入模型</span></span><br><span class="line">model = transformers.BertModel.from_pretrained(MODEL_PATH,config = model_config)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="利用分词器分词"><a href="#利用分词器分词" class="headerlink" title="利用分词器分词"></a>利用分词器分词</h3><p>利用分词器进行编码</p>
+<ul>
+<li><p>对于单句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encode仅返回input_ids</span></span><br><span class="line">tokenizer.encode(<span class="string">"i like you"</span>)</span><br><span class="line">Out : [<span class="number">101</span>, <span class="number">1045</span>, <span class="number">2066</span>, <span class="number">2017</span>, <span class="number">102</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于多句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encode_plus返回所有编码信息</span></span><br><span class="line">tokenizer.encode_plus(<span class="string">"i like you"</span>, <span class="string">"but not him"</span>)</span><br><span class="line">Out : </span><br><span class="line">    &#123;<span class="string">'input_ids'</span>: [<span class="number">101</span>, <span class="number">1045</span>, <span class="number">2066</span>, <span class="number">2017</span>, <span class="number">102</span>, <span class="number">2021</span>, <span class="number">2025</span>, <span class="number">2032</span>, <span class="number">102</span>],</span><br><span class="line">     <span class="string">'token_type_ids'</span>: [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">     <span class="string">'attention_mask'</span>: [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>模型的所有分词器都是在PreTrainedTokenizer中实现的，分词的结果主要有以下内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">input_ids: list[int],</span><br><span class="line">token_type_ids: list[int] <span class="keyword">if</span> return_token_type_ids <span class="keyword">is</span> <span class="literal">True</span> (default)</span><br><span class="line">attention_mask: list[int] <span class="keyword">if</span> return_attention_mask <span class="keyword">is</span> <span class="literal">True</span> (default)</span><br><span class="line">overflowing_tokens: list[int] <span class="keyword">if</span> a max_length <span class="keyword">is</span> specified <span class="keyword">and</span> 		return_overflowing_tokens <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">num_truncated_tokens: int <span class="keyword">if</span> a max_length <span class="keyword">is</span> specified <span class="keyword">and</span> return_overflowing_tokens <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">special_tokens_mask: list[int] <span class="keyword">if</span> add_special_tokens <span class="keyword">if</span> set to <span class="literal">True</span> <span class="keyword">and</span> return_special_tokens_mask <span class="keyword">is</span> <span class="literal">True</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编码解释：</p>
+<ul>
+<li>‘input_ids’：顾名思义，是单词在词典中的编码</li>
+<li>‘token_type_ids’， 区分两个句子的编码</li>
+<li>‘attention_mask’,  指定对哪些词进行self-Attention操作</li>
+<li>‘overflowing_tokens’, 当指定最大长度时，溢出的单词</li>
+<li>‘num_truncated_tokens’, 溢出的token数量</li>
+<li>‘return_special_tokens_mask’，如果添加特殊标记，则这是[0，1]的列表，其中0指定特殊添加的标记，而1指定序列标记</li>
+</ul>
+<h3 id="将分词结果输入模型，得到编码"><a href="#将分词结果输入模型，得到编码" class="headerlink" title="将分词结果输入模型，得到编码"></a>将分词结果输入模型，得到编码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加batch维度并转化为tensor</span></span><br><span class="line">input_ids = torch.tensor([input_ids])</span><br><span class="line">token_type_ids = torch.tensor([token_type_ids])</span><br><span class="line"><span class="comment"># 将模型转化为eval模式</span></span><br><span class="line">model.eval()</span><br><span class="line"><span class="comment"># 将模型和数据转移到cuda, 若无cuda,可更换为cpu</span></span><br><span class="line">device = <span class="string">'cuda'</span></span><br><span class="line">tokens_tensor = input_ids.to(device)</span><br><span class="line">segments_tensors = token_type_ids.to(device)</span><br><span class="line">model.to(device)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行编码</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    <span class="comment"># See the models docstrings for the detail of the inputs</span></span><br><span class="line">    outputs = model(tokens_tensor, token_type_ids=segments_tensors)</span><br><span class="line">    <span class="comment"># Transformers models always output tuples.</span></span><br><span class="line">    <span class="comment"># See the models docstrings for the detail of all the outputs</span></span><br><span class="line">    <span class="comment"># In our case, the first element is the hidden state of the last layer of the Bert model</span></span><br><span class="line">    encoded_layers = outputs</span><br><span class="line"><span class="comment"># 得到最终的编码结果encoded_layers</span></span><br></pre></td></tr></table></figure>
+<p>Bert最终输出的结果为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sequence_output, pooled_output, (hidden_states), (attentions)</span><br></pre></td></tr></table></figure>
+<p>以输入序列长度为14为例</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>名称</th>
+<th>维度</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>sequence_output</td>
+<td>torch.Size([1, 14, 768])</td>
+<td>输出序列</td>
+</tr>
+<tr>
+<td>1</td>
+<td>pooled_output</td>
+<td>torch.Size([1, 768])</td>
+<td>对输出序列进行pool操作的结果</td>
+</tr>
+<tr>
+<td>2</td>
+<td>(hidden_states)</td>
+<td>tuple,13*torch.Size([1, 14, 768])</td>
+<td>隐藏层状态(包括Embedding层)，取决于modelconfig中output_hidden_states</td>
+</tr>
+<tr>
+<td>3</td>
+<td>(attentions)</td>
+<td>tuple,12*torch.Size([1, 12, 14, 14])</td>
+<td>注意力层，取决于参数中output_attentions</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Bert总结"><a href="#Bert总结" class="headerlink" title="Bert总结"></a>Bert总结</h3><p>这一节我们以Bert为例对模型整体的流程进行了了解。之后的很多模型都基于Bert，并基于Bert进行了少量的调整。其中的输出和输出参数也有很多重复的地方。</p>
+<h2 id="利用预训练模型在下游任务上微调"><a href="#利用预训练模型在下游任务上微调" class="headerlink" title="利用预训练模型在下游任务上微调"></a>利用预训练模型在下游任务上微调</h2><p>如开头所说，这篇文章重点在于”如何进行模型的调整以及输入输出的设定”, 以及”Transformer的实现进行简要的提及”, 所以，我们不会去介绍、涉及如何写train循环等话题，而仅仅专注于模型。也就是说，我们将止步于跑通一个模型，而不计批量数据预处理、训练、验证等过程。</p>
+<p>同时，这里更看重如何基于Bert等初始模型在实际任务上进行微调，所以我们不会仅仅地导入已经在下游任务上训练好的模型参数，因为在这些模型上使用的方法和上一章的几乎完全相同。</p>
+<p>这里的输入和输入以模型的预测过程为例。</p>
+<h3 id="问答任务-via-Bert"><a href="#问答任务-via-Bert" class="headerlink" title="问答任务 via Bert"></a>问答任务 via Bert</h3><p><strong>任务输入</strong>：问题句，答案所在的文章 <code>&quot;Who was Jim Henson?&quot;, &quot;Jim Henson was a nice puppet&quot;</code></p>
+<p><strong>任务输出</strong>：答案  <code>&quot;a nice puppet&quot;</code></p>
+<p>现存的模型输入输出和任务的输入输出有一定差别，这也是在使用上需要区别的地方：</p>
+<p><strong>模型输入</strong>：inputids, token_type_ids</p>
+<p><strong>模型输出</strong>：start_scores, end_scores 形状都为<code>torch.Size([1, 14])</code>,其中<code>14</code>为序列长度，代表每个位置是开始/结束位置的概率。</p>
+<p><strong>模型的构建</strong>：</p>
+<p>一般情况下，一个基本模型对应一个Tokenizer, 所以并不存在对应于具体下游任务的Tokenizer。这里通过bert_model初始化BertForQuestionAnswering。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertTokenizer, BertForQuestionAnswering</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">MODEL_PATH = <span class="string">r"D:\transformr_files\bert-base-uncased/"</span></span><br><span class="line"><span class="comment"># 实例化tokenizer</span></span><br><span class="line">tokenizer = BertTokenizer.from_pretrained(<span class="string">r"D:\transformr_files\bert-base-uncased\bert-base-uncased-vocab.txt"</span>)</span><br><span class="line"><span class="comment"># 导入bert的model_config</span></span><br><span class="line">model_config = transformers.BertConfig.from_pretrained(MODEL_PATH)</span><br><span class="line"><span class="comment"># 首先新建bert_model</span></span><br><span class="line">bert_model = transformers.BertModel.from_pretrained(MODEL_PATH,config = model_config)</span><br><span class="line"><span class="comment"># 最终有两个输出，初始位置和结束位置（下面有解释）</span></span><br><span class="line">model_config.num_labels = <span class="number">2</span></span><br><span class="line"><span class="comment"># 同样根据bert的model_config新建BertForQuestionAnswering</span></span><br><span class="line">model = BertForQuestionAnswering(model_config)</span><br><span class="line">model.bert = bert_model</span><br></pre></td></tr></table></figure>
+<p><strong>利用模型进行运算：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设定模式</span></span><br><span class="line">model.eval()</span><br><span class="line">question, text = <span class="string">"Who was Jim Henson?"</span>, <span class="string">"Jim Henson was a nice puppet"</span></span><br><span class="line"><span class="comment"># 获取input_ids编码</span></span><br><span class="line">input_ids = tokenizer.encode(question, text)</span><br><span class="line"><span class="comment"># 手动进行token_type_ids编码，可用encode_plus代替</span></span><br><span class="line">token_type_ids = [<span class="number">0</span> <span class="keyword">if</span> i &lt;= input_ids.index(<span class="number">102</span>) <span class="keyword">else</span> <span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(len(input_ids))]</span><br><span class="line"><span class="comment"># 得到评分, </span></span><br><span class="line">start_scores, end_scores = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([token_type_ids]))</span><br><span class="line"><span class="comment"># 进行逆编码，得到原始的token </span></span><br><span class="line">all_tokens = tokenizer.convert_ids_to_tokens(input_ids)</span><br><span class="line"><span class="comment">#['[CLS]', 'who', 'was', 'jim', 'henson', '?', '[SEP]', 'jim', 'henson', 'was', 'a', 'nice', 'puppet', '[SEP]']</span></span><br></pre></td></tr></table></figure>
+<p><strong>将模型输出转化为任务输出：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对输出的答案进行解码的过程</span></span><br><span class="line">answer = <span class="string">' '</span>.join(all_tokens[torch.argmax(start_scores) : torch.argmax(end_scores)+<span class="number">1</span>])</span><br><span class="line"><span class="comment"># assert answer == "a nice puppet" </span></span><br><span class="line"><span class="comment"># 这里因为没有经过微调，所以效果不是很好，输出结果不佳。</span></span><br><span class="line">print(answer)</span><br><span class="line"><span class="comment"># 'was jim henson ? [SEP] jim henson was a nice puppet [SEP]'</span></span><br></pre></td></tr></table></figure>
+<h3 id="文本分类任务-情感分析等-via-XLNet"><a href="#文本分类任务-情感分析等-via-XLNet" class="headerlink" title="文本分类任务(情感分析等) via XLNet"></a>文本分类任务(情感分析等) via XLNet</h3><p><strong>任务输入</strong>：句子 <code>&quot;i like you, what about you&quot;</code></p>
+<p><strong>任务输出</strong>：句子所属的类别 <code>class1</code></p>
+<p><strong>模型输入</strong>：inputids, token_type_ids</p>
+<p><strong>模型输出</strong>：logits, hidden states， 其中logits形状为<code>torch.Size([1, 3])</code>, 其中的3对应的是类别的数量。当训练时，第一项为loss。</p>
+<p><strong>模型的构建</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> XLNetConfig, XLNetModel, XLNetTokenizer, XLNetForSequenceClassification</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="comment"># 定义路径，初始化tokenizer</span></span><br><span class="line">XLN_PATH = <span class="string">r"D:\transformr_files\XLNetLMHeadModel"</span></span><br><span class="line">tokenizer = XLNetTokenizer.from_pretrained(XLN_PATH)</span><br><span class="line"><span class="comment"># 加载配置</span></span><br><span class="line">model_config = XLNetConfig.from_pretrained(XLN_PATH)</span><br><span class="line"><span class="comment"># 设定类别数为3</span></span><br><span class="line">model_config.num_labels = <span class="number">3</span></span><br><span class="line"><span class="comment"># 直接从xlnet的config新建XLNetForSequenceClassification(和上一节方法等效)</span></span><br><span class="line">cls_model = XLNetForSequenceClassification.from_pretrained(XLN_PATH, config=model_config)</span><br></pre></td></tr></table></figure>
+<p><strong>利用模型进行运算：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设定模式</span></span><br><span class="line">model.eval()</span><br><span class="line">token_codes = tokenizer.encode_plus(<span class="string">"i like you, what about you"</span>)</span><br><span class="line"><span class="comment"># encode_plus结果为字典形式</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    outputs = cls_model(input_ids=torch.tensor([token_codes[<span class="string">'input_ids'</span>]]),token_type_ids = torch.tensor([token_codes[<span class="string">'token_type_ids'</span>]]))</span><br><span class="line"><span class="comment"># outputs[0]为logits，outputs[1]为hidden</span></span><br></pre></td></tr></table></figure>
+<p>输出的转化可直接通过numpy的argmax函数实现。</p>
+<h3 id="其他的任务，将继续更新"><a href="#其他的任务，将继续更新" class="headerlink" title="其他的任务，将继续更新"></a>其他的任务，将继续更新</h3><p>其他的模型和之前的两个大致是相同的，你可以自己发挥。我会继续在相关的库上进行实验，如果发现用法不一样的情况，将会添加在这里。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>本文章主要对HuggingFace库进行了简要介绍。具体安装等过程请参见官方<a href="https://github.com/huggingface/transformers" target="_blank" rel="noopener">github仓库</a>。</p>
+<p>本文主要参考于<a href="https://huggingface.co/transformers/installation.html#" target="_blank" rel="noopener">官方文档</a></p>
+<p>同时，在模型的理解过程中参考了一些kaggle上的notebooks, <a href="https://www.kaggle.com/abhishek/bert-base-uncased-using-pytorch" target="_blank" rel="noopener">主要是这一篇</a>，作者是<a href="https://www.kaggle.com/abhishek" target="_blank" rel="noopener">Abhishek Thakur</a></p>
+
       
     </div>
 
