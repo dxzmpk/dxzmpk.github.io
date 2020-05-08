@@ -20,25 +20,22 @@
     var CONFIG = {"hostname":"dxzmpk.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="装载硬盘 最终结果如图 然后通过右键点击数据文件，选择复制路径  这里数据路径为：&#x2F;content&#x2F;drive&#x2F;My Drive&#x2F;Colab Notebooks&#x2F;摘要-情感类型.xlsx 启动GPU加速 如图，点击笔记本设置，选择gpu，确定，等待笔记本重启即可。 运行代码可以逐行运行或者点击  全部运行">
+  <meta name="description" content="简介如果你经常在大量数据上训练模型的话，那么这样一个工具肯定很合你的胃口。这个项目叫做knockknock，它的功能只有一个：通知你训练结束了，并且附带训练的结果。 当前支持邮件、短信、微信群、钉钉群等通知方式，只需要三行代码，就能实现功能。 效果展示为了让你有看下去的动力，先展示一下最终的成果(钉钉)：  knockknock在钉钉群中的配置方式之所以选择使用钉钉，是因为它的通知声音比较好听🤭">
 <meta property="og:type" content="article">
-<meta property="og:title" content="普通学生，如何用Colab跑起来BERT系列模型？">
-<meta property="og:url" content="https://dxzmpk.github.io/2020/04/24/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/">
+<meta property="og:title" content="三行代码开启模型训练通知">
+<meta property="og:url" content="https://dxzmpk.github.io/2020/05/08/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/">
 <meta property="og:site_name" content="董雄的博客">
-<meta property="og:description" content="装载硬盘 最终结果如图 然后通过右键点击数据文件，选择复制路径  这里数据路径为：&#x2F;content&#x2F;drive&#x2F;My Drive&#x2F;Colab Notebooks&#x2F;摘要-情感类型.xlsx 启动GPU加速 如图，点击笔记本设置，选择gpu，确定，等待笔记本重启即可。 运行代码可以逐行运行或者点击  全部运行">
+<meta property="og:description" content="简介如果你经常在大量数据上训练模型的话，那么这样一个工具肯定很合你的胃口。这个项目叫做knockknock，它的功能只有一个：通知你训练结束了，并且附带训练的结果。 当前支持邮件、短信、微信群、钉钉群等通知方式，只需要三行代码，就能实现功能。 效果展示为了让你有看下去的动力，先展示一下最终的成果(钉钉)：  knockknock在钉钉群中的配置方式之所以选择使用钉钉，是因为它的通知声音比较好听🤭">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://dxzmpk.github.io/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150409157.png">
-<meta property="og:image" content="https://dxzmpk.github.io/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150608446.png">
-<meta property="og:image" content="https://dxzmpk.github.io/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150505969.png">
-<meta property="og:image" content="https://dxzmpk.github.io/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150715229.png">
-<meta property="article:published_time" content="2020-04-24T15:04:11.000Z">
-<meta property="article:modified_time" content="2020-05-06T07:52:37.726Z">
+<meta property="og:image" content="https://dxzmpk.github.io/images/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/share.jpg">
+<meta property="article:published_time" content="2020-05-08T04:12:05.000Z">
+<meta property="article:modified_time" content="2020-05-08T04:34:26.491Z">
 <meta property="article:author" content="董雄">
-<meta property="article:tag" content="4">
+<meta property="article:tag" content="3">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://dxzmpk.github.io/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150409157.png">
+<meta name="twitter:image" content="https://dxzmpk.github.io/images/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/share.jpg">
 
-<link rel="canonical" href="https://dxzmpk.github.io/2020/04/24/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/">
+<link rel="canonical" href="https://dxzmpk.github.io/2020/05/08/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/">
 
 
 <script id="page-configurations">
@@ -51,7 +48,7 @@
   };
 </script>
 
-  <title>普通学生，如何用Colab跑起来BERT系列模型？ | 董雄的博客</title>
+  <title>三行代码开启模型训练通知 | 董雄的博客</title>
   
 
 
@@ -172,7 +169,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/04/24/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/05/08/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -185,7 +182,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          普通学生，如何用Colab跑起来BERT系列模型？
+          三行代码开启模型训练通知
         </h1>
 
         <div class="post-meta">
@@ -195,16 +192,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-04-24 23:04:11" itemprop="dateCreated datePublished" datetime="2020-04-24T23:04:11+08:00">2020-04-24</time>
+              <time title="创建时间：2020-05-08 12:12:05 / 修改时间：12:34:26" itemprop="dateCreated datePublished" datetime="2020-05-08T12:12:05+08:00">2020-05-08</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-06 15:52:37" itemprop="dateModified" datetime="2020-05-06T15:52:37+08:00">2020-05-06</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -224,8 +215,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2020/04/24/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/24/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/05/08/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/08/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -240,16 +231,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="装载硬盘"><a href="#装载硬盘" class="headerlink" title="装载硬盘"></a>装载硬盘</h3><p><img src="/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150409157.png" alt="image-20200506150409157"></p>
-<p>最终结果如图</p>
-<p>然后通过右键点击数据文件，选择复制路径</p>
-<p><img src="/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150608446.png" alt="image-20200506150608446"></p>
-<p>这里数据路径为：<code>/content/drive/My Drive/Colab Notebooks/摘要-情感类型.xlsx</code></p>
-<h3 id="启动GPU加速"><a href="#启动GPU加速" class="headerlink" title="启动GPU加速"></a>启动GPU加速</h3><p><img src="/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150505969.png" alt="image-20200506150505969"></p>
-<p>如图，点击笔记本设置，选择gpu，确定，等待笔记本重启即可。</p>
-<h3 id="运行代码"><a href="#运行代码" class="headerlink" title="运行代码"></a>运行代码</h3><p>可以逐行运行或者点击</p>
-<p><img src="/images/%E6%99%AE%E9%80%9A%E5%AD%A6%E7%94%9F%EF%BC%8C%E5%A6%82%E4%BD%95%E7%94%A8Colab%E8%B7%91%E8%B5%B7%E6%9D%A5BERT%E7%B3%BB%E5%88%97%E6%A8%A1%E5%9E%8B%EF%BC%9F/image-20200506150715229.png" alt="image-20200506150715229"></p>
-<p>全部运行</p>
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>如果你经常在大量数据上训练模型的话，那么这样一个工具肯定很合你的胃口。这个项目叫做<a href="https://github.com/huggingface/knockknock" target="_blank" rel="noopener">knockknock</a>，它的功能只有一个：通知你训练结束了，并且附带训练的结果。</p>
+<p>当前支持邮件、短信、微信群、钉钉群等通知方式，只需要三行代码，就能实现功能。</p>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>为了让你有看下去的动力，先展示一下最终的成果(钉钉)：</p>
+<p><img src="/images/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/share.jpg" alt=""></p>
+<h2 id="knockknock在钉钉群中的配置方式"><a href="#knockknock在钉钉群中的配置方式" class="headerlink" title="knockknock在钉钉群中的配置方式"></a><a href="https://github.com/huggingface/knockknock" target="_blank" rel="noopener">knockknock</a>在钉钉群中的配置方式</h2><p>之所以选择使用钉钉，是因为它的通知声音比较好听🤭。配置过程：</p>
+<ol>
+<li><p>建立钉钉群（最好是在电脑）</p>
+</li>
+<li><p>添加机器人</p>
+<p>2.1 群设置$\rightarrow $智能群助手$\rightarrow $添加机器人</p>
+<p>2.2 添加自定义机器人</p>
+<p>2.3 自定义名字和头像</p>
+<p>2.4 选择一种加密方式，推荐选择<code>加签</code></p>
+<p>2.5 记录好<code>机器人的url</code>和加签生成的<code>密钥</code></p>
+</li>
+<li><p>在notebook或者python虚拟环境中安装knockknock</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!pip install knockknock(notebook)</span><br><span class="line"><span class="keyword">or</span></span><br><span class="line">pip install knockknock(虚拟环境)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>导入dingtalk_sender</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> knockknock <span class="keyword">import</span> dingtalk_sender</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在要跑的类上添加以下代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">webhook_url = <span class="string">"https://oapi.dingtalk.com/robot/send?access_token=..."</span></span><br><span class="line"><span class="meta">@dingtalk_sender(webhook_url=webhook_url, secret="加签生成的密钥", keywords=["随便填"])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_your_nicest_model</span><span class="params">(your_nicest_parameters)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> time</span><br><span class="line">    time.sleep(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">'loss'</span>: <span class="number">0.9</span>&#125; <span class="comment"># Optional return value</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行train_your_nicest_model，得到结果</p>
+</li>
+</ol>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>本文主要参考自官方<a href="https://github.com/huggingface/knockknock" target="_blank" rel="noopener">github仓库</a></p>
+<p>以及<a href="https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq" target="_blank" rel="noopener">阿里钉钉开发者平台</a></p>
 
     </div>
 
@@ -259,7 +269,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/4/" rel="tag"># 4</a>
+              <a href="/tags/3/" rel="tag"># 3</a>
           </div>
 
         
@@ -268,13 +278,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/23/HuggingFace-transformers%E7%B3%BB%E5%88%97%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%BB%A5%E5%8F%8A%E5%9C%A8%E4%B8%8B%E6%B8%B8%E4%BB%BB%E5%8A%A1%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="HuggingFace-Transformers系列的介绍以及在下游任务中的使用">
-      <i class="fa fa-chevron-left"></i> HuggingFace-Transformers系列的介绍以及在下游任务中的使用
+    <a href="/2020/04/29/Bert%E7%B3%BB%E5%88%97%E4%BC%B4%E7%94%9F%E7%9A%84%E6%96%B0%E5%88%86%E8%AF%8D%E5%99%A8/" rel="prev" title="Bert系列伴生的新分词器">
+      <i class="fa fa-chevron-left"></i> Bert系列伴生的新分词器
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/27/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0notebook%E5%A4%9A%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%E6%A0%B7%E6%9C%AC%E4%BB%A3%E7%A0%81/" rel="next" title="深度学习Notebook多折交叉验证样本代码">
-      深度学习Notebook多折交叉验证样本代码 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -334,7 +341,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#装载硬盘"><span class="nav-number">1.</span> <span class="nav-text">装载硬盘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动GPU加速"><span class="nav-number">2.</span> <span class="nav-text">启动GPU加速</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行代码"><span class="nav-number">3.</span> <span class="nav-text">运行代码</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#效果展示"><span class="nav-number">2.</span> <span class="nav-text">效果展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#knockknock在钉钉群中的配置方式"><span class="nav-number">3.</span> <span class="nav-text">knockknock在钉钉群中的配置方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -450,6 +457,59 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
