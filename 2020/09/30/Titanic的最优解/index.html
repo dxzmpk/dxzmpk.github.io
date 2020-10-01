@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"dxzmpk.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="特征工程填充空值将Embarked补充为出现次数最多的值 将Fare的空值补充为相同舱位Fare的中位数 将Age的空值补充为相同舱位Age的中位数 特征提取建立家庭特征，为姐妹和伴侣的集合     df[‘SibSp’]+df[‘Parch’]+1 Family     1 1   [2,4] 2   [5,6] 3   else 4     去除SibSp， Parch， PassengerI">
+  <meta name="description" content="特征工程data: https:&#x2F;&#x2F;www.kaggle.com&#x2F;c&#x2F;titanic&#x2F;data notebook: https:&#x2F;&#x2F;www.kaggle.com&#x2F;namylase&#x2F;titanic-eda-full-pipeline-ensemble 填充空值将Embarked补充为出现次数最多的值 将Fare的空值补充为相同舱位Fare的中位数 将Age的空值补充为相同舱位Age的中位数 特征提取">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Titanic的最优解">
 <meta property="og:url" content="https://dxzmpk.github.io/2020/09/30/Titanic%E7%9A%84%E6%9C%80%E4%BC%98%E8%A7%A3/">
 <meta property="og:site_name" content="董雄的博客">
-<meta property="og:description" content="特征工程填充空值将Embarked补充为出现次数最多的值 将Fare的空值补充为相同舱位Fare的中位数 将Age的空值补充为相同舱位Age的中位数 特征提取建立家庭特征，为姐妹和伴侣的集合     df[‘SibSp’]+df[‘Parch’]+1 Family     1 1   [2,4] 2   [5,6] 3   else 4     去除SibSp， Parch， PassengerI">
+<meta property="og:description" content="特征工程data: https:&#x2F;&#x2F;www.kaggle.com&#x2F;c&#x2F;titanic&#x2F;data notebook: https:&#x2F;&#x2F;www.kaggle.com&#x2F;namylase&#x2F;titanic-eda-full-pipeline-ensemble 填充空值将Embarked补充为出现次数最多的值 将Fare的空值补充为相同舱位Fare的中位数 将Age的空值补充为相同舱位Age的中位数 特征提取">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-09-30T04:40:05.000Z">
-<meta property="article:modified_time" content="2020-10-01T09:09:10.127Z">
+<meta property="article:modified_time" content="2020-10-01T09:12:39.624Z">
 <meta property="article:author" content="董雄">
 <meta property="article:tag" content="4">
 <meta name="twitter:card" content="summary">
@@ -198,7 +198,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-01 17:09:10" itemprop="dateModified" datetime="2020-10-01T17:09:10+08:00">2020-10-01</time>
+                <time title="修改时间：2020-10-01 17:12:39" itemprop="dateModified" datetime="2020-10-01T17:12:39+08:00">2020-10-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -235,7 +235,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><h3 id="填充空值"><a href="#填充空值" class="headerlink" title="填充空值"></a>填充空值</h3><p>将Embarked补充为出现次数最多的值</p>
+        <h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>data: <a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">https://www.kaggle.com/c/titanic/data</a></p>
+<p>notebook: <a href="https://www.kaggle.com/namylase/titanic-eda-full-pipeline-ensemble" target="_blank" rel="noopener">https://www.kaggle.com/namylase/titanic-eda-full-pipeline-ensemble</a></p>
+<h3 id="填充空值"><a href="#填充空值" class="headerlink" title="填充空值"></a>填充空值</h3><p>将Embarked补充为出现次数最多的值</p>
 <p>将Fare的空值补充为相同舱位Fare的中位数</p>
 <p>将Age的空值补充为相同舱位Age的中位数</p>
 <h3 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h3><p>建立家庭特征，为姐妹和伴侣的集合</p>
