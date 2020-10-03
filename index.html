@@ -471,10 +471,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-10-01 17:18:20 / 修改时间：17:20:00" itemprop="dateCreated datePublished" datetime="2020-10-01T17:18:20+08:00">2020-10-01</time>
+              <time title="创建时间：2020-10-01 17:18:20" itemprop="dateCreated datePublished" datetime="2020-10-01T17:18:20+08:00">2020-10-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-03 12:57:11" itemprop="dateModified" datetime="2020-10-03T12:57:11+08:00">2020-10-03</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -498,7 +504,52 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>data: <a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">https://www.kaggle.com/c/titanic/data</a></p>
+<p>notebook: <a href="https://www.kaggle.com/namylase/titanic-eda-full-pipeline-ensemble" target="_blank" rel="noopener">https://www.kaggle.com/namylase/titanic-eda-full-pipeline-ensemble</a></p>
+<h3 id="预处理-增加特征"><a href="#预处理-增加特征" class="headerlink" title="预处理 增加特征"></a>预处理 增加特征</h3><p>添加名字长度，</p>
+<p>是否有舱位，</p>
+<p>FamilySize为双亲加伴侣的数目+1，</p>
+<p>当FamilySize大于1时IsAlone为0，否则为1，</p>
+<p>Embarked填充空值为‘S’</p>
+<p>Fare填充空值为中位数</p>
+<p>train中CategoricalFare将Fare利用pd.qcut函数由大到小分为4个类别。</p>
+<p>train中CategoricalAge利用pd.cut()将年龄分为5个类别。</p>
+<p>Title是名称的前缀</p>
+<p>Sex由female,male转化成类别编码1，2，title、Embarked也作相同操作。</p>
+<p>Age，Fare根据范围也转化成类别型表示。</p>
+<h3 id="预处理-drop特征"><a href="#预处理-drop特征" class="headerlink" title="预处理 drop特征"></a>预处理 drop特征</h3><p>train、test去除[‘PassengerId’, ‘Name’, ‘Ticket’, ‘Cabin’, ‘SibSp’]特征</p>
+<p>train中还去除[‘CategoricalAge’, ‘CategoricalFare’]</p>
+<h3 id="特征可视化"><a href="#特征可视化" class="headerlink" title="特征可视化"></a>特征可视化</h3><p>使用Seaborn热图进行特征间相关性的可视化，最终得出的结论是所保留的特征相关性都比较低，也就是没有太多冗余的特征。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><ol>
+<li>Random Forest classifier</li>
+<li>Extra Trees classifier</li>
+<li>AdaBoost classifer</li>
+<li>Gradient Boosting classifer</li>
+<li>Support Vector Machine</li>
+</ol>
+<p>训练时使用Out-of-Fold Predictions的方法进行。</p>
+<h3 id="Out-of-Fold-Predictions"><a href="#Out-of-Fold-Predictions" class="headerlink" title="Out-of-Fold Predictions"></a><a href="https://machinelearningmastery.com/out-of-fold-predictions-in-machine-learning/" target="_blank" rel="noopener">Out-of-Fold Predictions</a></h3><p>通常机器学习算法训练时是通过重采样方法（K-fold）等来进行模型的评价的。在k折交叉验证中，预测是利用训练中没有使用的数据进行的。Out-of-Fold预测主要有两种作用：</p>
+<ul>
+<li>估测模型在将来未知数据上的表现</li>
+<li>拟合集成模型</li>
+</ul>
+<p>估测模型在将来未知数据上的表现主要有两种方法：</p>
+<ol>
+<li>在每折运算过后，计算模型的得分，最后进行平均。</li>
+<li>在K折交叉运算中，每个训练样本都在测试集中出现恰好一次。将对其进行预测的结果收集起来，和真实的样本标签进行对比，得分即作为模型的表现，这个表现是通过整个训练数据集计算得到的。</li>
+</ol>
+<p>拟合集成模型是Out-of-Fold的另一项重要应用。在K折交叉验证中，会生成K个基本模型。除此之外，一个更高阶的meta-model会通过<strong>基本模型的预测</strong>训练出来。这个模型的作用是学习如何更好地结合基本模型的方法。</p>
+<ul>
+<li><strong>Meta-Model Input</strong>: Input portion of a given sample concatenated with the predictions made by each base model.</li>
+<li><strong>Meta-Model Output</strong>: Output portion of a given sample.</li>
+</ul>
+<p>得到Meta模型之后，在全部的训练数据集上训练每个基本模型，并用于之后的预测。</p>
+<p>这个过程被称为stacked generalization。这里使用线性权值的方法得到Meta model，这个过程也被称为<strong>blending</strong>。</p>
+<h2 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h2><p>使用5折交叉验证进行训练，对于每一个基本模型，在每一折训练后，用out-of-fold测试集进行测试，并将此模型在总体测试集上进行预测，将预测结果存在数组第二维中，最终测试结果在第一维取平均值，得到最终结果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i, (train_index, test_index) <span class="keyword">in</span> enumerate(kf):</span><br><span class="line">    x_tr = x_train[train_index]</span><br><span class="line">    y_tr = y_train[train_index]</span><br><span class="line">    x_te = x_train[test_index]</span><br><span class="line"></span><br><span class="line">    clf.train(x_tr, y_tr)</span><br><span class="line"></span><br><span class="line">    oof_train[test_index] = clf.predict(x_te)</span><br><span class="line">    oof_test_skf[i, :] = clf.predict(x_test)</span><br><span class="line"><span class="comment"># 取平均、返回结果</span></span><br><span class="line">oof_test[:] = oof_test_skf.mean(axis=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">return</span> oof_train.reshape(<span class="number">-1</span>, <span class="number">1</span>), oof_test.reshape(<span class="number">-1</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="特征重要性可视化"><a href="#特征重要性可视化" class="headerlink" title="特征重要性可视化"></a>特征重要性可视化</h3><p>将各特征在模型中的重要性提取出来，只有树类型的模型可以作此操作，也就是模型1—4。</p>
+<h2 id="模型的集成"><a href="#模型的集成" class="headerlink" title="模型的集成"></a>模型的集成</h2><p>利用XGBClassifier对模型进行集成。首先将第一步得到的所有模型训练集预测结果连接起来，对XGBClassifier进行训练。然后把相同方法处理得到的测试集输入进行预测，得到最终的结果。</p>
+
       
     </div>
 
