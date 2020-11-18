@@ -532,10 +532,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-11-14 10:26:55 / 修改时间：18:32:05" itemprop="dateCreated datePublished" datetime="2020-11-14T10:26:55+08:00">2020-11-14</time>
+              <time title="创建时间：2020-11-14 10:26:55" itemprop="dateCreated datePublished" datetime="2020-11-14T10:26:55+08:00">2020-11-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-18 10:22:19" itemprop="dateModified" datetime="2020-11-18T10:22:19+08:00">2020-11-18</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -559,7 +565,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Introduction—-SIMPLICITY—-gt-RIGHT-—-gt-EXPLAIN"><a href="#Introduction—-SIMPLICITY—-gt-RIGHT-—-gt-EXPLAIN" class="headerlink" title="Introduction— SIMPLICITY—&gt; RIGHT —&gt; EXPLAIN"></a>Introduction— SIMPLICITY—&gt; RIGHT —&gt; EXPLAIN</h1><p>评价软件架构设计好坏的标准：</p>
+          <p><img src="https://miro.medium.com/max/2079/0*K8kz2wcJ84fEme5s" alt="https://miro.medium.com/max/2079/0*K8kz2wcJ84fEme5s"></p>
+<h1 id="Introduction—-SIMPLICITY—-gt-RIGHT-—-gt-EXPLAIN"><a href="#Introduction—-SIMPLICITY—-gt-RIGHT-—-gt-EXPLAIN" class="headerlink" title="Introduction— SIMPLICITY—&gt; RIGHT —&gt; EXPLAIN"></a>Introduction— SIMPLICITY—&gt; RIGHT —&gt; EXPLAIN</h1><p>评价软件架构设计好坏的标准：</p>
 <ol>
 <li>对于代码很小的修改是不是会对其他地方有较大的影响 — flexible</li>
 <li>代码重用是不是很困难 — reusable</li>
@@ -645,6 +652,191 @@
 <p>不应该将所有behavioural contracts都归纳为接口。创建接口需要满足特定要求：为相关类提供一种一致工作的方式。</p>
 <h2 id="设计的步骤"><a href="#设计的步骤" class="headerlink" title="设计的步骤"></a>设计的步骤</h2><p>和顾客沟通时，主要使用的技术是CRC卡片，而在技术设计中，UML类表是更合适的选择。</p>
 <p><img src="https://i.loli.net/2020/11/14/Fca6mC8PetLiuAD.png" alt="image-20201114163502253" style="zoom: 67%;" /></p>
+<h1 id="DESIGN-PRINCIPLES"><a href="#DESIGN-PRINCIPLES" class="headerlink" title="DESIGN PRINCIPLES"></a>DESIGN PRINCIPLES</h1><h2 id="Evaluating-Design-Complexity"><a href="#Evaluating-Design-Complexity" class="headerlink" title="Evaluating Design Complexity"></a>Evaluating Design Complexity</h2><p>模块：指代组成程序的多个单元，包括其中的类和方法。这也是Design complexity关注的粒度。</p>
+<p>良好的设计：模块可以重复使用，并且很方便地连接其他模块。这种特性主要由Cohesion和Couping两种指标来衡量。</p>
+<p><strong>耦合</strong>: ease  to use -&gt; loose couplng, 如果一个模块可以很容易地通过定义明确的接口连接其他模块，则是松耦合的。模块的耦合主要通过三个指标来度量：</p>
+<ol>
+<li>Degree 模块和其他模块连接的数目。</li>
+<li>Ease 模块之间建立连接的容易程度。</li>
+<li>Flexibility 模块之间是否很容易地进行调换， for something better in the future.</li>
+</ol>
+<p><strong>高耦合的特征：</strong></p>
+<ol>
+<li>一个模块需要通过大量的接口和参数来和其他模块建立连接。</li>
+<li>一个模块相连的其他模块很难找到。</li>
+<li>模块只能和其他几个特定的模块相连，而难以替换。</li>
+</ol>
+<p><strong>内聚</strong>: 目标要单一、明确，如果一个模块包含多个目标，则应该对其进行分隔。</p>
+<p><code>需要平衡二者的关系。Complexity要合理地分布在模块之间和模块内。</code></p>
+<h2 id="Separation-of-Concerns-关注点分离"><a href="#Separation-of-Concerns-关注点分离" class="headerlink" title="Separation of Concerns 关注点分离"></a>Separation of Concerns 关注点分离</h2><p><strong>关注点</strong>：任何和问题的解决方法相关的事情。不同的关注点要放在软件的不同位置。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/10/15/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3-%E5%90%8E%E7%AB%AF%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄写字的地方">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/15/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%8E%A5%E5%8F%A3-%E5%90%8E%E7%AB%AF%E7%AF%87/" class="post-title-link" itemprop="url">微信支付接口_后端篇</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-15 10:15:13 / 修改时间：11:55:57" itemprop="dateCreated datePublished" datetime="2020-10-15T10:15:13+08:00">2020-10-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="微信支付接口-后端篇"><a href="#微信支付接口-后端篇" class="headerlink" title="微信支付接口_后端篇"></a>微信支付接口_后端篇</h1><h3 id="微信支付系统"><a href="#微信支付系统" class="headerlink" title="微信支付系统"></a>微信支付系统</h3><p>微信支付系统是指完成微信支付流程中涉及的API接口、后台业务处理系统、账务系统、回调通知等系统的总称。</p>
+<h3 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h3><p><strong>商户后台</strong>和<strong>微信支付后台</strong>根据相同的密钥和算法生成一个结果，用于校验双方身份合法性。签名的算法由微信支付制定并公开，常用的签名方式有：MD5、SHA1、SHA256、HMAC等。</p>
+<h3 id="支付账户"><a href="#支付账户" class="headerlink" title="支付账户"></a>支付账户</h3><p>商户在微信公众平台或开放平台提交微信支付申请，微信支付工作人员审核资料无误后开通相应的微信支付权限。微信支付申请审核通过后，商户在申请资料填写的邮箱中收取到由微信支付小助手发送的邮件，此邮件包含开发时需要使用的支付账户信息，见图3.1所示。</p>
+<p><img src="https://pay.weixin.qq.com/wiki/doc/api/img/chapter3_1.png" alt="微信审核通过邮件模板"></p>
+<p> <strong>微信审核通过邮件模板</strong></p>
+<p>邮件中的账户参数与接口API参数对应关系见表格：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">邮件中参数</th>
+<th style="text-align:left">API参数名</th>
+<th style="text-align:left">详细说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">APPID</td>
+<td style="text-align:left">appid</td>
+<td style="text-align:left">appid是微信公众账号或<strong>开放平台APP的唯一标识</strong>，在公众平台申请公众账号或者在开放平台申请APP账号后，微信会自动分配对应的appid，用于标识该应用。可在微信公众平台—&gt;开发—&gt;基本配置里面查看，商户的微信支付审核通过邮件中也会包含该字段值。</td>
+</tr>
+<tr>
+<td style="text-align:left">微信支付商户号</td>
+<td style="text-align:left">mch_id</td>
+<td style="text-align:left">商户申请微信支付后，由微信支付分配的<strong>商户收款账号</strong>。</td>
+</tr>
+<tr>
+<td style="text-align:left">API密钥</td>
+<td style="text-align:left">key</td>
+<td style="text-align:left"><strong>交易过程生成签名的密钥</strong>，仅保留在商户系统和微信支付后台，不会在网络中传播。商户妥善保管该Key，切勿在网络中传输，不能在其他客户端中存储，保证key不会被泄漏。商户可根据邮件提示登录微信商户平台进行设置。也可按以下路径设置：微信商户平台(pay.weixin.qq.com)—&gt;账户中心—&gt;账户设置—&gt;API安全—&gt;密钥设置</td>
+</tr>
+<tr>
+<td style="text-align:left">Appsecret</td>
+<td style="text-align:left">secret</td>
+<td style="text-align:left">AppSecret是APPID对应的接口密码，用于<a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html" target="_blank" rel="noopener">获取接口调用凭证</a>access_token时使用。在微信支付中，先通过<a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html" target="_blank" rel="noopener">OAuth2.0接口</a>获取用户openid，此openid用于微信内网页支付模式下单接口使用。可登录公众平台—&gt;微信支付，获取AppSecret（需成为开发者且帐号没有异常状态）。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p> <strong>账户参数说明</strong></p>
+<h2 id="协议规则"><a href="#协议规则" class="headerlink" title="协议规则"></a>协议规则</h2><p>商户接入微信支付，调用API必须遵循以下规则：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">传输方式</th>
+<th>为保证交易安全性，采用HTTPS传输</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">提交方式</td>
+<td>采用POST方法提交</td>
+</tr>
+<tr>
+<td style="text-align:left">数据格式</td>
+<td>提交和返回数据都为XML格式，根节点名为xml</td>
+</tr>
+<tr>
+<td style="text-align:left">字符编码</td>
+<td>统一采用UTF-8字符编码</td>
+</tr>
+<tr>
+<td style="text-align:left">签名算法</td>
+<td>MD5/HMAC-SHA256</td>
+</tr>
+<tr>
+<td style="text-align:left">签名要求</td>
+<td>请求和接收数据均需要校验签名，详细方法请参考<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_3" target="_blank" rel="noopener">安全规范-签名算法</a></td>
+</tr>
+<tr>
+<td style="text-align:left">证书要求</td>
+<td>调用申请退款、撤销订单、红包接口等需要商户api证书，各api接口文档均有说明。</td>
+</tr>
+<tr>
+<td style="text-align:left">判断逻辑</td>
+<td>先判断协议字段返回，再判断业务返回，最后判断交易状态</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>特别提示：</p>
+<p>必须严格按照API的说明进行一单一支付，一单一红包，一单一付款，在<strong>未得到支付系统明确的回复之前不要换单</strong>，防止<strong>重复支付或者重复付款</strong>。</p>
+<h3 id="交易类型"><a href="#交易类型" class="headerlink" title="交易类型"></a>交易类型</h3><p>JSAPI—JSAPI支付（或小程序支付）、NATIVE—Native支付、APP—app支付，MWEB—H5支付，不同trade_type决定了调起支付的方式，请根据支付产品正确上传</p>
+<h3 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h3><p>标准北京时间，时区为东八区；如果商户的系统时间为非标准北京时间。参数值必须根据商户系统所在时区先换算成标准北京时间， <em>例如商户所在地为0时区的伦敦，当地时间为2014年11月11日0时0分0秒，换算成北京时间为2014年11月11日8时0分0秒。</em></p>
+<h3 id="时间戳"><a href="#时间戳" class="headerlink" title="时间戳"></a>时间戳</h3><p>标准北京时间，时区为东八区，自1970年1月1日 0点0分0秒以来的秒数。注意：部分系统取到的值为毫秒级，需要转换成秒(10位数字)。</p>
+<h3 id="商户订单号"><a href="#商户订单号" class="headerlink" title="商户订单号"></a>商户订单号</h3><p>商户支付的订单号由商户自定义生成，仅支持使用字母、数字、中划线-、下划线_、竖线|、星号<em>这些英文半角字符的组合，请勿使用汉字或全角等特殊字符。微信支付要求商户订单号保持唯一性（建议根据当前系统时间加随机序列来生成订单号）。重新发起一笔支付要使用原订单号，避免重复支付；<em>*已支付过或已调用关单、撤销（请见后文的API列表）的订单号不能重新发起支付。</em></em></p>
+<h2 id="支付"><a href="#支付" class="headerlink" title="支付"></a>支付</h2><p>交互细节：</p>
+<p>以下是支付场景的交互细节，请认真阅读，设计商户页面的逻辑：</p>
+<p>（1）用户打开商户网页选购商品，发起支付，在网页通过JavaScript调用<strong>getBrandWCPayRequest</strong>接口，发起微信支付请求，用户进入支付流程。</p>
+<p>（2）用户成功支付点击完成按钮后，商户的前端会收到JavaScript的返回值。商户可直接跳转到支付成功的静态页面进行展示。</p>
+<p>（3）商户后台<strong>收到来自微信开放平台的支付成功回调通知</strong>，标志该笔订单支付成功。</p>
+<p>注：（2）和（3）的触发不保证遵循严格的时序。JS API返回值作为触发商户网页跳转的标志，但<strong>商户后台应该只在收到微信后台的支付成功回调通知后，才做真正的支付成功的处理。</strong></p>
+<p><img src="https://pay.weixin.qq.com/wiki/doc/api/img/chapter7_4_1.png" alt="微信内网页支付时序图"></p>
+<p>商户系统和微信支付系统主要交互：</p>
+<p>1、商户server调用统一下单接口请求订单，api参见公共api【<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="noopener">统一下单API</a>】</p>
+<p>2、商户server接收支付通知，api参见公共api【<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_7" target="_blank" rel="noopener">支付结果通知API</a>】</p>
+<p>3、商户server查询支付结果，api参见公共api【<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_2" target="_blank" rel="noopener">查询订单API</a>】</p>
 
       
     </div>
@@ -1477,112 +1669,6 @@ V[x_2] = \sigma</script><p>随机过程由多个随机变量</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/05/08/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄写字的地方">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/05/08/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/" class="post-title-link" itemprop="url">三行代码开启模型训练通知</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-05-08 12:12:05" itemprop="dateCreated datePublished" datetime="2020-05-08T12:12:05+08:00">2020-05-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-14 21:15:05" itemprop="dateModified" datetime="2020-05-14T21:15:05+08:00">2020-05-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nlp/" itemprop="url" rel="index"><span itemprop="name">nlp</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>如果你经常在大量数据上训练模型的话，那么这样一个工具肯定很合你的胃口。这个项目叫做<a href="https://github.com/huggingface/knockknock" target="_blank" rel="noopener">knockknock</a>，它的功能只有一个：通知你训练结束了，并且附带训练的结果。</p>
-<p>当前支持邮件、短信、微信群、钉钉群等通知方式，只需要三行代码，就能实现功能。</p>
-<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p>为了让你有看下去的动力，先展示一下最终的成果(钉钉)：</p>
-<p><img src="/images/%E4%B8%89%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%BC%80%E5%90%AF%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E9%80%9A%E7%9F%A5/share.jpg" alt=""></p>
-<h2 id="knockknock在钉钉群中的配置方式"><a href="#knockknock在钉钉群中的配置方式" class="headerlink" title="knockknock在钉钉群中的配置方式"></a><a href="https://github.com/huggingface/knockknock" target="_blank" rel="noopener">knockknock</a>在钉钉群中的配置方式</h2><p>之所以选择使用钉钉，是因为它的通知声音比较好听🤭。配置过程：</p>
-<ol>
-<li><p>建立钉钉群（最好是在电脑）</p>
-</li>
-<li><p>添加机器人</p>
-<p>2.1 群设置$\rightarrow $智能群助手$\rightarrow $添加机器人</p>
-<p>2.2 添加自定义机器人</p>
-<p>2.3 自定义名字和头像</p>
-<p>2.4 选择一种加密方式，推荐选择<code>加签</code></p>
-<p>2.5 记录好<code>机器人的url</code>和加签生成的<code>密钥</code></p>
-</li>
-<li><p>在notebook或者python虚拟环境中安装knockknock</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!pip install knockknock(notebook)</span><br><span class="line"><span class="keyword">or</span></span><br><span class="line">pip install knockknock(虚拟环境)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>导入dingtalk_sender</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> knockknock <span class="keyword">import</span> dingtalk_sender</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在要跑的类上添加以下代码</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">webhook_url = <span class="string">"https://oapi.dingtalk.com/robot/send?access_token=..."</span></span><br><span class="line"><span class="meta">@dingtalk_sender(webhook_url=webhook_url, secret="加签生成的密钥", keywords=["随便填"])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_your_nicest_model</span><span class="params">(your_nicest_parameters)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> time</span><br><span class="line">    time.sleep(<span class="number">10</span>)</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">'loss'</span>: <span class="number">0.9</span>&#125; <span class="comment"># Optional return value</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行train_your_nicest_model，得到结果</p>
-<p><img src="https://i.loli.net/2020/05/14/vzGJgxiVu5j2Scb.jpg" alt="微信图片_20200514211147"></p>
-</li>
-</ol>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>本文主要参考自官方<a href="https://github.com/huggingface/knockknock" target="_blank" rel="noopener">github仓库</a></p>
-<p>以及<a href="https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq" target="_blank" rel="noopener">阿里钉钉开发者平台</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1652,7 +1738,7 @@ V[x_2] = \sigma</script><p>随机过程由多个随机变量</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
