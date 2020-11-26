@@ -473,7 +473,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-11-26 13:31:03 / 修改时间：14:58:41" itemprop="dateCreated datePublished" datetime="2020-11-26T13:31:03+08:00">2020-11-26</time>
+              <time title="创建时间：2020-11-26 13:31:03 / 修改时间：14:59:51" itemprop="dateCreated datePublished" datetime="2020-11-26T13:31:03+08:00">2020-11-26</time>
             </span>
 
           
@@ -491,7 +491,7 @@
       
           <h1 id="android-studio中3个和构建相关的组件"><a href="#android-studio中3个和构建相关的组件" class="headerlink" title="android studio中3个和构建相关的组件"></a>android studio中3个和构建相关的组件</h1><ol>
 <li><p><strong>Gradle程序</strong>，这是和安卓独立的gradle系统，现在的版本号为6.5；</p>
-<p>在项目中, gradle存储在gradle\wrapper\gradle-wrapper.properties文件中，以下载链接的方式存在。例如：<img src="/image/process/image-20201126135147962.png" alt="image-20201126135147962"></p>
+<p>在项目中, gradle存储在gradle\wrapper\gradle-wrapper.properties文件中，以下载链接的方式存在。例如：<img src="/images/process/image-20201126135147962.png" alt="image-20201126135147962"></p>
 <p>在构建中往往出现gradle下载不完全的问题，这时就会报错。打开<code>C:\Users\Administrator\.gradle\wrapper\dists</code>文件夹，就能看到不同版本的gradle文件。</p>
 <p><img src="/images/process/image-20201126135349366.png" alt="image-20201126135349366"></p>
 <p>我们可以直接到<code>gradle-wrapper.properties</code>指定的url下载压缩包并放到<code>C:\Users\Administrator\.gradle\wrapper\dists\gradle-5.6.4-bin\bxirm19lnfz6nurbatndyydux</code>类似的位置中。在启动构建时，android studio会自动解压并运行。</p>
