@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/%E8%A7%86%E5%8A%9B%E8%A1%A8%20(1).svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/%E8%A7%86%E5%8A%9B%E8%A1%A8.svg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"dxzmpk.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="介绍创建者模式单例模式工厂模式工厂中的具体实例化 结构型模式外观模式尽管解决方案很大，但是客户端仍然希望使用简化的界面与子系统进行交互。外观不会增加更多功能，而外观只是充当子系统的入口点。  适配器模式一个系统的输出可能与另一系统的预期输入不一致。 组成模式多态性  代理模式能够完成相同的任务，但是将请求委派给原始对象以实现它们。推迟创建资源密集型对象，直到需要远程系统的本地表示保证安全性 装饰者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Design-Patterns">
+<meta property="og:url" content="https://dxzmpk.github.io/2020/11/18/Design-Patterns/">
+<meta property="og:site_name" content="董雄写字的地方">
+<meta property="og:description" content="介绍创建者模式单例模式工厂模式工厂中的具体实例化 结构型模式外观模式尽管解决方案很大，但是客户端仍然希望使用简化的界面与子系统进行交互。外观不会增加更多功能，而外观只是充当子系统的入口点。  适配器模式一个系统的输出可能与另一系统的预期输入不一致。 组成模式多态性  代理模式能够完成相同的任务，但是将请求委派给原始对象以实现它们。推迟创建资源密集型对象，直到需要远程系统的本地表示保证安全性 装饰者">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144147502.png">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144207333.png">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144226796.png">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144235090.png">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144258511.png">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144309874.png">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144321678.png">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144350572.png">
+<meta property="og:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144408610.png">
+<meta property="article:published_time" content="2020-11-18T02:23:09.000Z">
+<meta property="article:modified_time" content="2020-11-26T06:44:10.590Z">
+<meta property="article:author" content="董雄">
+<meta property="article:tag" content="4">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dxzmpk.github.io/Design-Patterns/image-20201126144147502.png">
+
+<link rel="canonical" href="https://dxzmpk.github.io/2020/11/18/Design-Patterns/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Design-Patterns | 董雄写字的地方</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">董雄写字的地方</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">endless hard working</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/18/Design-Patterns/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄写字的地方">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Design-Patterns
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-18 10:23:09" itemprop="dateCreated datePublished" datetime="2020-11-18T10:23:09+08:00">2020-11-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-26 14:44:10" itemprop="dateModified" datetime="2020-11-26T14:44:10+08:00">2020-11-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/11/18/Design-Patterns/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/18/Design-Patterns/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="创建者模式"><a href="#创建者模式" class="headerlink" title="创建者模式"></a>创建者模式</h2><p><strong>单例模式</strong><br><strong>工厂模式</strong><br>工厂中的具体实例化</p>
+<h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><p><strong>外观模式</strong><br>尽管解决方案很大，但是客户端仍然希望使用简化的界面与子系统进行交互。<br>外观不会增加更多功能，而外观只是充当子系统的入口点。</p>
+<p><img src="/Design-Patterns/image-20201126144147502.png" alt="image-20201126144147502"></p>
+<p><strong>适配器模式</strong><br>一个系统的输出可能与另一系统的预期输入不一致。</p>
+<p><img src="/Design-Patterns/image-20201126144207333.png" alt="image-20201126144207333"><strong>组成模式</strong><br>多态性</p>
+<p><img src="/Design-Patterns/image-20201126144226796.png" alt="image-20201126144226796"></p>
+<p><strong>代理模式</strong><br>能够完成相同的任务，但是将请求委派给原始对象以实现它们。<br>推迟创建资源密集型对象，直到需要<br>远程系统的本地表示<br>保证安全性</p>
+<p><img src="/Design-Patterns/image-20201126144235090.png" alt="image-20201126144235090"><strong>装饰者模式</strong><br>行为组合-&gt;新类，类的数目可能会过于多<br>一对一聚合。<br>堆栈聚合，顺序很重要！<br>使用时，我们需要继承抽象装饰器并使用具体装饰器类实现组件接口</p>
+<p><img src="/Design-Patterns/image-20201126144258511.png" alt="image-20201126144258511"></p>
+<h1 id="行为模式"><a href="#行为模式" class="headerlink" title="行为模式"></a>行为模式</h1><p><strong>模板方法模式</strong></p>
+<p>模板方法模式定义了一个操作中算法的执行结构，而将一些子类之间不同的行为延迟到子类中定义。</p>
+<p><img src="/Design-Patterns/image-20201126144309874.png" alt="image-20201126144309874"></p>
+<p><strong>职责链模式</strong></p>
+<p>将问题的解决者对象连接在一起。将request 传递下去。</p>
+<p>但是，如果其中的一个解决者没有传递对象的话，就会产生问题。这里需要使用模板方法模式规定行为的发生顺序，至于每个解决者如何解决问题，延迟到子类中进行实现。</p>
+<p><img src="/Design-Patterns/image-20201126144321678.png" alt="image-20201126144321678"></p>
+<p><strong>状态模式</strong></p>
+<p>当系统处于不同的状态，对不同的行为需要做出不同的反应时，我们往往需要使用很多的if-else条件分支。而使用状态模式，通过维持当前上下文的一个状态，由状态对发生的行为进行处理，而具体的实现在状态子类的对应方法中。通过这种方式就可以简化代码。</p>
+<p><img src="/Design-Patterns/image-20201126144350572.png" alt="image-20201126144350572"></p>
+<p><strong>指令模式</strong></p>
+<p>指令模式将对象对另一个对象的方法调用封装为一个Command对象，这样就可以将方法的调用保存到队列中之后再规划执行。</p>
+<p><strong>中介者模式</strong></p>
+<p>通过中介者，将相互有联系的对象的交互逻辑限制在中介者中，从而让代码更加集中，减少对象之间的耦合，但是同样地，会降低内聚性，因此需要在二者之间做好平衡。</p>
+<p><strong>观察者模式</strong></p>
+<p>主要包含一个域、三个方法，方法分别为添加订阅者，删除订阅者，通知全部订阅者，通知是通过调用所有Observer的update方法实现的，因此所有的Observer类都要实现相同的接口。</p>
+<h1 id="MVC-and-Good-Bad-Design"><a href="#MVC-and-Good-Bad-Design" class="headerlink" title="MVC and Good/Bad Design"></a>MVC and Good/Bad Design</h1><p><img src="/Design-Patterns/image-20201126144408610.png" alt="image-20201126144408610"></p>
+<p><strong>Code smell:</strong></p>
+<ul>
+<li>Comments</li>
+<li>long methods</li>
+<li>not just getter and setter</li>
+<li>long parameter is bad, introduce parameter objects</li>
+<li>global variables which is also bad</li>
+</ul>
+<p>Part2: code smells when you make changes to the code</p>
+<ul>
+<li>如果一开始没有做到seperation of concerns, 会导致最终的divergent change.</li>
+<li>change to be localized</li>
+<li>如果两个类总是频繁地进行交流，他们可能本就属于一处。</li>
+<li>message chains: makes code harder to test independly</li>
+<li>Switch Statements: </li>
+<li>Speculative Generality</li>
+<li>Refused Bequest: 拒绝馈赠</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/4/" rel="tag"># 4</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/14/%E6%88%91%E7%9A%84springboot/" rel="prev" title="我的Springboot">
+      <i class="fa fa-chevron-left"></i> 我的Springboot
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/" rel="next" title="安卓中Fragment、Activity、View、Layout的关系">
+      安卓中Fragment、Activity、View、Layout的关系 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建者模式"><span class="nav-number">1.1.</span> <span class="nav-text">创建者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构型模式"><span class="nav-number">1.2.</span> <span class="nav-text">结构型模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#行为模式"><span class="nav-number">2.</span> <span class="nav-text">行为模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MVC-and-Good-Bad-Design"><span class="nav-number">3.</span> <span class="nav-text">MVC and Good&#x2F;Bad Design</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">董雄</p>
+  <div class="site-description" itemprop="description">Learning in Harbin Institute of Technology</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">董雄</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278837449&web_id=1278837449"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 't8n8RTilca5Gm0vKToaMrjRU-gzGzoHsz',
+      appKey     : 'x4Jty8MrDpczjPANtbbGhwXX',
+      placeholder: "请留下一点痕迹吧, 评论将永远留存",
+      avatar     : 'robohash',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

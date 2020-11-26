@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/%E8%A7%86%E5%8A%9B%E8%A1%A8%20(1).svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/%E8%A7%86%E5%8A%9B%E8%A1%A8.svg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"dxzmpk.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="android studio中3个和构建相关的组件 Gradle程序，这是和安卓独立的gradle系统，现在的版本号为6.5； 在项目中, gradle存储在gradle\wrapper\gradle-wrapper.properties文件中，以下载链接的方式存在。例如： 在构建中往往出现gradle下载不完全的问题，这时就会报错。打开C:\Users\Administrator\.gradle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Google Android Learning Process">
+<meta property="og:url" content="https://dxzmpk.github.io/2020/11/26/process/">
+<meta property="og:site_name" content="董雄写字的地方">
+<meta property="og:description" content="android studio中3个和构建相关的组件 Gradle程序，这是和安卓独立的gradle系统，现在的版本号为6.5； 在项目中, gradle存储在gradle\wrapper\gradle-wrapper.properties文件中，以下载链接的方式存在。例如： 在构建中往往出现gradle下载不完全的问题，这时就会报错。打开C:\Users\Administrator\.gradle">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dxzmpk.github.io/process/image-20201126135147962.png">
+<meta property="og:image" content="https://dxzmpk.github.io/process/image-20201126135349366.png">
+<meta property="og:image" content="https://dxzmpk.github.io/process/image-20201126140235517.png">
+<meta property="og:image" content="https://dxzmpk.github.io/process/image-20201126140333350.png">
+<meta property="og:image" content="https://dxzmpk.github.io/process/image-20201126140458210.png">
+<meta property="og:image" content="https://dxzmpk.github.io/process/image-20201126140536176.png">
+<meta property="og:image" content="https://dxzmpk.github.io/process/image-20201126141054278.png">
+<meta property="og:image" content="https://developer.android.com/images/tools/studio/project-structure_2x.png">
+<meta property="article:published_time" content="2020-11-26T05:31:03.000Z">
+<meta property="article:modified_time" content="2020-11-26T06:35:43.408Z">
+<meta property="article:author" content="董雄">
+<meta property="article:tag" content="nlp">
+<meta property="article:tag" content=" cs">
+<meta property="article:tag" content=" hit">
+<meta property="article:tag" content=" transformers">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dxzmpk.github.io/process/image-20201126135147962.png">
+
+<link rel="canonical" href="https://dxzmpk.github.io/2020/11/26/process/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Google Android Learning Process | 董雄写字的地方</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">董雄写字的地方</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">endless hard working</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/26/process/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄写字的地方">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Google Android Learning Process
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-11-26 13:31:03 / 修改时间：14:35:43" itemprop="dateCreated datePublished" datetime="2020-11-26T13:31:03+08:00">2020-11-26</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/11/26/process/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/26/process/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="android-studio中3个和构建相关的组件"><a href="#android-studio中3个和构建相关的组件" class="headerlink" title="android studio中3个和构建相关的组件"></a>android studio中3个和构建相关的组件</h1><ol>
+<li><p><strong>Gradle程序</strong>，这是和安卓独立的gradle系统，现在的版本号为6.5；</p>
+<p>在项目中, gradle存储在gradle\wrapper\gradle-wrapper.properties文件中，以下载链接的方式存在。例如：<img src="/../process/image-20201126135147962.png" alt="image-20201126135147962"></p>
+<p>在构建中往往出现gradle下载不完全的问题，这时就会报错。打开<code>C:\Users\Administrator\.gradle\wrapper\dists</code>文件夹，就能看到不同版本的gradle文件。</p>
+<p><img src="/../process/image-20201126135349366.png" alt="image-20201126135349366"></p>
+<p>我们可以直接到<code>gradle-wrapper.properties</code>指定的url下载压缩包并放到<code>C:\Users\Administrator\.gradle\wrapper\dists\gradle-5.6.4-bin\bxirm19lnfz6nurbatndyydux</code>类似的位置中。在启动构建时，android studio会自动解压并运行。</p>
+</li>
+<li><p><strong>android sdk build tools.</strong>这是安卓sdk中自带的构建工具。我们可以打开<img src="/../process/image-20201126140235517.png" alt="image-20201126140235517">这个图标，选择SDK tools栏看到<img src="/../process/image-20201126140333350.png" alt="image-20201126140333350"></p>
+<p>即已经安卓了相应的SDK build tools工具。在项目中的<img src="/../process/image-20201126140458210.png" alt="image-20201126140458210">文件指定了需要的版本。<img src="/../process/image-20201126140536176.png" alt="image-20201126140536176">如这里是29.0.2。打开安卓sdk build-tools目录，如<code>C:\Users\Administrator\AppData\Local\Android\Sdk\build-tools</code>就可以看到工具的所有版本。当出现下载问题时，可以到<a href="https://androidsdkmanager.azurewebsites.net/Buildtools" target="_blank" rel="noopener">相应网站</a>下载需要的工具版本，解压后重命名放到sdk build-tools目录中，android studio会自动检测并使用。</p>
+</li>
+<li><p><strong>gradle plugin.</strong> 除了以上两种，安卓还提供了一个构建插件。其版本号规定在项目文件<img src="/../process/image-20201126141054278.png" alt="image-20201126141054278">中。即对于全局项目，使用的gradle插件是相同的。在打开android studio的时候，往往会提示我们更新gradle插件版本，其实就是指的它。一般情况下，gradle插件并不会导致太大的问题。</p>
+</li>
+</ol>
+<h2 id="gradle-plugin-和-Gradle程序的兼容问题"><a href="#gradle-plugin-和-Gradle程序的兼容问题" class="headerlink" title="gradle plugin 和 Gradle程序的兼容问题"></a>gradle plugin 和 <strong>Gradle程序</strong>的兼容问题</h2><p>下表列出了每个版本的Android Gradle插件所需的Gradle版本。 为了获得最佳性能，建议使用Gradle和插件的最新版本。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Plugin version</th>
+<th style="text-align:left">Required Gradle version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1.0.0 - 1.1.3</td>
+<td style="text-align:left">2.2.1 - 2.3</td>
+</tr>
+<tr>
+<td style="text-align:left">1.2.0 - 1.3.1</td>
+<td style="text-align:left">2.2.1 - 2.9</td>
+</tr>
+<tr>
+<td style="text-align:left">1.5.0</td>
+<td style="text-align:left">2.2.1 - 2.13</td>
+</tr>
+<tr>
+<td style="text-align:left">2.0.0 - 2.1.2</td>
+<td style="text-align:left">2.10 - 2.13</td>
+</tr>
+<tr>
+<td style="text-align:left">2.1.3 - 2.2.3</td>
+<td style="text-align:left">2.14.1+</td>
+</tr>
+<tr>
+<td style="text-align:left">2.3.0+</td>
+<td style="text-align:left">3.3+</td>
+</tr>
+<tr>
+<td style="text-align:left">3.0.0+</td>
+<td style="text-align:left">4.1+</td>
+</tr>
+<tr>
+<td style="text-align:left">3.1.0+</td>
+<td style="text-align:left">4.4+</td>
+</tr>
+<tr>
+<td style="text-align:left">3.2.0 - 3.2.1</td>
+<td style="text-align:left">4.6+</td>
+</tr>
+<tr>
+<td style="text-align:left">3.3.0 - 3.3.3</td>
+<td style="text-align:left">4.10.1+</td>
+</tr>
+<tr>
+<td style="text-align:left">3.4.0 - 3.4.3</td>
+<td style="text-align:left">5.1.1+</td>
+</tr>
+<tr>
+<td style="text-align:left">3.5.0 - 3.5.4</td>
+<td style="text-align:left">5.4.1+</td>
+</tr>
+<tr>
+<td style="text-align:left">3.6.0 - 3.6.4</td>
+<td style="text-align:left">5.6.4+</td>
+</tr>
+<tr>
+<td style="text-align:left">4.0.0+</td>
+<td style="text-align:left">6.1.1+</td>
+</tr>
+<tr>
+<td style="text-align:left">4.1.0+</td>
+<td style="text-align:left">6.5+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="安卓程序的构建"><a href="#安卓程序的构建" class="headerlink" title="安卓程序的构建"></a>安卓程序的构建</h2><h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h3><p><img src="https://developer.android.com/images/tools/studio/project-structure_2x.png" alt="img" style="zoom:50%;" /></p>
+<p>安卓项目主要分为三个级别：</p>
+<ol>
+<li>Project级别：项目包含的所有文件</li>
+<li>Module级别：例如app等模块，一个项目可以有多个模块。</li>
+<li>代码模块，main文件夹下的所有文件。</li>
+</ol>
+<h3 id="build-gradle文件结构"><a href="#build-gradle文件结构" class="headerlink" title="build.gradle文件结构"></a>build.gradle文件结构</h3><p>主要包含两个文件：</p>
+<ol>
+<li><p>全局构建配置文件build.gradle(Project)</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        maven &#123;</span><br><span class="line">            url <span class="string">'https://maven.google.com/'</span></span><br><span class="line">            name <span class="string">'Google'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath <span class="string">'com.android.tools.build:gradle:3.6.1'</span></span><br><span class="line">        <span class="comment">// <span class="doctag">NOTE:</span> Do not place your application dependencies here; they belong</span></span><br><span class="line">        <span class="comment">// in the individual module build.gradle files</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        maven &#123;</span><br><span class="line">            url <span class="string">'https://maven.google.com/'</span></span><br><span class="line">            name <span class="string">'Google'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task clean(<span class="string">type:</span> Delete) &#123;</span><br><span class="line">    delete rootProject.buildDir</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>位于根项目目录中的全局build.gradle文件定义了适用于项目中所有模块的构建配置。 </p>
+<p>默认情况下，buildscript块定义项目中所有模块通用的Gradle存储库和依赖项。</p>
+<p>allprojects块用来配置存储库和所有模块共用的依赖，例如第三方插件和库，默认情况下，这里只包括jcenter和maven存储库。</p>
+<p>dependencies配置了gradle构建项目需要的依赖，关于版本的问题前文已经提到过了。</p>
+</li>
+<li><p>模块配置文件 build.gradle(Module)</p>
+<p>位于模块的根目录中，主要用于配置其所在的特定模块。我们可以通过配置这些构建设置来提供自定义打包选项，例如其他构建类型和产品类型，并覆盖manifest或全局build.gradle文件中的设置。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The first line in the build configuration applies the Android plugin for</span></span><br><span class="line"><span class="comment"> * Gradle to this build and makes the android block available to specify</span></span><br><span class="line"><span class="comment"> * Android-specific build options.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The android block is where you configure all your Android-specific</span></span><br><span class="line"><span class="comment"> * build options.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * compileSdkVersion specifies the Android API level Gradle should use to</span></span><br><span class="line"><span class="comment">   * compile your app. This means your app can use the API features included in</span></span><br><span class="line"><span class="comment">   * this API level and lower.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  compileSdkVersion <span class="number">28</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * buildToolsVersion specifies the version of the SDK build tools, command-line</span></span><br><span class="line"><span class="comment">   * utilities, and compiler that Gradle should use to build your app. You need to</span></span><br><span class="line"><span class="comment">   * download the build tools using the SDK Manager.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * This property is optional because the plugin uses a recommended version of</span></span><br><span class="line"><span class="comment">   * the build tools by default.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  buildToolsVersion <span class="string">"29.0.2"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The defaultConfig block encapsulates default settings and entries for all</span></span><br><span class="line"><span class="comment">   * build variants, and can override some attributes in main/AndroidManifest.xml</span></span><br><span class="line"><span class="comment">   * dynamically from the build system. You can configure product flavors to override</span></span><br><span class="line"><span class="comment">   * these values for different versions of your app.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  defaultConfig &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * applicationId uniquely identifies the package for publishing.</span></span><br><span class="line"><span class="comment">     * However, your source code should still reference the package name</span></span><br><span class="line"><span class="comment">     * defined by the package attribute in the main/AndroidManifest.xml file.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    applicationId <span class="string">'com.example.myapp'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Defines the minimum API level required to run the app.</span></span><br><span class="line">    minSdkVersion <span class="number">15</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Specifies the API level used to test the app.</span></span><br><span class="line">    targetSdkVersion <span class="number">28</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Defines the version number of your app.</span></span><br><span class="line">    versionCode <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Defines a user-friendly version name for your app.</span></span><br><span class="line">    versionName <span class="string">"1.0"</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The buildTypes block is where you can configure multiple build types.</span></span><br><span class="line"><span class="comment">   * By default, the build system defines two build types: debug and release. The</span></span><br><span class="line"><span class="comment">   * debug build type is not explicitly shown in the default build configuration,</span></span><br><span class="line"><span class="comment">   * but it includes debugging tools and is signed with the debug key. The release</span></span><br><span class="line"><span class="comment">   * build type applies Proguard settings and is not signed by default.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  buildTypes &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * By default, Android Studio configures the release build type to enable code</span></span><br><span class="line"><span class="comment">     * shrinking, using minifyEnabled, and specifies the default Proguard rules file.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    release &#123;</span><br><span class="line">        minifyEnabled <span class="literal">true</span> <span class="comment">// Enables code shrinking for the release build type.</span></span><br><span class="line">        proguardFiles getDefaultProguardFile(<span class="string">'proguard-android.txt'</span>), <span class="string">'proguard-rules.pro'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The productFlavors block is where you can configure multiple product flavors.</span></span><br><span class="line"><span class="comment">   * This allows you to create different versions of your app that can</span></span><br><span class="line"><span class="comment">   * override the defaultConfig block with their own settings. Product flavors</span></span><br><span class="line"><span class="comment">   * are optional, and the build system does not create them by default.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * This example creates a free and paid product flavor. Each product flavor</span></span><br><span class="line"><span class="comment">   * then specifies its own application ID, so that they can exist on the Google</span></span><br><span class="line"><span class="comment">   * Play Store, or an Android device, simultaneously.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * If you declare product flavors, you must also declare flavor dimensions</span></span><br><span class="line"><span class="comment">   * and assign each flavor to a flavor dimension.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  flavorDimensions <span class="string">"tier"</span></span><br><span class="line">  productFlavors &#123;</span><br><span class="line">    free &#123;</span><br><span class="line">      dimension <span class="string">"tier"</span></span><br><span class="line">      applicationId <span class="string">'com.example.myapp.free'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    paid &#123;</span><br><span class="line">      dimension <span class="string">"tier"</span></span><br><span class="line">      applicationId <span class="string">'com.example.myapp.paid'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * The splits block is where you can configure different APK builds that</span></span><br><span class="line"><span class="comment">   * each contain only code and resources for a supported screen density or</span></span><br><span class="line"><span class="comment">   * ABI. You'll also need to configure your build so that each APK has a</span></span><br><span class="line"><span class="comment">   * different versionCode.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  splits &#123;</span><br><span class="line">    <span class="comment">// Settings to build multiple APKs based on screen density.</span></span><br><span class="line">    density &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Enable or disable building multiple APKs.</span></span><br><span class="line">      enable <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// Exclude these densities when building multiple APKs.</span></span><br><span class="line">      exclude <span class="string">"ldpi"</span>, <span class="string">"tvdpi"</span>, <span class="string">"xxxhdpi"</span>, <span class="string">"400dpi"</span>, <span class="string">"560dpi"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The dependencies block in the module-level build configuration file</span></span><br><span class="line"><span class="comment"> * specifies dependencies required to build only the module itself.</span></span><br><span class="line"><span class="comment"> * To learn more, go to Add build dependencies.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation project(<span class="string">":lib"</span>)</span><br><span class="line">    implementation <span class="string">'com.android.support:appcompat-v7:28.0.0'</span></span><br><span class="line">    implementation fileTree(<span class="string">dir:</span> <span class="string">'libs'</span>, <span class="string">include:</span> [<span class="string">'*.jar'</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://developer.android.com/studio/build" target="_blank" rel="noopener">https://developer.android.com/studio/build</a></p>
+<p><a href="https://developer.android.com/codelabs/android-training-hello-world?index=..%2F..%2Fandroid-training#0" target="_blank" rel="noopener">https://developer.android.com/codelabs/android-training-hello-world?index=..%2F..%2Fandroid-training#0</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/" rel="prev" title="安卓中Fragment、Activity、View、Layout的关系">
+      <i class="fa fa-chevron-left"></i> 安卓中Fragment、Activity、View、Layout的关系
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#android-studio中3个和构建相关的组件"><span class="nav-number">1.</span> <span class="nav-text">android studio中3个和构建相关的组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gradle-plugin-和-Gradle程序的兼容问题"><span class="nav-number">1.1.</span> <span class="nav-text">gradle plugin 和 Gradle程序的兼容问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安卓程序的构建"><span class="nav-number">1.2.</span> <span class="nav-text">安卓程序的构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件结构"><span class="nav-number">1.2.1.</span> <span class="nav-text">文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#build-gradle文件结构"><span class="nav-number">1.2.2.</span> <span class="nav-text">build.gradle文件结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">1.3.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">董雄</p>
+  <div class="site-description" itemprop="description">Learning in Harbin Institute of Technology</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">董雄</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1278837449&web_id=1278837449"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 't8n8RTilca5Gm0vKToaMrjRU-gzGzoHsz',
+      appKey     : 'x4Jty8MrDpczjPANtbbGhwXX',
+      placeholder: "请留下一点痕迹吧, 评论将永远留存",
+      avatar     : 'robohash',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
