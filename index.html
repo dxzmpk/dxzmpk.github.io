@@ -721,7 +721,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-11-29 20:56:27 / 修改时间：22:31:33" itemprop="dateCreated datePublished" datetime="2020-11-29T20:56:27+08:00">2020-11-29</time>
+              <time title="创建时间：2020-11-29 20:56:27 / 修改时间：22:38:50" itemprop="dateCreated datePublished" datetime="2020-11-29T20:56:27+08:00">2020-11-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -747,21 +747,21 @@
 
       
           <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>我是一名NBA球迷，上大学后时间都由自己支配了，因此将更多的时间花在追星这件事上。而对于篮球迷来说，虎扑则是大家一起交流娱乐的乐园。在大多数无聊的时候，我会打开虎扑网页或者APP版，查看有关詹姆斯的信息。而且我只关注他一个人，别人的消息我都直接划过，甚至对我来说是浪费时间，因此萌生了 使用爬虫过滤信息的方法。</p>
-<h2 id="爬虫-EXCEL阅读"><a href="#爬虫-EXCEL阅读" class="headerlink" title="爬虫+EXCEL阅读"></a>爬虫+EXCEL阅读</h2><p><img src="D:\hexo-blog\source\images\TIMESAVER的演化史\image-20201129210419725.png" alt="image-20201129210419725" style="zoom:50%;" /></p>
-<p><img src="D:\hexo-blog\source\images\TIMESAVER的演化史\image-20201129210601902.png" alt="image-20201129210601902" style="zoom:60%;" /></p>
+<h2 id="爬虫-EXCEL阅读"><a href="#爬虫-EXCEL阅读" class="headerlink" title="爬虫+EXCEL阅读"></a>爬虫+EXCEL阅读</h2><p><img src="\images\TIMESAVER的演化史\image-20201129210419725.png" alt="image-20201129210419725" style="zoom:50%;" /></p>
+<p><img src="\images\TIMESAVER的演化史\image-20201129210601902.png" alt="image-20201129210601902" style="zoom:60%;" /></p>
 <p>实现的唯一功能是爬取湿乎乎的话题这一板块的所有数据，然后过滤得到标题中包含詹姆斯的结果，最终将链接也一并返回。</p>
 <p>需求大致是实现了，一开始用的也很起劲。但是，每次阅读之前我都需要打开Pycharm, 等爬取结束之后再打开EXCEL，这中间的步骤太多，以致大多数情况下，我都不愿意，也可能不记得使用这个工具。久而久之，写好的代码就被我闲置了。最近开始学习安卓开发，就萌生了将这个功能部署在云服务器，然后写一个APP来展示数据的想法，写这个应用的初衷是节约时间，故名曰：TIMESAVER。</p>
 <h1 id="版本迭代"><a href="#版本迭代" class="headerlink" title="版本迭代"></a>版本迭代</h1><h2 id="v1-0"><a href="#v1-0" class="headerlink" title="v1.0"></a>v1.0</h2><p>首页：</p>
-<p><img src="D:\hexo-blog\source\images\TIMESAVER的演化史\image-20201129221653452.png" alt="image-20201129221653452" style="zoom:67%;" /></p>
+<p><img src="\images\TIMESAVER的演化史\image-20201129221653452.png" alt="image-20201129221653452" style="zoom:67%;" /></p>
 <p>点击获取之后，会进入<strong>等待</strong>状态，同时会向云服务器发送请求，云服务器实时爬取之后将结果返回到客户端。</p>
-<p><img src="D:\hexo-blog\source\images\TIMESAVER的演化史\image-20201129221805801.png" alt="image-20201129221805801" style="zoom:67%;" /></p>
+<p><img src="\images\TIMESAVER的演化史\image-20201129221805801.png" alt="image-20201129221805801" style="zoom:67%;" /></p>
 <p>返回的数据直接放入TextView进行展示，展示效果如图：</p>
-<p><img src="D:\hexo-blog\source\images\TIMESAVER的演化史\image-20201129221944630.png" alt="image-20201129221944630" style="zoom:67%;" /></p>
+<p><img src="\images\TIMESAVER的演化史\image-20201129221944630.png" alt="image-20201129221944630" style="zoom:67%;" /></p>
 <h2 id="v2-0"><a href="#v2-0" class="headerlink" title="v2.0"></a>v2.0</h2><p>最近新学习了ListView, 通过ListView可以自定义每一项的显示，相对来说自由度比较高，可以获得更加美观的结果。除此之外, ListView还自带滚动效果，省去了调整ScrollView的困难（在v1.0的实现中需要使用ScrollView, 其宽度和长度的属性设置曾产生了难以解释的结果，导致我最后只能通过硬编码的方式解决布局问题）。</p>
 <p>通过菜单栏切换到列表模式：</p>
-<p><img src="D:\hexo-blog\source\images\TIMESAVER的演化史\image-20201129222756210.png" alt="image-20201129222756210" style="zoom:67%;" /></p>
+<p><img src="\images\TIMESAVER的演化史\image-20201129222756210.png" alt="image-20201129222756210" style="zoom:67%;" /></p>
 <p>还是相同的操作，点击获取，等待……最终得到结果：</p>
-<p><img src="D:\hexo-blog\source\images\TIMESAVER的演化史\image-20201129222848423.png" alt="image-20201129222848423" style="zoom:67%;" /></p>
+<p><img src="\images\TIMESAVER的演化史\image-20201129222848423.png" alt="image-20201129222848423" style="zoom:67%;" /></p>
 <p>肉眼可见的两点改进：</p>
 <ul>
 <li>不同新闻之间可以添加分割线，更加明确区分的界限。</li>
