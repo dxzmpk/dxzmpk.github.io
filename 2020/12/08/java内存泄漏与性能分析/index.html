@@ -20,20 +20,23 @@
     var CONFIG = {"hostname":"dxzmpk.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="article">
-<meta property="og:title" content="安卓中Fragment、Activity、View、Layout的关系">
-<meta property="og:url" content="https://dxzmpk.github.io/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/">
+  <meta name="description" content="Learning in Harbin Institute of Technology">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内存泄漏与性能分析">
+<meta property="og:url" content="https://dxzmpk.github.io/2020/12/08/java%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E4%B8%8E%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">
 <meta property="og:site_name" content="董雄写字的地方">
+<meta property="og:description" content="Learning in Harbin Institute of Technology">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://dxzmpk.github.io/images/process/a.svg">
-<meta property="article:published_time" content="2020-11-22T08:45:35.000Z">
-<meta property="article:modified_time" content="2020-11-26T07:06:17.900Z">
+<meta property="article:published_time" content="2020-12-08T11:56:17.000Z">
+<meta property="article:modified_time" content="2020-12-08T11:56:17.433Z">
 <meta property="article:author" content="董雄">
-<meta property="article:tag" content="4">
+<meta property="article:tag" content="nlp">
+<meta property="article:tag" content=" cs">
+<meta property="article:tag" content=" hit">
+<meta property="article:tag" content=" transformers">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://dxzmpk.github.io/images/process/a.svg">
 
-<link rel="canonical" href="https://dxzmpk.github.io/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/">
+<link rel="canonical" href="https://dxzmpk.github.io/2020/12/08/java%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E4%B8%8E%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">
 
 
 <script id="page-configurations">
@@ -46,7 +49,7 @@
   };
 </script>
 
-  <title>安卓中Fragment、Activity、View、Layout的关系 | 董雄写字的地方</title>
+  <title>Java内存泄漏与性能分析 | 董雄写字的地方</title>
   
 
 
@@ -167,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/12/08/java%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E4%B8%8E%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -180,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          安卓中Fragment、Activity、View、Layout的关系
+          Java内存泄漏与性能分析
         </h1>
 
         <div class="post-meta">
@@ -191,23 +194,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-11-22 16:45:35" itemprop="dateCreated datePublished" datetime="2020-11-22T16:45:35+08:00">2020-11-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 15:06:17" itemprop="dateModified" datetime="2020-11-26T15:06:17+08:00">2020-11-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
-                </span>
+              <time title="创建时间：2020-12-08 19:56:17" itemprop="dateCreated datePublished" datetime="2020-12-08T19:56:17+08:00">2020-12-08</time>
             </span>
 
           
@@ -219,8 +206,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/12/08/java%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E4%B8%8E%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/08/java%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E4%B8%8E%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -235,8 +222,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><img src="/images/process/a.svg" alt="未命名文件"></p>
-
+        
     </div>
 
     
@@ -244,9 +230,6 @@
     
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/4/" rel="tag"># 4</a>
-          </div>
 
         
 
@@ -254,13 +237,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/11/18/Design-Patterns/" rel="prev" title="Design-Patterns">
-      <i class="fa fa-chevron-left"></i> Design-Patterns
+    <a href="/2020/12/08/java%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D-JNI/" rel="prev" title="java本地方法介绍(JNI)">
+      <i class="fa fa-chevron-left"></i> java本地方法介绍(JNI)
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/11/26/process/" rel="next" title="Android Studio中3个和构建相关的组件">
-      Android Studio中3个和构建相关的组件 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
