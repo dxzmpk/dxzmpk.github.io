@@ -167,6 +167,128 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2021/03/29/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E6%97%B6%E9%97%B4%E6%B6%88%E8%80%97%E5%AF%B9%E6%AF%94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄写字的地方">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/29/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E6%97%B6%E9%97%B4%E6%B6%88%E8%80%97%E5%AF%B9%E6%AF%94/" class="post-title-link" itemprop="url">快速排序和归并排序的时间消耗对比</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <i class="fa fa-thumb-tack"></i>
+            <font color=7D26CD>置顶</font>
+            <span class="post-meta-divider">|</span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-29 17:33:04 / 修改时间：18:20:44" itemprop="dateCreated datePublished" datetime="2021-03-29T17:33:04+08:00">2021-03-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h1><p>快速排序和归并排序都基于递归的思想。其中归并排序每次将输入平均划分为两部分，因此时间复杂度为O(nlogn)。而快速排序根据选择的 pivot将其余的数据划分为大于s[pivot]和小于s[pivot]的，只有当s[pivot]恰好是中位数时，时间复杂度才是O(nlogn)，最坏情况下， 每次选择的pivot都位于边缘，如下图所示。这样时间复杂度就退化为$O(n^2)$</p>
+<p>以上的分析是基于内存模型和大 O表示法的，而在实际运行过程中，由于归并排序归并需要的时间比快速排序时间长，因此时间的比较可能出现不一样的结果。本文将对其实际性能进行对比。本实验基于java 1.8。</p>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>数组长度</th>
+<th>初始化情况</th>
+<th>快速排序</th>
+<th>归并排序</th>
+<th>System</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1e6</td>
+<td>有序</td>
+<td>StackOverflow</td>
+<td>496</td>
+<td>5</td>
+</tr>
+<tr>
+<td>1e6</td>
+<td>无序</td>
+<td>153</td>
+<td>663</td>
+<td>180</td>
+</tr>
+<tr>
+<td>1e8</td>
+<td>有序</td>
+<td>StackOverflow</td>
+<td>496</td>
+<td>131</td>
+</tr>
+<tr>
+<td>1e6</td>
+<td>无序</td>
+<td>17380</td>
+<td>too long</td>
+<td>17471</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong><em>时间单位：ms</em></strong></p>
+<h1 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h1><h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] s = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;<span class="number">4</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">4</span>&#125;;</span><br><span class="line">        <span class="keyword">new</span> QuickSort().quickSort(s, <span class="number">0</span>, s.length - <span class="number">1</span>);</span><br><span class="line">        System.out.println(Arrays.toString(s));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] s, <span class="keyword">int</span> l, <span class="keyword">int</span> h)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> p;</span><br><span class="line">        <span class="keyword">if</span> (h - l &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            p = parition(s, l, h);</span><br><span class="line">            quickSort(s,l,p-<span class="number">1</span>);</span><br><span class="line">            quickSort(s,p+<span class="number">1</span>,h);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">parition</span><span class="params">(<span class="keyword">int</span>[] s, <span class="keyword">int</span> l, <span class="keyword">int</span> h)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i; <span class="comment">/* counter */</span></span><br><span class="line">        <span class="keyword">int</span> p; <span class="comment">/* pivot element index */</span></span><br><span class="line">        <span class="keyword">int</span> firsthigh; <span class="comment">/* next position to store lowest num */</span></span><br><span class="line"></span><br><span class="line">        p = h;</span><br><span class="line">        firsthigh = l;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = l; i &lt; h; i ++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[i] &lt; s[p]) &#123;</span><br><span class="line">                swap(s, i, firsthigh);</span><br><span class="line">                firsthigh ++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        swap(s, p , firsthigh);</span><br><span class="line">        <span class="keyword">return</span> (firsthigh);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] s, <span class="keyword">int</span> i, <span class="keyword">int</span> i1)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = s[i];</span><br><span class="line">        s[i] = s[i1];</span><br><span class="line">        s[i1] = temp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergeSort</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] s = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;<span class="number">4</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>, <span class="number">10</span>, <span class="number">9</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">4</span>&#125;;</span><br><span class="line">        <span class="keyword">new</span> MergeSort().mergesort(s, <span class="number">0</span>, s.length - <span class="number">1</span>);</span><br><span class="line">        System.out.println(Arrays.toString(s));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">mergesort</span><span class="params">(<span class="keyword">int</span>[] s, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i; <span class="comment">/* counter */</span></span><br><span class="line">        <span class="keyword">int</span> middle; <span class="comment">/* index of middle element */</span></span><br><span class="line">        <span class="keyword">if</span> (low &lt; high) &#123;</span><br><span class="line">            middle = (low+high)/<span class="number">2</span>;</span><br><span class="line">            mergesort(s,low,middle);</span><br><span class="line">            mergesort(s,middle+<span class="number">1</span>,high);</span><br><span class="line">            merge(s, low, middle, high);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] s, <span class="keyword">int</span> low, <span class="keyword">int</span> middle, <span class="keyword">int</span> high)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i; <span class="comment">// counter</span></span><br><span class="line">        Queue&lt;Integer&gt; buffer1, buffer2;</span><br><span class="line">        buffer1 = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        buffer2 = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (i = low; i &lt;= middle; i++) &#123;</span><br><span class="line">            buffer1.offer(s[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (i = middle + <span class="number">1</span>; i &lt;= high; i++) &#123;</span><br><span class="line">            buffer2.offer(s[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        i = low;</span><br><span class="line">        <span class="keyword">while</span> ((!buffer1.isEmpty()) &amp;&amp; (!buffer2.isEmpty())) &#123;</span><br><span class="line">            <span class="keyword">if</span> (buffer1.peek() &lt;= buffer2.peek()) &#123; <span class="comment">// equals keeps stability</span></span><br><span class="line">                s[i++] = buffer1.poll();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                s[i++] = buffer2.poll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (!buffer1.isEmpty()) &#123;</span><br><span class="line">            s[i++] = buffer1.poll();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (!buffer2.isEmpty()) &#123;</span><br><span class="line">            s[i++] = buffer2.poll();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/28/%E6%9C%80%E5%B8%B8%E8%AE%BF%E9%97%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -695,6 +817,173 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2021/02/18/Android%E5%B1%8F%E5%B9%95%E7%BB%98%E5%88%B6%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄写字的地方">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/18/Android%E5%B1%8F%E5%B9%95%E7%BB%98%E5%88%B6%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">Android屏幕绘制原理</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-18 08:49:40" itemprop="dateCreated datePublished" datetime="2021-02-18T08:49:40+08:00">2021-02-18</time>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/12/09/java%E9%9C%80%E8%A6%81%E8%AE%B0%E4%BD%8F%E7%9A%84%E5%87%A0%E4%BB%B6%E4%BA%8B%E5%84%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄写字的地方">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/09/java%E9%9C%80%E8%A6%81%E8%AE%B0%E4%BD%8F%E7%9A%84%E5%87%A0%E4%BB%B6%E4%BA%8B%E5%84%BF/" class="post-title-link" itemprop="url">Java需要记住的几件事儿</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-09 15:53:04" itemprop="dateCreated datePublished" datetime="2020-12-09T15:53:04+08:00">2020-12-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-13 22:22:26" itemprop="dateModified" datetime="2020-12-13T22:22:26+08:00">2020-12-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="继承篇"><a href="#继承篇" class="headerlink" title="继承篇"></a>继承篇</h1><h2 id="新建对象时，引用必须比new对象的等级高"><a href="#新建对象时，引用必须比new对象的等级高" class="headerlink" title="新建对象时，引用必须比new对象的等级高"></a>新建对象时，引用必须比new对象的等级高</h2><ul>
+<li>新建对象时，包含两部分，一部分是new出来的对象，一部分是创建的新引用。引用的类型可以是接口、抽象类、普通类，而new对象的类型必须是<strong>实现类</strong>，这个实现类常见的有三种表现形式，一种是普通的类，另外是抽象类或接口，但是必须实现所有还没有实现的方法。引用的类型可以使用new出来对象的父类，但是不能使用其子类。可以这样理解：引用的作用是调用方法，子类往往拥有比父类更多的方法（通过继承多个接口等），因此只能用方法更少的父类指向方法更多的子类，以防我们引用了某个方法，但是在new出来的对象中并不存在，造成错误。</li>
+</ul>
+<h2 id="cast对象时，需要从子类cast为父类-需要从内存中实际对象的类别转化为其父类或本身"><a href="#cast对象时，需要从子类cast为父类-需要从内存中实际对象的类别转化为其父类或本身" class="headerlink" title="cast对象时，需要从子类cast为父类 需要从内存中实际对象的类别转化为其父类或本身"></a>cast对象时，<del>需要从子类cast为父类</del> 需要从内存中实际对象的类别转化为其父类或本身</h2><ul>
+<li>和上面的一条有异曲同工之妙，在类型强转之后，我们需要调用对象中的方法，强转的过程想必也不会添加新的方法吧。所以强转是不是可以看作是单纯地去掉一些方法呢，其实不是的。强转的最大作用其实是让我们用不同的引用类型去访问同一个对象，而<strong>堆中的对象本身并没有改变</strong>。</li>
+<li>但是，在安卓开发中经常会用到 (Button) findViewById(R.id.activity_button) 这样的操作，而Button明明是子类啊，为什么可以强转呢？区别在于引用指向的对象在内存中究竟是什么。如果其在内存中是以Button存在的，那么即使返回类型是以View引用的，也可以强转回Button。</li>
+</ul>
+<h2 id="子类override父类的方法时，可以改变方法的返回值，但是返回值必须是父类返回值的子类"><a href="#子类override父类的方法时，可以改变方法的返回值，但是返回值必须是父类返回值的子类" class="headerlink" title="子类override父类的方法时，可以改变方法的返回值，但是返回值必须是父类返回值的子类"></a>子类override父类的方法时，可以改变方法的返回值，但是返回值必须是父类返回值的子类</h2><ul>
+<li>还是和引用与实现对象的类型有关。在调用方法时，利用的是引用的类型，即父类。如果引用类型中没有某个方法，就无法调用，即使实现对象中有此方法。所以父类方法的<strong>返回类型</strong>就是我们调用方法时期望得到的类型。我们可能会利用一个<strong>返回值引用</strong>去指向得到的返回值。所以由<strong>“新建对象时，引用必须比new对象的等级高”</strong>可知，返回值引用的类型要比返回对象的等级高，如果子类实现返回一个等级更高的对象，就可能违背这个原则。</li>
+</ul>
+<h2 id="方法中实际返回的类型要比声明的类型等级低"><a href="#方法中实际返回的类型要比声明的类型等级低" class="headerlink" title="方法中实际返回的类型要比声明的类型等级低"></a>方法中实际返回的类型要比声明的类型等级低</h2><ul>
+<li>由原则1,2易得</li>
+</ul>
+<h1 id="运行篇"><a href="#运行篇" class="headerlink" title="运行篇"></a>运行篇</h1><h2 id="守护线程和用户线程"><a href="#守护线程和用户线程" class="headerlink" title="守护线程和用户线程"></a>守护线程和用户线程</h2><p>在java程序开始执行之后，会产生多个线程。主要分为用户线程和守护线程。用户线程包括我们平时使用的main函数创建的主线程，这个线程主要完成一些复杂的工作，而守护线程则是为了程序正常运行提供服务的线程。他们主要有以下区别：</p>
+<h3 id="jvm只等待用户线程结束才结束"><a href="#jvm只等待用户线程结束才结束" class="headerlink" title="jvm只等待用户线程结束才结束"></a>jvm只等待用户线程结束才结束</h3><h3 id="用户线程优先级比守护线程高"><a href="#用户线程优先级比守护线程高" class="headerlink" title="用户线程优先级比守护线程高"></a>用户线程优先级比守护线程高</h3><p>这保证了cpu会优先满足用户进程的执行</p>
+<h3 id="由谁创建：用户线程通常由用户创建，而守护线程往往由操作系统创建"><a href="#由谁创建：用户线程通常由用户创建，而守护线程往往由操作系统创建" class="headerlink" title="由谁创建：用户线程通常由用户创建，而守护线程往往由操作系统创建"></a>由谁创建：用户线程通常由用户创建，而守护线程往往由操作系统创建</h3><h3 id="用户线程是jvm运行的前提，当只有守护线程时，jvm无法继续运行"><a href="#用户线程是jvm运行的前提，当只有守护线程时，jvm无法继续运行" class="headerlink" title="用户线程是jvm运行的前提，当只有守护线程时，jvm无法继续运行"></a>用户线程是jvm运行的前提，当只有守护线程时，jvm无法继续运行</h3><h2 id="栈帧的组成"><a href="#栈帧的组成" class="headerlink" title="栈帧的组成"></a>栈帧的组成</h2><p>Each frame contains:</p>
+<h3 id="Local-variable-array-本地变量数组"><a href="#Local-variable-array-本地变量数组" class="headerlink" title="Local variable array 本地变量数组"></a>Local variable array 本地变量数组</h3><ul>
+<li>boolean</li>
+<li>byte</li>
+<li>char</li>
+<li>long</li>
+<li>short</li>
+<li>int</li>
+<li>float</li>
+<li>double</li>
+<li>reference</li>
+<li>returnAddress</li>
+</ul>
+<p>除了double和float之外，都占用8个字节/32bit</p>
+<h3 id="Return-value-返回值"><a href="#Return-value-返回值" class="headerlink" title="Return value 返回值"></a>Return value 返回值</h3><h3 id="Operand-stack-操作数栈"><a href="#Operand-stack-操作数栈" class="headerlink" title="Operand stack 操作数栈"></a>Operand stack 操作数栈</h3><h3 id="Reference-to-runtime-constant-pool-for-class-of-the-current-method-运行时常量池的引用"><a href="#Reference-to-runtime-constant-pool-for-class-of-the-current-method-运行时常量池的引用" class="headerlink" title="Reference to runtime constant pool for class of the current method 运行时常量池的引用"></a>Reference to runtime constant pool for class of the current method 运行时常量池的引用</h3><h3 id="运行时常量池的作用"><a href="#运行时常量池的作用" class="headerlink" title="运行时常量池的作用"></a>运行时常量池的作用</h3><p>在c(++)语言中，代码通常被编译为一个个对象，然后通过连接他们来产生可运行文件或者dll。在连接阶段，符号引用被实际的内存地址代替。而在java中这个过程是在运行时动态实现的。</p>
+<p>当java class被加载到jvm中之后，所有的引用和变量都会被存储在类的常量池中，这里的存储使用的是符号引用，而不是对应于实际的地址引用。jvm的具体实现可以选择何时解析符号引用，分为两种，饥饿模式和懒汉模式。饥饿模式的解析发生在字节码验证之后，懒汉模式则发生在引用和变量第一次被使用时。Binding是变量、方法的符号引用被直接引用取代的过程，这个过程只发生一次。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/12/08/java%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E4%B8%8E%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1025,373 +1314,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/18/Design-Patterns/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄写字的地方">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/18/Design-Patterns/" class="post-title-link" itemprop="url">Design-Patterns</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-11-18 10:23:09" itemprop="dateCreated datePublished" datetime="2020-11-18T10:23:09+08:00">2020-11-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 15:05:49" itemprop="dateModified" datetime="2020-11-26T15:05:49+08:00">2020-11-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="创建者模式"><a href="#创建者模式" class="headerlink" title="创建者模式"></a>创建者模式</h2><p><strong>单例模式</strong><br><strong>工厂模式</strong><br>工厂中的具体实例化</p>
-<h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><p><strong>外观模式</strong><br>尽管解决方案很大，但是客户端仍然希望使用简化的界面与子系统进行交互。<br>外观不会增加更多功能，而外观只是充当子系统的入口点。</p>
-<p><img src="/images/Design-Patterns/image-20201126144147502.png" alt="image-20201126144147502"></p>
-<p><strong>适配器模式</strong><br>一个系统的输出可能与另一系统的预期输入不一致。</p>
-<p><img src="/images/Design-Patterns/image-20201126144207333.png" alt="image-20201126144207333"><strong>组成模式</strong><br>多态性</p>
-<p><img src="/images/Design-Patterns/image-20201126144226796.png" alt="image-20201126144226796"></p>
-<p><strong>代理模式</strong><br>能够完成相同的任务，但是将请求委派给原始对象以实现它们。<br>推迟创建资源密集型对象，直到需要<br>远程系统的本地表示<br>保证安全性</p>
-<p><img src="/images/Design-Patterns/image-20201126144235090.png" alt="image-20201126144235090"><strong>装饰者模式</strong><br>行为组合-&gt;新类，类的数目可能会过于多<br>一对一聚合。<br>堆栈聚合，顺序很重要！<br>使用时，我们需要继承抽象装饰器并使用具体装饰器类实现组件接口</p>
-<p><img src="/images/Design-Patterns/image-20201126144258511.png" alt="image-20201126144258511"></p>
-<h1 id="行为模式"><a href="#行为模式" class="headerlink" title="行为模式"></a>行为模式</h1><p><strong>模板方法模式</strong></p>
-<p>模板方法模式定义了一个操作中算法的执行结构，而将一些子类之间不同的行为延迟到子类中定义。</p>
-<p><img src="/images/Design-Patterns/image-20201126144309874.png" alt="image-20201126144309874"></p>
-<p><strong>职责链模式</strong></p>
-<p>将问题的解决者对象连接在一起。将request 传递下去。</p>
-<p>但是，如果其中的一个解决者没有传递对象的话，就会产生问题。这里需要使用模板方法模式规定行为的发生顺序，至于每个解决者如何解决问题，延迟到子类中进行实现。</p>
-<p><img src="/images/Design-Patterns/image-20201126144321678.png" alt="image-20201126144321678"></p>
-<p><strong>状态模式</strong></p>
-<p>当系统处于不同的状态，对不同的行为需要做出不同的反应时，我们往往需要使用很多的if-else条件分支。而使用状态模式，通过维持当前上下文的一个状态，由状态对发生的行为进行处理，而具体的实现在状态子类的对应方法中。通过这种方式就可以简化代码。</p>
-<p><img src="/images/Design-Patterns/image-20201126144350572.png" alt="image-20201126144350572"></p>
-<p><strong>指令模式</strong></p>
-<p>指令模式将对象对另一个对象的方法调用封装为一个Command对象，这样就可以将方法的调用保存到队列中之后再规划执行。</p>
-<p><strong>中介者模式</strong></p>
-<p>通过中介者，将相互有联系的对象的交互逻辑限制在中介者中，从而让代码更加集中，减少对象之间的耦合，但是同样地，会降低内聚性，因此需要在二者之间做好平衡。</p>
-<p><strong>观察者模式</strong></p>
-<p>主要包含一个域、三个方法，方法分别为添加订阅者，删除订阅者，通知全部订阅者，通知是通过调用所有Observer的update方法实现的，因此所有的Observer类都要实现相同的接口。</p>
-<h1 id="MVC-and-Good-Bad-Design"><a href="#MVC-and-Good-Bad-Design" class="headerlink" title="MVC and Good/Bad Design"></a>MVC and Good/Bad Design</h1><p><img src="/images/Design-Patterns/image-20201126144408610.png" alt="image-20201126144408610"></p>
-<p><strong>Code smell:</strong></p>
-<ul>
-<li>Comments</li>
-<li>long methods</li>
-<li>not just getter and setter</li>
-<li>long parameter is bad, introduce parameter objects</li>
-<li>global variables which is also bad</li>
-</ul>
-<p>Part2: code smells when you make changes to the code</p>
-<ul>
-<li>如果一开始没有做到seperation of concerns, 会导致最终的divergent change.</li>
-<li>change to be localized</li>
-<li>如果两个类总是频繁地进行交流，他们可能本就属于一处。</li>
-<li>message chains: makes code harder to test independly</li>
-<li>Switch Statements: </li>
-<li>Speculative Generality</li>
-<li>Refused Bequest: 拒绝馈赠</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/14/%E6%88%91%E7%9A%84springboot/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄写字的地方">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/14/%E6%88%91%E7%9A%84springboot/" class="post-title-link" itemprop="url">我的Springboot</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-11-14 10:34:04" itemprop="dateCreated datePublished" datetime="2020-11-14T10:34:04+08:00">2020-11-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-18 13:31:45" itemprop="dateModified" datetime="2020-11-18T13:31:45+08:00">2020-11-18</time>
-              </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题篇"><a href="#问题篇" class="headerlink" title="问题篇"></a>问题篇</h1><h3 id="不同表之间交叉在一起，很难进行之后微服务的划分"><a href="#不同表之间交叉在一起，很难进行之后微服务的划分" class="headerlink" title="不同表之间交叉在一起，很难进行之后微服务的划分"></a>不同表之间交叉在一起，很难进行之后微服务的划分</h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/14/Object-Oriented-Design/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄写字的地方">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/14/Object-Oriented-Design/" class="post-title-link" itemprop="url">Object-Oriented Design</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-11-14 10:26:55" itemprop="dateCreated datePublished" datetime="2020-11-14T10:26:55+08:00">2020-11-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-18 10:22:19" itemprop="dateModified" datetime="2020-11-18T10:22:19+08:00">2020-11-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://miro.medium.com/max/2079/0*K8kz2wcJ84fEme5s" alt="https://miro.medium.com/max/2079/0*K8kz2wcJ84fEme5s"></p>
-<h1 id="Introduction—-SIMPLICITY—-gt-RIGHT-—-gt-EXPLAIN"><a href="#Introduction—-SIMPLICITY—-gt-RIGHT-—-gt-EXPLAIN" class="headerlink" title="Introduction— SIMPLICITY—&gt; RIGHT —&gt; EXPLAIN"></a>Introduction— SIMPLICITY—&gt; RIGHT —&gt; EXPLAIN</h1><p>评价软件架构设计好坏的标准：</p>
-<ol>
-<li>对于代码很小的修改是不是会对其他地方有较大的影响 — flexible</li>
-<li>代码重用是不是很困难 — reusable</li>
-<li>软件是不是很难维护 — maintainable</li>
-</ol>
-<p>Design — Architecture</p>
-<p>Use Object to represent things; Modular, </p>
-<h2 id="用户故事的重要性"><a href="#用户故事的重要性" class="headerlink" title="用户故事的重要性"></a>用户故事的重要性</h2><h2 id="三种对象"><a href="#三种对象" class="headerlink" title="三种对象"></a>三种对象</h2><ol>
-<li><p>实体对象</p>
-<p>对应于现实生活中的一些实体。</p>
-<p>知道自身的一些属性，同时可以对自己进行编辑。</p>
-<p>在分析时，通常是最先出现的。</p>
-</li>
-<li><p>边界对象</p>
-<p>边界对象位于系统的交界处，例如和网络进行通信的对象。</p>
-</li>
-<li><p>控制对象</p>
-<p>控制对象的主要作用是协调。当把一个大对象拆分成小对象之后，让一个对象控制其他对象是非常有用的。</p>
-<p>一个很好的例子就是设计模式之中的Mediator, 其作用是通过协调使得不同的对象之间达到松耦合的效果。</p>
-<p>flexible, reusable, and maintainable~</p>
-</li>
-</ol>
-<p><strong>Non functional Requirements</strong></p>
-<p>CRC cards:</p>
-<p>Class Responsibility Collaborator</p>
-<p>Record Organize Refine</p>
-<p> <img src="upload\image-20201114124451028.png" alt="image-20201114124451028" style="zoom: 33%;" /></p>
-<h1 id="Object-Oriented-Modeling"><a href="#Object-Oriented-Modeling" class="headerlink" title="Object-Oriented Modeling"></a>Object-Oriented Modeling</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">abstraction, encapsulation, decomposition, and generalization</span><br></pre></td></tr></table></figure>
-<h2 id="Degisn-Pricinples-—-Abstraction"><a href="#Degisn-Pricinples-—-Abstraction" class="headerlink" title="Degisn Pricinples — Abstraction"></a>Degisn Pricinples — Abstraction</h2><p>抽象将概念的简要表示提取出来，并忽略一些不重要的细节，从而让我们更好地理解概念。</p>
-<p>Relevent Attributes and Behavior <em>IN THIS CONTEXT</em></p>
-<h2 id="Encapsulation"><a href="#Encapsulation" class="headerlink" title="Encapsulation"></a>Encapsulation</h2><p>封装既包括把属性值和行为包含在一个对象里，还包括暴露特定的数据和函数，同时还有将对某些数据和方法的访问限制在同一个对象内。</p>
-<p>封装的思想之一是将对某些数据和功能的访问限制为仅在一个对象内.</p>
-<p>这就提供了以下几点有用的性能：</p>
-<ol>
-<li>自身的属性限制—-Integrity and Security</li>
-<li>对外界数据和方法的保禄—-Changeable Implementation</li>
-<li>内部的实现外部无法看到—-Black box， abstraction barrier ， increase reusability</li>
-</ol>
-<h2 id="Decomposition"><a href="#Decomposition" class="headerlink" title="Decomposition"></a>Decomposition</h2><p>分解：把一个大的问题拆分成容易理解和解决的小问题</p>
-<p>整体中的每一个不同的部分都可以单独开一个类，这样我们就能更好地组织、封装不同的部分。</p>
-<h3 id="整体和部分的关系"><a href="#整体和部分的关系" class="headerlink" title="整体和部分的关系"></a>整体和部分的关系</h3><ol>
-<li>整体会包含多个部分，部分的数目可能是固定的，也可能是可变的，这取决于具体的问题。</li>
-<li>整体和部分都有自己特定的生存周期，二者的生存周期可能是相同的，也可能是不同步的，同样需要具体问题具体分析。</li>
-<li>整体之间也可以分享自己的部分</li>
-</ol>
-<h3 id="三种分解关系"><a href="#三种分解关系" class="headerlink" title="三种分解关系"></a>三种分解关系</h3><ol>
-<li><p>Association</p>
-<p>不依赖于彼此，但是可能会相互交互，</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Association can be represented in Java code as well.  </span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123; </span><br><span class="line">  <span class="comment">//Any number of sports can be played by a student and any number of students can play a sport. </span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">( Sport sport )</span></span>&#123; </span><br><span class="line">   execute.play( sport ); </span><br><span class="line">  &#125; </span><br><span class="line">  … </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Aggregation</p>
-<p>整体拥有部分，但这种拥有权是比较弱的，部分也可以单独存在。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Aggregation can be represented in Java code as well. </span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Airliner</span> </span>&#123; </span><br><span class="line">  <span class="keyword">private</span> ArrayList&lt;CrewMember&gt; crew; </span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Airliner</span><span class="params">()</span> </span>&#123; </span><br><span class="line">   crew = <span class="keyword">new</span> ArrayList&lt;CrewMember&gt;(); </span><br><span class="line">  &#125; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">( CrewMember crewMember )</span> </span>&#123; </span><br><span class="line">… </span><br><span class="line">&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Composition</p>
-<p>合成关系整体对于部分的排他性包含。换句话说，没有部分就不能存在一个整体，如果整体被破坏了，那么这些部分也将被破坏。在这中关系中，我们只能通过整体来访问部分。例如房屋和房间的关系。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Composition can be represented using Java code as well.  </span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">House</span> </span>&#123; </span><br><span class="line">  <span class="keyword">private</span> Room room; </span><br><span class="line"> </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">House</span><span class="params">()</span></span>&#123; </span><br><span class="line">   room = <span class="keyword">new</span> Room(); </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="Generalization"><a href="#Generalization" class="headerlink" title="Generalization"></a>Generalization</h2><p>泛化体现在以下方面：</p>
-<p>methods: 同一个方法可以用于不同的输入数据，因此我们不需要为每一个数据都建立方法，减少了代码的冗余。</p>
-<p>inheritance: 通过继承可以省略重复的代码。</p>
-<p>继承的优点：对于不同子类方法的修改只需要一次性在父类中修改即可。可以轻松添加子类，而不用重新添加相同的属性和方法，软件扩展起来更加容易。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Java中受保护的属性只能由以下人员访问：</span><br><span class="line">• 封装的类本身</span><br><span class="line">• 所有子类</span><br><span class="line">• 同一包内的所有类</span><br><span class="line">    </span><br><span class="line">关键字<span class="keyword">abstract</span>表示无法实例化该类。换句话说，不能创建该对象。</span><br></pre></td></tr></table></figure>
-<h3 id="继承的不同种类"><a href="#继承的不同种类" class="headerlink" title="继承的不同种类"></a>继承的不同种类</h3><p>Java能够支持几种不同类型的继承。本课程中的以上示例是实现继承。</p>
-<ol>
-<li><p>实现继承</p>
-<p>​    只能继承一个父类，提供了方法的实现细节。表示“是”关系。对于狮子来说，它既有动物的属性，又有狮子特有的属性，因此狮子是动物和狮子。</p>
-</li>
-<li><p>接口继承</p>
-<p>可以实现多个接口，同时不会继承方法细节。</p>
-</li>
-</ol>
-<p>这是因为从两个或多个超类继承会引起数据歧义 - 如果子类从两个或多个具有相同名称的属性或具有相同方法签名的行为的超类继承，则无法区分它们。由于Java无法确定引用了哪个对象，因此它不允许多重继承以防止数据歧义。而在接口继承中，具有多个接口的重叠方法签名只有单一实现，这是可以接受的。</p>
-<p>在实现继承中，超类类型和子类类型之间具有一致性。子类对象可在程序中要处理超类类型的任何地方使用。类似地，在接口继承中，接口类型与实现类类型之间具有一致性。</p>
-<p><strong><em>使用接口的好处：</em></strong></p>
-<p>在面向对象的语言中，多态是指两个类对行为的描述相同，但是该行为的实现可能不同。</p>
-<ol>
-<li>接口可以继承其他接口</li>
-<li>允许多重继承</li>
-</ol>
-<p><strong><em>使用接口的时机</em></strong></p>
-<p>不应该将所有behavioural contracts都归纳为接口。创建接口需要满足特定要求：为相关类提供一种一致工作的方式。</p>
-<h2 id="设计的步骤"><a href="#设计的步骤" class="headerlink" title="设计的步骤"></a>设计的步骤</h2><p>和顾客沟通时，主要使用的技术是CRC卡片，而在技术设计中，UML类表是更合适的选择。</p>
-<p><img src="https://i.loli.net/2020/11/14/Fca6mC8PetLiuAD.png" alt="image-20201114163502253" style="zoom: 67%;" /></p>
-<h1 id="DESIGN-PRINCIPLES"><a href="#DESIGN-PRINCIPLES" class="headerlink" title="DESIGN PRINCIPLES"></a>DESIGN PRINCIPLES</h1><h2 id="Evaluating-Design-Complexity"><a href="#Evaluating-Design-Complexity" class="headerlink" title="Evaluating Design Complexity"></a>Evaluating Design Complexity</h2><p>模块：指代组成程序的多个单元，包括其中的类和方法。这也是Design complexity关注的粒度。</p>
-<p>良好的设计：模块可以重复使用，并且很方便地连接其他模块。这种特性主要由Cohesion和Couping两种指标来衡量。</p>
-<p><strong>耦合</strong>: ease  to use -&gt; loose couplng, 如果一个模块可以很容易地通过定义明确的接口连接其他模块，则是松耦合的。模块的耦合主要通过三个指标来度量：</p>
-<ol>
-<li>Degree 模块和其他模块连接的数目。</li>
-<li>Ease 模块之间建立连接的容易程度。</li>
-<li>Flexibility 模块之间是否很容易地进行调换， for something better in the future.</li>
-</ol>
-<p><strong>高耦合的特征：</strong></p>
-<ol>
-<li>一个模块需要通过大量的接口和参数来和其他模块建立连接。</li>
-<li>一个模块相连的其他模块很难找到。</li>
-<li>模块只能和其他几个特定的模块相连，而难以替换。</li>
-</ol>
-<p><strong>内聚</strong>: 目标要单一、明确，如果一个模块包含多个目标，则应该对其进行分隔。</p>
-<p><code>需要平衡二者的关系。Complexity要合理地分布在模块之间和模块内。</code></p>
-<h2 id="Separation-of-Concerns-关注点分离"><a href="#Separation-of-Concerns-关注点分离" class="headerlink" title="Separation of Concerns 关注点分离"></a>Separation of Concerns 关注点分离</h2><p><strong>关注点</strong>：任何和问题的解决方法相关的事情。不同的关注点要放在软件的不同位置。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1461,14 +1383,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -1501,7 +1423,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1563,6 +1485,59 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
