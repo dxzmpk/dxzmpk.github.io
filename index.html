@@ -833,6 +833,161 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2021/06/02/%E8%A7%A3%E5%86%B3mysql%E6%97%A0%E6%B3%95%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄写字的地方">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/02/%E8%A7%A3%E5%86%B3mysql%E6%97%A0%E6%B3%95%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决Mysql无法远程连接的问题</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-02 15:30:05 / 修改时间：15:31:40" itemprop="dateCreated datePublished" datetime="2021-06-02T15:30:05+08:00">2021-06-02</time>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近开发中遇到一个问题，mysql在服务器本地可以登录，但是远程通过3306端口却不可以。这个问题困扰了我一周之久，终于在今天解决了。在解决的过程中试了很多的方法，遂记录下来，希望能给大家一些提示。</p>
+<h1 id="排查错误位置"><a href="#排查错误位置" class="headerlink" title="排查错误位置"></a>排查错误位置</h1><h2 id="客户端方面"><a href="#客户端方面" class="headerlink" title="客户端方面"></a>客户端方面</h2><p>首先通过ping命令对服务器进行测试，如果ping不通，则是网络的问题，本文中没有涉及这类问题的解决。<br>如果能ping通，再测试端口有没有问题。首先安装telnet, telnet是windows系统自带的，搜索”启动或关闭Windows功能”， 找telnet客户端，勾选即可启动。在cmd中输入<code>telnet {服务器IP} 3306</code>, 如果不能正确连接，说明是端口设置的问题， 再试试22端口有没有问题，如果也有问题，就是服务器整体的端口设置有问题，如果只有3306有问题，那么就是3306端口、mysql的设置问题，继续往下测试。</p>
+<h2 id="服务器方面"><a href="#服务器方面" class="headerlink" title="服务器方面"></a>服务器方面</h2><p>针对只有3306端口不能连接的情况，有以下几种解决方法：</p>
+<h3 id="1-修改配置文件，开启对其他ip地址的监听"><a href="#1-修改配置文件，开启对其他ip地址的监听" class="headerlink" title="1. 修改配置文件，开启对其他ip地址的监听"></a>1. 修改配置文件，开启对其他ip地址的监听</h3><p>输入命令<code>netstat -ntpl |grep 3306</code> 和 <code>netstat -ntpl |grep 22</code>, 查看端口的绑定情况<br>正确情况下应为以下输出：<br><img src="https://img2020.cnblogs.com/blog/2019150/202106/2019150-20210602151004441-411658419.png" alt=""><br>如果3306只绑定的本地端口，就会出现和上图不一致的输出。需要对其配置文件进行修改：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf</span><br></pre></td></tr></table></figure>
+<p>打开配置文件, 找到bind-address开头的一行，如果后面的ip地址是127.0.0.1，也就是服务器只会接收本地的连接请求，那么就需要改变此地址来指向外部的IP地址。例如，可以改为：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lc-messages-dir = /usr/share/mysql</span><br><span class="line">skip-external-locking</span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Instead of skip-networking the default is now to listen only on</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> localhost <span class="built_in">which</span> is more compatible and is not less secure.</span></span><br><span class="line">bind-address            = 0.0.0.0</span><br></pre></td></tr></table></figure><br>如果你的mysql版本是MySQL 8+，那么mysqld.cnf中可能不会包含bind-address这一行，应该像下面所示方法进行添加：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">pid-file        = /var/run/mysqld/mysqld.pid</span><br><span class="line">socket          = /var/run/mysqld/mysqld.sock</span><br><span class="line">datadir         = /var/lib/mysql</span><br><span class="line">log-error       = /var/log/mysql/error.log</span><br><span class="line">bind-address            = 0.0.0.0</span><br></pre></td></tr></table></figure><br>修改完成后，保存并退出。重启mysql服务<code>sudo systemctl restart mysql</code>，使得配置文件的修改得以生效。<br>接下来再次回到客户端进行验证，如果能够telnet连接3306端口，说明配置成功，如果还是不能连接，进入下一步骤。</p>
+<h3 id="2-关闭防火墙"><a href="#2-关闭防火墙" class="headerlink" title="2. 关闭防火墙"></a>2. 关闭防火墙</h3><p>Ubuntu默认的防火墙为ufw。防火墙的作用是管理网络规则，默认情况下打开防火墙是更好的选择， 但是这里为了排除debug时的影响，就先关闭一下。<br>查看防火墙状态<code>sudo ufw status</code>, 如果显示active, 就运行<code>sudo ufw disable</code>关闭。</p>
+<h3 id="3-修改-iptables"><a href="#3-修改-iptables" class="headerlink" title="3. 修改 iptables"></a>3. 修改 iptables</h3><p>iptables定义了网络访问规则，它工作在内核中，是一个网络过滤器。<br>运行<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -I INPUT -p tcp --dport 3306 -j ACCEPT</span><br></pre></td></tr></table></figure><br>表示添加接收3306端口的规则。<br>-I INPUT将当前命令插入在filter链的第一位置。<br>-p tcp表示添加tcp协议的扩展。<br>—dport XX-XX：指定目标端口。<br>-j ACCEPT: 规定的动作，这里为接收。<br>完成后，保存修改的配置<code>sudo iptables-save</code>。<br>然后再次在客户端用telnet进行测试，得到结果：<br><img src="https://img2020.cnblogs.com/blog/2019150/202106/2019150-20210602152842002-1749917019.png" alt=""><br>说明连接3306端口成功了。(忽略这里的乱码)</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2021/05/30/%E8%BD%AF%E4%BB%B6%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E6%A0%87%E5%87%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="董雄">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="董雄写字的地方">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/30/%E8%BD%AF%E4%BB%B6%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E6%A0%87%E5%87%86/" class="post-title-link" itemprop="url">软件性能测试的标准</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-30 10:13:23" itemprop="dateCreated datePublished" datetime="2021-05-30T10:13:23+08:00">2021-05-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-31 00:01:55" itemprop="dateModified" datetime="2021-05-31T00:01:55+08:00">2021-05-31</time>
+              </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="性能测试标准及其定义"><a href="#性能测试标准及其定义" class="headerlink" title="性能测试标准及其定义"></a>性能测试标准及其定义</h1><p><strong>事务</strong>：从客户端发起一个或多个请求（这些请求组成一个完整的操作），到客户端接收到从服务器返回的响应。</p>
+<p><strong>TPS</strong>: Transaction Per Second，每秒钟系统能够处理的事务数</p>
+<p><strong>请求响应事件</strong>：从客户端发起的一个请求开始，到客户端接收到从服务器返回的响应，整个过程耗费的时间。</p>
+<p><strong>事务响应时间</strong>：事务可能是由一个或多个请求组成的，事务响应时间主要是针对与用户的角度而言，如转账。</p>
+<p><strong>并发的定义</strong>：没有严格意义上的并发。并发总有先后，所以并发讲的是一个时间范围内，比如1秒。</p>
+<p><strong>并发用户数</strong>：同一单位时间内，对系统发起请求的用户数量</p>
+<p><strong>吞吐量</strong>：一次性能测试过程中网络上传输的数据量的总和。</p>
+<p><strong>吞吐率</strong>：单位时间内网络上传输的数据量。</p>
+<p><strong>吞吐率</strong> = 吞吐量/传输时间</p>
+<p><strong>点击率</strong>：每秒钟用户向服务器提交的请求数，是 web应用程序的特有指标。一次单击操作后，客户端有可能向服务器发送了多个请求。</p>
+<p><strong>资源使用率</strong>：对不同的系统资源的使用情况，如cpu、内存、io。</p>
+<h1 id="Jmeter的构成"><a href="#Jmeter的构成" class="headerlink" title="Jmeter的构成"></a>Jmeter的构成</h1><h2 id="测试计划"><a href="#测试计划" class="headerlink" title="测试计划"></a>测试计划</h2><p>线程组：多个线程，模拟多用户并发</p>
+<p>监听器：调试脚本，对一些资源进行监控</p>
+<p>配置元件：做一些配置，如http头，mysql连接信息。</p>
+<p>后置处理器：并发完成之后做一些事情。</p>
+<p>前置处理器：请求发生之前要做一些什么。</p>
+<p>逻辑控制器</p>
+<p>Sampler：放所有的请求</p>
+<p>逻辑控制器和Sampler都是基于线程之下进行工作的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2021/02/18/Android%E5%B1%8F%E5%B9%95%E7%BB%98%E5%88%B6%E5%8E%9F%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1162,174 +1317,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/29/TIMESAVER%E7%9A%84%E6%BC%94%E5%8C%96%E5%8F%B2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄写字的地方">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/29/TIMESAVER%E7%9A%84%E6%BC%94%E5%8C%96%E5%8F%B2/" class="post-title-link" itemprop="url">TIMESAVER的演化史</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-11-29 20:56:27 / 修改时间：22:38:50" itemprop="dateCreated datePublished" datetime="2020-11-29T20:56:27+08:00">2020-11-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>我是一名NBA球迷，上大学后时间都由自己支配了，因此将更多的时间花在追星这件事上。而对于篮球迷来说，虎扑则是大家一起交流娱乐的乐园。在大多数无聊的时候，我会打开虎扑网页或者APP版，查看有关詹姆斯的信息。而且我只关注他一个人，别人的消息我都直接划过，甚至对我来说是浪费时间，因此萌生了 使用爬虫过滤信息的方法。</p>
-<h2 id="爬虫-EXCEL阅读"><a href="#爬虫-EXCEL阅读" class="headerlink" title="爬虫+EXCEL阅读"></a>爬虫+EXCEL阅读</h2><p><img src="\images\TIMESAVER的演化史\image-20201129210419725.png" alt="image-20201129210419725" style="zoom:50%;" /></p>
-<p><img src="\images\TIMESAVER的演化史\image-20201129210601902.png" alt="image-20201129210601902" style="zoom:60%;" /></p>
-<p>实现的唯一功能是爬取湿乎乎的话题这一板块的所有数据，然后过滤得到标题中包含詹姆斯的结果，最终将链接也一并返回。</p>
-<p>需求大致是实现了，一开始用的也很起劲。但是，每次阅读之前我都需要打开Pycharm, 等爬取结束之后再打开EXCEL，这中间的步骤太多，以致大多数情况下，我都不愿意，也可能不记得使用这个工具。久而久之，写好的代码就被我闲置了。最近开始学习安卓开发，就萌生了将这个功能部署在云服务器，然后写一个APP来展示数据的想法，写这个应用的初衷是节约时间，故名曰：TIMESAVER。</p>
-<h1 id="版本迭代"><a href="#版本迭代" class="headerlink" title="版本迭代"></a>版本迭代</h1><h2 id="v1-0"><a href="#v1-0" class="headerlink" title="v1.0"></a>v1.0</h2><p>首页：</p>
-<p><img src="\images\TIMESAVER的演化史\image-20201129221653452.png" alt="image-20201129221653452" style="zoom:67%;" /></p>
-<p>点击获取之后，会进入<strong>等待</strong>状态，同时会向云服务器发送请求，云服务器实时爬取之后将结果返回到客户端。</p>
-<p><img src="\images\TIMESAVER的演化史\image-20201129221805801.png" alt="image-20201129221805801" style="zoom:67%;" /></p>
-<p>返回的数据直接放入TextView进行展示，展示效果如图：</p>
-<p><img src="\images\TIMESAVER的演化史\image-20201129221944630.png" alt="image-20201129221944630" style="zoom:67%;" /></p>
-<h2 id="v2-0"><a href="#v2-0" class="headerlink" title="v2.0"></a>v2.0</h2><p>最近新学习了ListView, 通过ListView可以自定义每一项的显示，相对来说自由度比较高，可以获得更加美观的结果。除此之外, ListView还自带滚动效果，省去了调整ScrollView的困难（在v1.0的实现中需要使用ScrollView, 其宽度和长度的属性设置曾产生了难以解释的结果，导致我最后只能通过硬编码的方式解决布局问题）。</p>
-<p>通过菜单栏切换到列表模式：</p>
-<p><img src="\images\TIMESAVER的演化史\image-20201129222756210.png" alt="image-20201129222756210" style="zoom:67%;" /></p>
-<p>还是相同的操作，点击获取，等待……最终得到结果：</p>
-<p><img src="\images\TIMESAVER的演化史\image-20201129222848423.png" alt="image-20201129222848423" style="zoom:67%;" /></p>
-<p>肉眼可见的两点改进：</p>
-<ul>
-<li>不同新闻之间可以添加分割线，更加明确区分的界限。</li>
-<li>可以在标题前添加序号，方便计数与识别。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="董雄">
-      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="董雄写字的地方">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/11/22/%E5%AE%89%E5%8D%93%E4%B8%ADFragment%E3%80%81Activity%E3%80%81View%E3%80%81Layout%E7%9A%84%E5%85%B3%E7%B3%BB/" class="post-title-link" itemprop="url">安卓中Fragment、Activity、View、Layout的关系</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-11-22 16:45:35" itemprop="dateCreated datePublished" datetime="2020-11-22T16:45:35+08:00">2020-11-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-26 15:06:17" itemprop="dateModified" datetime="2020-11-26T15:06:17+08:00">2020-11-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/android/" itemprop="url" rel="index"><span itemprop="name">android</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="/images/process/a.svg" alt="未命名文件"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1399,7 +1386,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">26</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
