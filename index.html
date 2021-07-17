@@ -238,6 +238,412 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2021/07/17/%E9%9D%A2%E5%90%91%E4%BA%92%E8%81%94%E7%BD%91%E4%BF%A1%E6%81%AF%E7%9A%84%E8%88%86%E6%83%85%E6%A3%80%E6%B5%8B%E4%B8%8E%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dxzmpk">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dxzmpk">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/17/%E9%9D%A2%E5%90%91%E4%BA%92%E8%81%94%E7%BD%91%E4%BF%A1%E6%81%AF%E7%9A%84%E8%88%86%E6%83%85%E6%A3%80%E6%B5%8B%E4%B8%8E%E9%A2%84%E8%AD%A6%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">面向互联网信息的舆情检测与预警系统</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <i class="fa fa-thumb-tack"></i>
+            <font color=7D26CD>置顶</font>
+            <span class="post-meta-divider">|</span>
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-17 12:48:56 / 修改时间：12:51:08" itemprop="dateCreated datePublished" datetime="2021-07-17T12:48:56+08:00">2021-07-17</time>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="面向互联网信息的舆情检测与预警系统（国家重点研发计划课题）"><a href="#面向互联网信息的舆情检测与预警系统（国家重点研发计划课题）" class="headerlink" title="面向互联网信息的舆情检测与预警系统（国家重点研发计划课题）"></a>面向互联网信息的舆情检测与预警系统（国家重点研发计划课题）</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#环境搭建">环境搭建</a><ul>
+<li><a href="#配置过程">配置过程</a></li>
+<li><a href="#获取远程develop分支">获取远程develop分支</a></li>
+</ul>
+</li>
+<li><a href="#项目组件介绍">项目组件介绍</a><ul>
+<li><a href="#缓存机制">缓存机制</a></li>
+<li><a href="#定时任务">定时任务</a></li>
+</ul>
+</li>
+<li><a href="#性能指标与参数调整">性能指标与参数调整</a><ul>
+<li><a href="#redis单机性能测试">Redis单机性能测试</a></li>
+<li><a href="#负载测试">负载测试</a><ul>
+<li><a href="#tomcat配置更新后测试默认带有redis缓存功能">tomcat配置更新后测试【默认带有redis缓存功能】</a></li>
+</ul>
+</li>
+<li><a href="#server测试">server测试</a><ul>
+<li><a href="#server测试中的问题">server测试中的问题</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#查询优化-分库分表">查询优化-分库分表</a><ul>
+<li><a href="#未分库分表迁移到分库分表的方法">未分库分表迁移到分库分表的方法</a><ul>
+<li><a href="#方案1-使用resourcedatabasepopulator进行迁移"><strong>方案1 使用</strong>ResourceDatabasePopulator进行迁移</a></li>
+<li><a href="#方案2-从旧库读取然后插入新库中"><strong>方案2 从旧库读取，然后插入新库中</strong></a></li>
+</ul>
+</li>
+<li><a href="#分库分表前后接口耗时测试">分库分表前后接口耗时测试</a></li>
+<li><a href="#分库分表带来的复杂性">分库分表带来的复杂性</a><ul>
+<li><a href="#跨库关联查询">跨库关联查询</a></li>
+<li><a href="#分布式事务">分布式事务</a></li>
+<li><a href="#排序分页函数计算问题">排序、分页、函数计算问题</a></li>
+<li><a href="#分布式id">分布式id</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><h2 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h2><ul>
+<li>导入项目到idea中: File-&gt;open-&gt;选中pom.xml-&gt;open as project</li>
+<li>IDEA安装lombok插件</li>
+<li>运行BackendApplication</li>
+<li>浏览器打开<a href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noopener">http://localhost:8080/swagger-ui.html</a> 查看接口</li>
+</ul>
+<h2 id="获取远程develop分支"><a href="#获取远程develop分支" class="headerlink" title="获取远程develop分支"></a>获取远程develop分支</h2><ol>
+<li>.git中config文件fetch修改为    fetch = +refs/heads/<em>:refs/remotes/origin/</em></li>
+<li>右下角刷新、选择分支<br><img src="https://i.loli.net/2021/07/17/MjsI3cwRGJzDdhB.png" alt="img.png"></li>
+</ol>
+<p><img src="https://i.loli.net/2021/07/17/XK1AuqejIDytzMV.png" alt="img.png"></p>
+<h1 id="项目组件介绍"><a href="#项目组件介绍" class="headerlink" title="项目组件介绍"></a>项目组件介绍</h1><h2 id="缓存机制"><a href="#缓存机制" class="headerlink" title="缓存机制"></a>缓存机制</h2><ol>
+<li>返回的对象需要实现Serializable接口</li>
+<li>返回的方法添加@Cacheable(cacheNames = “MESSAGE”, keyGenerator = “DEFAULT”)注解</li>
+<li>默认的缓存过期时间为一小时</li>
+</ol>
+<h2 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h2><p>定时执行某些接口<br>为了保证接口的数据被成功缓存，不能直接调用controller中的方法，而应该使用restTemplate的方式进行调用<br>定时任务采用 接口名称 + cron表达式进行设置<br>cron表达式用来规定执行的时间，具体用法可见<a href="https://www.cnblogs.com/yanghj010/p/10875151.html" target="_blank" rel="noopener">https://www.cnblogs.com/yanghj010/p/10875151.html</a> \<br>可以使用在线cron表达式生成器对执行时间进行配置，生成器链接：<br><a href="https://cron.qqe2.com/" target="_blank" rel="noopener">https://cron.qqe2.com/</a></p>
+<h1 id="性能指标与参数调整"><a href="#性能指标与参数调整" class="headerlink" title="性能指标与参数调整"></a>性能指标与参数调整</h1><h2 id="Redis单机性能测试"><a href="#Redis单机性能测试" class="headerlink" title="Redis单机性能测试"></a>Redis单机性能测试</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[dx@IPIR-dx ~]$ redis-benchmark -t get -c 100 -n 1000000</span><br><span class="line">====== GET ======</span><br><span class="line">  1000000 requests completed in 23.73 seconds</span><br><span class="line">  100 parallel clients</span><br><span class="line">  3 bytes payload</span><br><span class="line">  keep alive: 1</span><br><span class="line"></span><br><span class="line">0.23% &lt;= 1 milliseconds</span><br><span class="line">98.86% &lt;= 2 milliseconds</span><br><span class="line">99.96% &lt;= 3 milliseconds</span><br><span class="line">99.99% &lt;= 4 milliseconds</span><br><span class="line">100.00% &lt;= 5 milliseconds</span><br><span class="line">100.00% &lt;= 6 milliseconds</span><br><span class="line">100.00% &lt;= 106 milliseconds</span><br><span class="line">100.00% &lt;= 107 milliseconds</span><br><span class="line">100.00% &lt;= 107 milliseconds</span><br><span class="line">42144.30 requests per second</span><br></pre></td></tr></table></figure>
+<h2 id="负载测试"><a href="#负载测试" class="headerlink" title="负载测试"></a>负载测试</h2><p><strong>测试工具</strong> ：jemeter</p>
+<p><strong>测试规模</strong> ：</p>
+<ol>
+<li>小测试 - 1000用户，每人发送20次，共2万个请求， </li>
+<li>中测试 - 5000用户，每人发送20次，共10万个请求</li>
+<li>大测试：10000用户，每人发送20次，共20万个请求</li>
+</ol>
+<p><strong>测试持续时间</strong> ： 60s, 到时之后将自动停止发送请求，但可能有未执行完的请求会继续排队直至执行完成。</p>
+<p><strong>测试接口</strong>：message/countMessages</p>
+<p><strong>测试环境</strong>：i5-6300hq, jvm heap大小为3.53gb</p>
+<p><strong>tomcat默认配置</strong>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">tomcat:</span></span><br><span class="line">  <span class="attr">uri-encoding:</span> <span class="string">UTF-8</span></span><br><span class="line">  <span class="attr">max-connections:</span> <span class="number">8192</span> <span class="comment"># 最大连接数</span></span><br><span class="line">  <span class="attr">threads:</span></span><br><span class="line">    <span class="attr">max:</span> <span class="number">200</span></span><br><span class="line">  <span class="attr">accept-count:</span> <span class="number">100</span> <span class="comment"># 请求等待队列</span></span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>测试配置</th>
+<th>请求数量</th>
+<th>吞吐量/s</th>
+<th>最小返回耗时(ms)</th>
+<th>最大耗时</th>
+<th>平均耗时</th>
+<th>错误率</th>
+<th>接收速率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无redis</td>
+<td>1790</td>
+<td>6.2</td>
+<td>4998</td>
+<td>123975</td>
+<td>70637</td>
+<td>68.32%</td>
+<td>1.59kb/s</td>
+</tr>
+<tr>
+<td>单redis-小测试</td>
+<td>20000</td>
+<td>2035</td>
+<td>5</td>
+<td>3561</td>
+<td>449</td>
+<td>0.00%</td>
+<td>443kb/s</td>
+</tr>
+<tr>
+<td>单redis-大测试</td>
+<td>198674</td>
+<td>2465</td>
+<td>1</td>
+<td>3497</td>
+<td>481</td>
+<td>1.5%</td>
+<td>1519kb/s</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>在单redis-大测试中，出现的异常为HttpHostConnectException。Connect to localhost:8080 failed: Connection refused: connect。这是tomcat可以容纳的同时链接数太少造成的。接下来更新tomcat的配置，将max-connection调为20000；</p>
+<h3 id="tomcat配置更新后测试【默认带有redis缓存功能】"><a href="#tomcat配置更新后测试【默认带有redis缓存功能】" class="headerlink" title="tomcat配置更新后测试【默认带有redis缓存功能】"></a>tomcat配置更新后测试【默认带有redis缓存功能】</h3><p><strong>tomcat中配置</strong>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">tomcat:</span></span><br><span class="line">  <span class="attr">uri-encoding:</span> <span class="string">UTF-8</span></span><br><span class="line">  <span class="attr">max-connections:</span> <span class="number">20000</span> <span class="comment"># 最大连接数</span></span><br><span class="line">  <span class="attr">threads:</span></span><br><span class="line">    <span class="attr">max:</span> <span class="number">1000</span> <span class="comment"># 最大线程数</span></span><br><span class="line">  <span class="attr">accept-count:</span> <span class="number">1000</span> <span class="comment"># 请求等待队列</span></span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>测试配置</th>
+<th>请求数量</th>
+<th>吞吐量/s</th>
+<th>最小返回耗时(ms)</th>
+<th>最大耗时</th>
+<th>平均耗时</th>
+<th>错误率</th>
+<th>接收速率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tomcat默认-大测试-local</td>
+<td>198674</td>
+<td>2465</td>
+<td>1</td>
+<td>3497</td>
+<td>481</td>
+<td>1.5%</td>
+<td>1519kb/s</td>
+</tr>
+<tr>
+<td>tomcat中-大测试-local</td>
+<td>200000</td>
+<td>2492</td>
+<td>3</td>
+<td>7850</td>
+<td>1264</td>
+<td>0.00%</td>
+<td>542kb/s</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>在单redis-大测试中，出现的异常HttpHostConnectException在tomcat中-大测试-local中并没有出现，因此可以断定增加tomcat配置可以增加连接的数目，8092的默认数目不够10000的需求，因此出现了异常。</p>
+<h2 id="server测试"><a href="#server测试" class="headerlink" title="server测试"></a>server测试</h2><p>之前的测试程序和springboot程序运行在同一台机器上，主要是为了消除网络时延对于测试的影响。但是这种情况下，两个程序会争夺系统资源，可能无法将测试结果准确表现出来。因此<strong>基于tomcat中配置</strong>，在服务器上用docker搭建了测试环境。</p>
+<p><strong>测试环境</strong>：Intel(R) Xeon(R) CPU E5-2620 v2 @ 2.10GHz。jvm堆大小为8g。</p>
+<p>jmeter设置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Number of Threads: 1000</span><br><span class="line">Ramp-up period: 0</span><br><span class="line">Loop Count: 20</span><br><span class="line">Dutation: 120</span><br><span class="line">对于中测试，Number of Threads = 5000， 其余不变。</span><br></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>测试配置</th>
+<th>请求数量</th>
+<th>吞吐量/s</th>
+<th>最小返回耗时(ms)</th>
+<th>最大耗时</th>
+<th>平均耗时</th>
+<th>错误率</th>
+<th>接收速率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单redis-小测试</td>
+<td>20000</td>
+<td>2035</td>
+<td>5</td>
+<td>3561</td>
+<td>449</td>
+<td>0.00%</td>
+<td>443kb/s</td>
+</tr>
+<tr>
+<td>tomcat中-小测试-server</td>
+<td>20000</td>
+<td>311</td>
+<td>3</td>
+<td>5998</td>
+<td>814</td>
+<td>0.00%</td>
+<td>67.78kb/s</td>
+</tr>
+<tr>
+<td>tomcat中-中测试-server</td>
+<td>100000</td>
+<td>818.2</td>
+<td>5</td>
+<td>31532</td>
+<td>4924</td>
+<td>2.22%</td>
+<td>218.90</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>tomcat中-中测试-server出现了错误。全部为java.net.SocketException,Non HTTP response message: Connection reset，主要问题在于网络。</p>
+<p><strong>本地测试和server测试吞吐量对比：</strong></p>
+<p>本地测试吞吐量更高，而且由于网络带来的时延，平均耗时约为server的一半。接收速率也高一些。</p>
+<h3 id="server测试中的问题"><a href="#server测试中的问题" class="headerlink" title="server测试中的问题"></a>server测试中的问题</h3><ol>
+<li><p>Non HTTP response code: java.net.BindException,Non HTTP response message: Address already in use: connect</p>
+<p>ephemeral TCP ports使用量到达了上限，通过增加ephemeral ports的最大数量解决。<a href="https://www.baselogic.com/2011/11/23/solved-java-net-bindexception-address-use-connect-issue-windows/" target="_blank" rel="noopener">方案链接</a></p>
+</li>
+<li><p>Non HTTP response code: java.net.SocketException,Non HTTP response message: Connection reset</p>
+</li>
+<li><p>Non HTTP response code: java.net.SocketTimeoutException,Non HTTP response message: Read timed out</p>
+</li>
+<li><p>Non HTTP response code: org.apache.http.conn.HttpHostConnectException,Non HTTP response message: Connect to 192.168.55.215:8080 [/192.168.55.215] failed: Connection timed out: connect</p>
+</li>
+<li><p>Non HTTP response code: java.net.SocketException,Non HTTP response message: Software caused connection abort: connect</p>
+</li>
+</ol>
+<p>If your Jmeter is eating all resources will your application will get anything (Simple answer is NO) Thus application will go down and you will start getting timeout errors or socket exceptions.</p>
+<p>If you have jmeter and application on diff machines then still 10000 users in 1 second is very high load for a normal application and it is obvious that you will face such errors. Try running test with realistic load that is expected for your application with given hw. Maybe 100 users in 1 second and gradually increase them to expected value.</p>
+<h1 id="查询优化-分库分表"><a href="#查询优化-分库分表" class="headerlink" title="查询优化-分库分表"></a>查询优化-分库分表</h1><p>打开慢查询log， 将慢查询记录阈值设置为5秒。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- show variables like '%slow%'; </span></span><br><span class="line"><span class="comment">-- set global slow_query_log = on;</span></span><br><span class="line"><span class="comment">-- show variables like '%long_query_time%';</span></span><br><span class="line"><span class="comment">-- set global long_query_time = 5;</span></span><br></pre></td></tr></table></figure>
+<h2 id="未分库分表迁移到分库分表的方法"><a href="#未分库分表迁移到分库分表的方法" class="headerlink" title="未分库分表迁移到分库分表的方法"></a>未分库分表迁移到分库分表的方法</h2><p>在分库上配置适用于mybatis的sharding-jdbc方案。</p>
+<p>​                <img src="https://docimg10.docs.qq.com/image/8j1-MPbkKXf8dhpgGYvEVg?w=1180&amp;h=604" alt="img">        </p>
+<p>​    现在需要将旧库的数据迁移到新库上。主要的方案有停机迁移和非停机迁移两种。为了能在迁移的过程中不影响原数据库的使用，采用双写迁移方法。</p>
+<p><img src="https://i.loli.net/2021/06/24/LC3iJPNO5U2xcyk.png" alt="表拆分示意图"></p>
+<h3 id="方案1-使用ResourceDatabasePopulator进行迁移"><a href="#方案1-使用ResourceDatabasePopulator进行迁移" class="headerlink" title="方案1 使用ResourceDatabasePopulator进行迁移"></a><strong>方案1 使用</strong>ResourceDatabasePopulator进行迁移</h3><p>首先使用mysqldump将原库中的数据导出为sql脚本格式，然后利用Springboot自带的ResourceDatabasePopulator将sql脚本导入。这里导出的sql脚本大小为4.7GB。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InitializeData</span> </span>&#123;</span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> DataSource dataSource;</span><br><span class="line"><span class="meta">@EventListener</span>(ApplicationReadyEvent<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">void</span> <span class="title">loadData</span>() </span>&#123;</span><br><span class="line">ResourceDatabasePopulator resourceDatabasePopulator = <span class="keyword">new</span> ResourceDatabasePopulator(<span class="keyword">false</span>, <span class="keyword">false</span>, <span class="string">"UTF-8"</span>, <span class="keyword">new</span> FileSystemResource(<span class="string">"posys_message.sql"</span>));</span><br><span class="line">        resourceDatabasePopulator.execute(dataSource);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在内存大小为16g的电脑上启动Springboot程序，报错为Failed to execute database script; nested exception is java.lang.OutOfMemoryError : heap，堆内存溢出了。然后试图将堆内存调大，发现还是会出现内存溢出异常——系统内存大小无法满足需要分配的堆内存大小。</p>
+<h3 id="方案2-从旧库读取，然后插入新库中"><a href="#方案2-从旧库读取，然后插入新库中" class="headerlink" title="方案2 从旧库读取，然后插入新库中"></a><strong>方案2 从旧库读取，然后插入新库中</strong></h3><p>根据mysql<a href="https://dev.mysql.com/doc/refman/8.0/en/insert-optimization.html" target="_blank" rel="noopener">开发文档</a>中查询的优化，在插入语句中级联多条记录会增加查询的速度。插入一条语句时需要的时间主要由以下因素决定，后面的数字代表耗费的时间所占的比例。</p>
+<ul>
+<li>Connecting: (3)</li>
+<li>Sending query to server: (2)</li>
+<li>Parsing query: (2)</li>
+<li>Inserting row: (1 × size of row)</li>
+<li>Inserting indexes: (1 × number of indexes)</li>
+<li>Closing: (1)</li>
+</ul>
+<p>因此，在一条语句中包含更多条数据可以节省建立连接、解析语句、关闭连接的时间。同时，在新库中将索引暂时关闭，也是有益于数据插入的快速进行的。</p>
+<p>不同数据量测试5次，结果如下：</p>
+<p>单独插入50000条数据平均耗时：233748ms<br>批量插入50000条数据平均耗时：2590ms<br>对比：效率差50倍<br>单独插入10000条数据平均耗时：22036ms<br>批量插入10000条数据平均耗时：3330ms<br>对比：效率差6倍<br>单独插入1000条数据平均耗时：3122ms<br>批量插入1000条数据平均耗时：374ms<br>对比：效率差8倍</p>
+<p>其实最快的方式是从文本中直接加载表，这比INSERT语句快20多倍。但是由于这里使用了分表策略，加载时需要考虑数据的哈希定位库表的问题，因此只能选择语句插入的方式。</p>
+<p>​                 <img src="https://docimg9.docs.qq.com/image/0KMrfEq3mKpZf2Hv_ZY2IA?w=443&amp;h=87" alt="img">        </p>
+<p>首先在数据库中记录counter, 保存下一次迁移时的起始id和终止id, 如上图所示。然后主要的工作分为三部分：</p>
+<ol>
+<li>从旧库中批量读取，从起始id依次读到终止id。</li>
+<li>向新库中批量插入。</li>
+<li>递归调用当前函数，进行下一批数据的迁移。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">migrate</span><span class="params">()</span></span>&#123;</span><br><span class="line">            logger.warn(<span class="string">"开始迁移"</span>);</span><br><span class="line">            List&lt;Integer&gt; idList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="comment">// 取上图counter，分别为start和end</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt;= end; i++) &#123;</span><br><span class="line">                idList.add(i);</span><br><span class="line">            &#125;</span><br><span class="line">            List&lt;Message&gt; oldMessages;</span><br><span class="line">    		<span class="comment">// select...in子句取出源库中的所有数据</span></span><br><span class="line">            oldMessages = messageMapper.selectIdIn(idList);</span><br><span class="line">            <span class="keyword">if</span> (oldMessages.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 将数据批量插入到分库分表中，这种批量插入的方式比单条插入快很多</span></span><br><span class="line">                <span class="keyword">int</span> res = messageMapper.batchInsert(oldMessages);</span><br><span class="line">                logger.warn(<span class="string">"成功插入"</span> + res + <span class="string">"个"</span>);</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="comment">// 更新计数器</span></span><br><span class="line">            <span class="keyword">int</span> newStart = end + <span class="number">1</span>;</span><br><span class="line">            end = end + end - start + <span class="number">1</span>;</span><br><span class="line">            String newCounter = newStart + <span class="string">" "</span> + end;</span><br><span class="line">            <span class="comment">// 将新的计数器信息newCounter存入数据库</span></span><br><span class="line">            System.gc();</span><br><span class="line">    		<span class="comment">// 强制进行gc</span></span><br><span class="line">            migrate();</span><br><span class="line">    		<span class="comment">// 进行下一次迁移，这里使用递归调用的方式，虽然速度会慢一些，但是比较可靠，不容易出错</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在插入时不断监看log，如果发生错误应及时修正。</p>
+<p>​                 <img src="https://docimg3.docs.qq.com/image/GlJQYzGgCEiXgysSE5FrrA?w=209&amp;h=256" alt="img">        </p>
+<h2 id="分库分表前后接口耗时测试"><a href="#分库分表前后接口耗时测试" class="headerlink" title="分库分表前后接口耗时测试"></a>分库分表前后接口耗时测试</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>countMessages（index）</th>
+<th>getKeywordCount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单库单表</td>
+<td>26708</td>
+<td>45476（ALL）</td>
+</tr>
+<tr>
+<td>双库四表</td>
+<td>9513.6（单表4.297）</td>
+<td>15263（单表5827）（ALL）</td>
+</tr>
+<tr>
+<td>单库单表+索引</td>
+<td>—</td>
+<td>2049（index）</td>
+</tr>
+<tr>
+<td>双库四表+索引</td>
+<td>—</td>
+<td>2395（单表1339）（index）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>利用EXPLAIN来查看上述两条语句的执行计划，并在标题栏中标注出来。ALL、index、range、 ref、eq_ref、const、system、NULL（从左到右，性能从差到好）。</p>
+<p><strong>分库效果小结：</strong>通过分库可以减少需要扫描全部索引的时间，因此countMessages分库分表执行时间比原来快很多。在getKeywordCount测试中，由于归并需要时间，因此在有索引的情况下，虽然单个小表查询时间比原来少，但是得到汇总结果的时间会多于单表下的查询时间。</p>
+<h2 id="分库分表带来的复杂性"><a href="#分库分表带来的复杂性" class="headerlink" title="分库分表带来的复杂性"></a>分库分表带来的复杂性</h2><h3 id="跨库关联查询"><a href="#跨库关联查询" class="headerlink" title="跨库关联查询"></a>跨库关联查询</h3><p>有几种方案可以解决：</p>
+<ul>
+<li>字段冗余：把需要关联的字段放入主表中，避免 join 操作；</li>
+<li>数据抽象：通过ETL等将数据汇合聚集，生成新的表；</li>
+<li>全局表：比如一些基础表可以在每个数据库中都放一份；</li>
+<li>应用层组装：将基础数据查出来，通过应用程序计算组装；</li>
+</ul>
+<h3 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h3><p>单数据库可以用本地事务搞定，使用多数据库就只能通过分布式事务解决了。</p>
+<p>常用解决方案有：基于可靠消息（MQ）的解决方案、两阶段事务提交、柔性事务等。</p>
+<p>Sharding-jdbc中本地事务完全支持非跨库事务：例如仅分表，或分库但是路由的结果在单库中。同时完全支持因逻辑异常导致的跨库事务。例如：同一事务中，跨两个库更新。更新完毕后，抛出空指针，则两个库的内容都能回滚。但是不支持因网络、硬件异常导致的跨库事务。例如：同一事务中，跨两个库更新，更新完毕后、未提交之前，第一个库宕机，则只有第二个库数据提交。</p>
+<p>因此使用两阶段事务来完全支持跨库事务。在sharding-jdbc中默认使用Atomikos，支持使用SPI的方式加载其他XA事务管理器。</p>
+<p>不过，XA 并不是 Java 的技术规范（XA 提出那时还没有 Java），而是一套语言无关的通用规范，所以 Java 中专门定义了<a href="https://www.jcp.org/en/jsr/detail?id=907" target="_blank" rel="noopener">JSR 907 Java Transaction API</a>，基于 XA 模式在 Java 语言中的实现了全局事务处理的标准，这也就是我们现在所熟知的 JTA。JTA 最主要的两个接口是：</p>
+<ul>
+<li>事务管理器的接口：<code>javax.transaction.TransactionManager</code>。这套接口是给 Java EE 服务器提供容器事务（由容器自动负责事务管理）使用的，还提供了另外一套<code>javax.transaction.UserTransaction</code>接口，用于通过程序代码手动开启、提交和回滚事务。</li>
+<li>满足 XA 规范的资源定义接口：<code>javax.transaction.xa.XAResource</code>，任何资源（JDBC、JMS 等等）如果想要支持 JTA，只要实现 XAResource 接口中的方法即可。</li>
+</ul>
+<p>JTA 原本是 Java EE 中的技术，一般情况下应该由 JBoss、WebSphere、WebLogic 这些 Java EE 容器来提供支持，但现在<a href="https://web.archive.org/web/20100414140721/http://docs.codehaus.org/display/BTM/Home" target="_blank" rel="noopener">Bittronix</a>、<a href="http://www.atomikos.com/Main/TransactionsEssentials" target="_blank" rel="noopener">Atomikos</a>和<a href="http://www.jboss.org/jbosstm" target="_blank" rel="noopener">JBossTM</a>（以前叫 Arjuna）都以 JAR 包的形式实现了 JTA 的接口，称为 JOTM（Java Open Transaction Manager），使得我们能够在 Tomcat、Jetty 这样的 Java SE 环境下也能使用 JTA。</p>
+<p>XA 将事务提交拆分成为两阶段过程：</p>
+<ul>
+<li><strong>准备阶段</strong>：又叫作投票阶段，在这一阶段，协调者询问事务的所有参与的是否准备好提交，参与者如果已经准备好提交则回复 Prepared，否则回复 Non-Prepared。这里所说的准备操作跟人类语言中通常理解的准备并不相同，对于数据库来说，准备操作是在重做日志中记录全部事务提交操作所要做的内容，它与本地事务中真正提交的区别只是暂不写入最后一条 Commit Record 而已，这意味着在做完数据持久化后并不立即释放隔离性，即仍继续持有锁，维持数据对其他非事务内观察者的隔离状态。</li>
+<li><strong>提交阶段</strong>：又叫作执行阶段，协调者如果在上一阶段收到所有事务参与者回复的 Prepared 消息，则先自己在本地持久化事务状态为 Commit，在此操作完成后向所有参与者发送 Commit 指令，所有参与者立即执行提交操作；否则，任意一个参与者回复了 Non-Prepared 消息，或任意一个参与者超时未回复，协调者将将自己的事务状态持久化为 Abort 之后，向所有参与者发送 Abort 指令，参与者立即执行回滚操作。对于数据库来说，这个阶段的提交操作应是很轻量的，仅仅是持久化一条 Commit Record 而已，通常能够快速完成，只有收到 Abort 指令时，才需要根据回滚日志清理已提交的数据，这可能是相对重负载操作。</li>
+</ul>
+<p><img src="https://i.loli.net/2021/06/23/dL54u9iBDRQt6sg.png" alt="image-20210623180351644"></p>
+<p>两段式提交原理简单，并不难实现，但有几个非常显著的缺点：</p>
+<ul>
+<li><strong>单点问题</strong>：协调者在两段提交中具有举足轻重的作用，协调者等待参与者回复时可以有超时机制，允许参与者宕机，但参与者等待协调者指令时无法做超时处理。一旦宕机的不是其中某个参与者，而是协调者的话，所有参与者都会受到影响。如果协调者一直没有恢复，没有正常发送 Commit 或者 Rollback 的指令，那所有参与者都必须一直等待。</li>
+<li><strong>性能问题</strong>：两段提交过程中，所有参与者相当于被绑定成为一个统一调度的整体，期间要经过两次远程服务调用，三次数据持久化（准备阶段写重做日志，协调者做状态持久化，提交阶段在日志写入 Commit Record），整个过程将持续到参与者集群中最慢的那一个处理操作结束为止，这决定了两段式提交的性能通常都较差。</li>
+<li><strong>一致性风险</strong>：前面已经提到，两段式提交的成立是有前提条件的，当网络稳定性和宕机恢复能力的假设不成立时，仍可能出现一致性问题。宕机恢复能力这一点不必多谈，1985 年 Fischer、Lynch、Paterson 提出了“<a href="https://en.wikipedia.org/wiki/Consensus_(computer_science" target="_blank" rel="noopener">FLP 不可能原理</a>#Solvability_results_for_some_agreement_problems)”，证明了如果宕机最后不能恢复，那就不存在任何一种分布式协议可以正确地达成一致性结果。该原理在分布式中是与“CAP 不可兼得原理“齐名的理论。而网络稳定性带来的一致性风险是指：尽管提交阶段时间很短，但这仍是一段明确存在的危险期，如果协调者在发出准备指令后，根据收到各个参与者发回的信息确定事务状态是可以提交的，协调者会先持久化事物状态，并提交自己的事务，如果这时候网络忽然被断开，无法再通过网络向所有参与者发出 Commit 指令的话，就会导致部分数据（协调者的）已提交，但部分数据（参与者的）既未提交，也没有办法回滚，产生了数据不一致的问题。</li>
+</ul>
+<h3 id="排序、分页、函数计算问题"><a href="#排序、分页、函数计算问题" class="headerlink" title="排序、分页、函数计算问题"></a>排序、分页、函数计算问题</h3><p>使用SQL时order by, limit关键字需要特殊处理，一般来说采用分片的思路</p>
+<p>现在某个分片上执行相应的函数，然后将各个分片的结果集进行汇总和再次计算，最终得到结果。</p>
+<h3 id="分布式id"><a href="#分布式id" class="headerlink" title="分布式id"></a>分布式id</h3><p>如果使用mysql可以在单库单表中使用id自增作为主键，分库分表就不行了，会出现id重复。</p>
+<p>可以通过以下分布式id生成方案解决：</p>
+<ul>
+<li>UUID</li>
+<li>基于数据库自增单独维护一张 ID表</li>
+<li>号段模式</li>
+<li>Redis 缓存</li>
+<li>雪花算法（Snowflake）</li>
+<li>百度uid-generator</li>
+<li>美团Leaf</li>
+<li>滴滴Tinyid</li>
+</ul>
+<p>本项目中，表插入操作在主库posys中进行，插入后会运行同步插件，实现新旧库的一致。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2021/03/29/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E7%9A%84%E6%97%B6%E9%97%B4%E6%B6%88%E8%80%97%E5%AF%B9%E6%AF%94/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1211,112 +1617,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/12/08/java%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D-JNI/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="dxzmpk">
-      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="dxzmpk">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/08/java%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D-JNI/" class="post-title-link" itemprop="url">java本地方法介绍(JNI)</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-12-08 16:05:34 / 修改时间：18:08:04" itemprop="dateCreated datePublished" datetime="2020-12-08T16:05:34+08:00">2020-12-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h1><p>这篇博客将对java中的本地方法进行介绍，主要从为什么需要本地方法，以及本地方法是如何运行的两个方面进行。</p>
-<h1 id="为什么需要本地方法"><a href="#为什么需要本地方法" class="headerlink" title="为什么需要本地方法"></a>为什么需要本地方法</h1><p>java的跨平台特性是其一大优点，我们通过一次编译得到字节码，就能在任何可以运行jvm（Java Virtual Machine）的系统上执行。然而，在有些情况下，我们可能需要一些纯java代码无法实现的功能，这时我们需要一些在本地编译好，只能在特定环境下执行的代码，也就是本地方法，本地方法常常由C/C++语言编写。</p>
-<p>需要使用本地方法的情况主要有以下三种：</p>
-<ol>
-<li>需要和硬件进行交互</li>
-<li>对于有些方法，使用C/C++可以加快执行的速度，因为C/C++的编译是依赖于操作系统的，对于程序性能有要求的可以考虑使用本地方法。</li>
-<li>有些库已经用其他语言写好，我们想使用但是不想重新再写一遍的话，就可以使用本地方法。</li>
-</ol>
-<p>java代码是在 jvm中运行的， 本地方法是在本地环境中运行的，为了在java程序中调用本地方法，就需要一个桥梁将本地方法和jvm连接起来，这个桥梁就是JNI(java native interface)。</p>
-<h1 id="本地方法是如何运行的"><a href="#本地方法是如何运行的" class="headerlink" title="本地方法是如何运行的"></a>本地方法是如何运行的</h1><p>java关键字<code>native</code> 表明某个接口是由本地代码实现的。</p>
-<p>java调用C/C++代码的时候，使用的是动态链接库的方式（shared libs），因为我们不能把字节码和本地编译好的代码放在同一个二进制文件中（jvm无法执行本地代码）。因此，最终编译好的java代码只声明对本地代码的<strong>引用</strong>， 而不是直接把代码复制过来。所以引用的库中会包含<em>so/.dll/.dylib</em>等文件，操作系统不同，文件的格式也不同。</p>
-<p>本地方法也是一种抽象方法, 我们只是声明方法头， 具体的实现则交给本地代码。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">aNativeMethod</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-<p>要实现本地方法的运行，主要需要以下组件：</p>
-<ul>
-<li>Java Code – our classes. They will include at least one <em>native</em> method.</li>
-<li>Native Code – the actual logic of our native methods, usually coded in C or C++.</li>
-<li>JNI header file – this header file for C/C++ (<em>include/jni.h</em> into the JDK directory) includes all definitions of JNI elements that we may use into our native programs.</li>
-<li>C/C++ Compiler – we can choose between GCC, Clang, Visual Studio, or any other we like as far as it’s able to generate a native shared library for our platform.</li>
-</ul>
-<h2 id="本地方法代码编写步骤"><a href="#本地方法代码编写步骤" class="headerlink" title="本地方法代码编写步骤"></a>本地方法代码编写步骤</h2><h3 id="创建java类，其中声明本地方法"><a href="#创建java类，其中声明本地方法" class="headerlink" title="创建java类，其中声明本地方法"></a>创建java类，其中声明本地方法</h3><h3 id="利用Java编译器（javac）的-h选项创建方法的引用，-h文件"><a href="#利用Java编译器（javac）的-h选项创建方法的引用，-h文件" class="headerlink" title="利用Java编译器（javac）的-h选项创建方法的引用，.h文件"></a>利用Java编译器（javac）的-h选项创建方法的引用，.h文件</h3><h3 id="创建-cpp文件，实现本地代码"><a href="#创建-cpp文件，实现本地代码" class="headerlink" title="创建.cpp文件，实现本地代码"></a>创建.cpp文件，实现本地代码</h3><h3 id="编译并链接"><a href="#编译并链接" class="headerlink" title="编译并链接"></a>编译并链接</h3><p><strong>编译C++代码：</strong></p>
-<p>Ubuntu version:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -c -fPIC -I<span class="variable">$&#123;JAVA_HOME&#125;</span>/include -I<span class="variable">$&#123;JAVA_HOME&#125;</span>/include/linux com_baeldung_jni_HelloWorldJNI.cpp -o com_baeldung_jni_HelloWorldJNI.o</span><br></pre></td></tr></table></figure>
-<p>Windows version:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -c -I%JAVA_HOME%\include -I%JAVA_HOME%\include\win32 com_baeldung_jni_HelloWorldJNI.cpp -o com_baeldung_jni_HelloWorldJNI.o</span><br></pre></td></tr></table></figure>
-<p>MacOS version;</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -c -fPIC -I<span class="variable">$&#123;JAVA_HOME&#125;</span>/include -I<span class="variable">$&#123;JAVA_HOME&#125;</span>/include/darwin com_baeldung_jni_HelloWorldJNI.cpp -o com_baeldung_jni_HelloWorldJNI.o</span><br></pre></td></tr></table></figure>
-<p><strong>和java共享库建立链接：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -shared -fPIC -o libnative.so com_baeldung_jni_HelloWorldJNI.o -lc</span><br></pre></td></tr></table></figure>
-<p>Windows version:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -shared -o native.dll com_baeldung_jni_HelloWorldJNI.o -Wl,--add-stdcall-alias</span><br></pre></td></tr></table></figure>
-<p>MacOS version:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -dynamiclib -o libnative.dylib com_baeldung_jni_HelloWorldJNI.o -lc</span><br></pre></td></tr></table></figure>
-<h3 id="在命令行中执行"><a href="#在命令行中执行" class="headerlink" title="在命令行中执行"></a>在命令行中执行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp . -Djava.library.path=/NATIVE_SHARED_LIB_FOLDER com.baeldung.jni.HelloWorldJNI</span><br></pre></td></tr></table></figure>
-<p>除此之外，java与本地方法之间还可以传递参数，参数类型是通过JNIEnv进行映射的，<a href="https://docs.oracle.com/javase/9/docs/specs/jni/types.html" target="_blank" rel="noopener">映射表的链接</a>。 </p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="https://www.baeldung.com/jni" target="_blank" rel="noopener">https://www.baeldung.com/jni</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1386,7 +1686,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

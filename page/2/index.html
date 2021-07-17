@@ -167,6 +167,112 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/12/08/java%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D-JNI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dxzmpk">
+      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="dxzmpk">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/08/java%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D-JNI/" class="post-title-link" itemprop="url">java本地方法介绍(JNI)</a>
+        </h2>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-12-08 16:05:34 / 修改时间：18:08:04" itemprop="dateCreated datePublished" datetime="2020-12-08T16:05:34+08:00">2020-12-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h1><p>这篇博客将对java中的本地方法进行介绍，主要从为什么需要本地方法，以及本地方法是如何运行的两个方面进行。</p>
+<h1 id="为什么需要本地方法"><a href="#为什么需要本地方法" class="headerlink" title="为什么需要本地方法"></a>为什么需要本地方法</h1><p>java的跨平台特性是其一大优点，我们通过一次编译得到字节码，就能在任何可以运行jvm（Java Virtual Machine）的系统上执行。然而，在有些情况下，我们可能需要一些纯java代码无法实现的功能，这时我们需要一些在本地编译好，只能在特定环境下执行的代码，也就是本地方法，本地方法常常由C/C++语言编写。</p>
+<p>需要使用本地方法的情况主要有以下三种：</p>
+<ol>
+<li>需要和硬件进行交互</li>
+<li>对于有些方法，使用C/C++可以加快执行的速度，因为C/C++的编译是依赖于操作系统的，对于程序性能有要求的可以考虑使用本地方法。</li>
+<li>有些库已经用其他语言写好，我们想使用但是不想重新再写一遍的话，就可以使用本地方法。</li>
+</ol>
+<p>java代码是在 jvm中运行的， 本地方法是在本地环境中运行的，为了在java程序中调用本地方法，就需要一个桥梁将本地方法和jvm连接起来，这个桥梁就是JNI(java native interface)。</p>
+<h1 id="本地方法是如何运行的"><a href="#本地方法是如何运行的" class="headerlink" title="本地方法是如何运行的"></a>本地方法是如何运行的</h1><p>java关键字<code>native</code> 表明某个接口是由本地代码实现的。</p>
+<p>java调用C/C++代码的时候，使用的是动态链接库的方式（shared libs），因为我们不能把字节码和本地编译好的代码放在同一个二进制文件中（jvm无法执行本地代码）。因此，最终编译好的java代码只声明对本地代码的<strong>引用</strong>， 而不是直接把代码复制过来。所以引用的库中会包含<em>so/.dll/.dylib</em>等文件，操作系统不同，文件的格式也不同。</p>
+<p>本地方法也是一种抽象方法, 我们只是声明方法头， 具体的实现则交给本地代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">aNativeMethod</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<p>要实现本地方法的运行，主要需要以下组件：</p>
+<ul>
+<li>Java Code – our classes. They will include at least one <em>native</em> method.</li>
+<li>Native Code – the actual logic of our native methods, usually coded in C or C++.</li>
+<li>JNI header file – this header file for C/C++ (<em>include/jni.h</em> into the JDK directory) includes all definitions of JNI elements that we may use into our native programs.</li>
+<li>C/C++ Compiler – we can choose between GCC, Clang, Visual Studio, or any other we like as far as it’s able to generate a native shared library for our platform.</li>
+</ul>
+<h2 id="本地方法代码编写步骤"><a href="#本地方法代码编写步骤" class="headerlink" title="本地方法代码编写步骤"></a>本地方法代码编写步骤</h2><h3 id="创建java类，其中声明本地方法"><a href="#创建java类，其中声明本地方法" class="headerlink" title="创建java类，其中声明本地方法"></a>创建java类，其中声明本地方法</h3><h3 id="利用Java编译器（javac）的-h选项创建方法的引用，-h文件"><a href="#利用Java编译器（javac）的-h选项创建方法的引用，-h文件" class="headerlink" title="利用Java编译器（javac）的-h选项创建方法的引用，.h文件"></a>利用Java编译器（javac）的-h选项创建方法的引用，.h文件</h3><h3 id="创建-cpp文件，实现本地代码"><a href="#创建-cpp文件，实现本地代码" class="headerlink" title="创建.cpp文件，实现本地代码"></a>创建.cpp文件，实现本地代码</h3><h3 id="编译并链接"><a href="#编译并链接" class="headerlink" title="编译并链接"></a>编译并链接</h3><p><strong>编译C++代码：</strong></p>
+<p>Ubuntu version:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -c -fPIC -I<span class="variable">$&#123;JAVA_HOME&#125;</span>/include -I<span class="variable">$&#123;JAVA_HOME&#125;</span>/include/linux com_baeldung_jni_HelloWorldJNI.cpp -o com_baeldung_jni_HelloWorldJNI.o</span><br></pre></td></tr></table></figure>
+<p>Windows version:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -c -I%JAVA_HOME%\include -I%JAVA_HOME%\include\win32 com_baeldung_jni_HelloWorldJNI.cpp -o com_baeldung_jni_HelloWorldJNI.o</span><br></pre></td></tr></table></figure>
+<p>MacOS version;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -c -fPIC -I<span class="variable">$&#123;JAVA_HOME&#125;</span>/include -I<span class="variable">$&#123;JAVA_HOME&#125;</span>/include/darwin com_baeldung_jni_HelloWorldJNI.cpp -o com_baeldung_jni_HelloWorldJNI.o</span><br></pre></td></tr></table></figure>
+<p><strong>和java共享库建立链接：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -shared -fPIC -o libnative.so com_baeldung_jni_HelloWorldJNI.o -lc</span><br></pre></td></tr></table></figure>
+<p>Windows version:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -shared -o native.dll com_baeldung_jni_HelloWorldJNI.o -Wl,--add-stdcall-alias</span><br></pre></td></tr></table></figure>
+<p>MacOS version:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -dynamiclib -o libnative.dylib com_baeldung_jni_HelloWorldJNI.o -lc</span><br></pre></td></tr></table></figure>
+<h3 id="在命令行中执行"><a href="#在命令行中执行" class="headerlink" title="在命令行中执行"></a>在命令行中执行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -cp . -Djava.library.path=/NATIVE_SHARED_LIB_FOLDER com.baeldung.jni.HelloWorldJNI</span><br></pre></td></tr></table></figure>
+<p>除此之外，java与本地方法之间还可以传递参数，参数类型是通过JNIEnv进行映射的，<a href="https://docs.oracle.com/javase/9/docs/specs/jni/types.html" target="_blank" rel="noopener">映射表的链接</a>。 </p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="https://www.baeldung.com/jni" target="_blank" rel="noopener">https://www.baeldung.com/jni</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/11/29/TIMESAVER%E7%9A%84%E6%BC%94%E5%8C%96%E5%8F%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1283,127 +1389,6 @@ V[x_2] = \sigma</script><p>随机过程由多个随机变量</p>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://dxzmpk.github.io/2020/10/01/Titanic%E4%B8%AD%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E7%9A%84%E6%8A%80%E5%B7%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="dxzmpk">
-      <meta itemprop="description" content="Learning in Harbin Institute of Technology">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="dxzmpk">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/01/Titanic%E4%B8%AD%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E7%9A%84%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">Titanic中特征选择的技巧</a>
-        </h2>
-
-        <div class="post-meta">
-          
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-10-01 17:18:20" itemprop="dateCreated datePublished" datetime="2020-10-01T17:18:20+08:00">2020-10-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-03 12:57:11" itemprop="dateModified" datetime="2020-10-03T12:57:11+08:00">2020-10-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ml-kaggle/" itemprop="url" rel="index"><span itemprop="name">ml-kaggle</span></a>
-                </span>
-            </span>
-
-          
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>data: <a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">https://www.kaggle.com/c/titanic/data</a></p>
-<p>notebook: <a href="https://www.kaggle.com/namylase/titanic-eda-full-pipeline-ensemble" target="_blank" rel="noopener">https://www.kaggle.com/namylase/titanic-eda-full-pipeline-ensemble</a></p>
-<h3 id="预处理-增加特征"><a href="#预处理-增加特征" class="headerlink" title="预处理 增加特征"></a>预处理 增加特征</h3><p>添加名字长度，</p>
-<p>是否有舱位，</p>
-<p>FamilySize为双亲加伴侣的数目+1，</p>
-<p>当FamilySize大于1时IsAlone为0，否则为1，</p>
-<p>Embarked填充空值为‘S’</p>
-<p>Fare填充空值为中位数</p>
-<p>train中CategoricalFare将Fare利用pd.qcut函数由大到小分为4个类别。</p>
-<p>train中CategoricalAge利用pd.cut()将年龄分为5个类别。</p>
-<p>Title是名称的前缀</p>
-<p>Sex由female,male转化成类别编码1，2，title、Embarked也作相同操作。</p>
-<p>Age，Fare根据范围也转化成类别型表示。</p>
-<h3 id="预处理-drop特征"><a href="#预处理-drop特征" class="headerlink" title="预处理 drop特征"></a>预处理 drop特征</h3><p>train、test去除[‘PassengerId’, ‘Name’, ‘Ticket’, ‘Cabin’, ‘SibSp’]特征</p>
-<p>train中还去除[‘CategoricalAge’, ‘CategoricalFare’]</p>
-<h3 id="特征可视化"><a href="#特征可视化" class="headerlink" title="特征可视化"></a>特征可视化</h3><p>使用Seaborn热图进行特征间相关性的可视化，最终得出的结论是所保留的特征相关性都比较低，也就是没有太多冗余的特征。</p>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><ol>
-<li>Random Forest classifier</li>
-<li>Extra Trees classifier</li>
-<li>AdaBoost classifer</li>
-<li>Gradient Boosting classifer</li>
-<li>Support Vector Machine</li>
-</ol>
-<p>训练时使用Out-of-Fold Predictions的方法进行。</p>
-<h3 id="Out-of-Fold-Predictions"><a href="#Out-of-Fold-Predictions" class="headerlink" title="Out-of-Fold Predictions"></a><a href="https://machinelearningmastery.com/out-of-fold-predictions-in-machine-learning/" target="_blank" rel="noopener">Out-of-Fold Predictions</a></h3><p>通常机器学习算法训练时是通过重采样方法（K-fold）等来进行模型的评价的。在k折交叉验证中，预测是利用训练中没有使用的数据进行的。Out-of-Fold预测主要有两种作用：</p>
-<ul>
-<li>估测模型在将来未知数据上的表现</li>
-<li>拟合集成模型</li>
-</ul>
-<p>估测模型在将来未知数据上的表现主要有两种方法：</p>
-<ol>
-<li>在每折运算过后，计算模型的得分，最后进行平均。</li>
-<li>在K折交叉运算中，每个训练样本都在测试集中出现恰好一次。将对其进行预测的结果收集起来，和真实的样本标签进行对比，得分即作为模型的表现，这个表现是通过整个训练数据集计算得到的。</li>
-</ol>
-<p>拟合集成模型是Out-of-Fold的另一项重要应用。在K折交叉验证中，会生成K个基本模型。除此之外，一个更高阶的meta-model会通过<strong>基本模型的预测</strong>训练出来。这个模型的作用是学习如何更好地结合基本模型的方法。</p>
-<ul>
-<li><strong>Meta-Model Input</strong>: Input portion of a given sample concatenated with the predictions made by each base model.</li>
-<li><strong>Meta-Model Output</strong>: Output portion of a given sample.</li>
-</ul>
-<p>得到Meta模型之后，在全部的训练数据集上训练每个基本模型，并用于之后的预测。</p>
-<p>这个过程被称为stacked generalization。这里使用线性权值的方法得到Meta model，这个过程也被称为<strong>blending</strong>。</p>
-<h2 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h2><p>使用5折交叉验证进行训练，对于每一个基本模型，在每一折训练后，用out-of-fold测试集进行测试，并将此模型在总体测试集上进行预测，将预测结果存在数组第二维中，最终测试结果在第一维取平均值，得到最终结果。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i, (train_index, test_index) <span class="keyword">in</span> enumerate(kf):</span><br><span class="line">    x_tr = x_train[train_index]</span><br><span class="line">    y_tr = y_train[train_index]</span><br><span class="line">    x_te = x_train[test_index]</span><br><span class="line"></span><br><span class="line">    clf.train(x_tr, y_tr)</span><br><span class="line"></span><br><span class="line">    oof_train[test_index] = clf.predict(x_te)</span><br><span class="line">    oof_test_skf[i, :] = clf.predict(x_test)</span><br><span class="line"><span class="comment"># 取平均、返回结果</span></span><br><span class="line">oof_test[:] = oof_test_skf.mean(axis=<span class="number">0</span>)</span><br><span class="line"><span class="keyword">return</span> oof_train.reshape(<span class="number">-1</span>, <span class="number">1</span>), oof_test.reshape(<span class="number">-1</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="特征重要性可视化"><a href="#特征重要性可视化" class="headerlink" title="特征重要性可视化"></a>特征重要性可视化</h3><p>将各特征在模型中的重要性提取出来，只有树类型的模型可以作此操作，也就是模型1—4。</p>
-<h2 id="模型的集成"><a href="#模型的集成" class="headerlink" title="模型的集成"></a>模型的集成</h2><p>利用XGBClassifier对模型进行集成。首先将第一步得到的所有模型训练集预测结果连接起来，对XGBClassifier进行训练。然后把相同方法处理得到的测试集输入进行预测，得到最终的结果。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1473,7 +1458,7 @@ V[x_2] = \sigma</script><p>随机过程由多个随机变量</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
